@@ -1,0 +1,67 @@
+/* Color Theme - Shades of #223C4F */
+:root {
+  --color-darkest: #0f1c24;
+  --color-darker: #162833;
+  --color-dark: #1b3242;
+  --color-primary: #223C4F;
+  --color-medium: #2d5068;
+  --color-light: #3a6481;
+  --color-lighter: #4a7a9a;
+  --color-accent: #5b91b3;
+  --color-highlight: #7ab0d1;
+  --color-text: #e8f1f7;
+  --color-text-muted: #a0b8c8;
+  --font-primary: 'Poppins', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--color-darkest);
+  color: var(--color-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-light);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-highlight);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

@@ -1,0 +1,182 @@
+.toys-page {
+  max-width: 1200px;
+}
+
+.toys-content {
+  margin-top: 2rem;
+}
+
+.toys-intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+}
+
+.collection-section {
+  margin-bottom: 4rem;
+}
+
+.section-icon {
+  margin-right: 0.5rem;
+}
+
+/* Toys Grid */
+.toys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Toy Card */
+.toy-card {
+  background: linear-gradient(135deg, var(--color-dark), var(--color-darker));
+  border: 2px solid var(--color-medium);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.toy-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 0 15px 35px rgba(90, 145, 179, 0.25);
+}
+
+.toy-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.toy-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-medium));
+  font-size: 4rem;
+  transition: transform 0.3s ease;
+}
+
+.toy-card:hover .toy-placeholder {
+  transform: scale(1.1);
+}
+
+.toy-info {
+  padding: 1rem;
+}
+
+.toy-info h3 {
+  font-size: 1rem;
+  color: var(--color-highlight);
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+}
+
+.toy-brand {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.toy-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.toy-tag {
+  padding: 0.2rem 0.5rem;
+  background: var(--color-primary);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.toy-tag.edition {
+  background: #9b59b6;
+  color: white;
+}
+
+/* Add Card */
+.add-toy-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  background: var(--color-darker);
+  border: 2px dashed var(--color-medium);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-toy-card:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Wishlist Section */
+.wishlist .section-title {
+  border-left-color: #f1c40f;
+}
+
+.wishlist-description {
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--color-darker);
+  border: 2px dashed var(--color-medium);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  transition: all 0.3s ease;
+}
+
+.wishlist-item:hover {
+  border-color: #f1c40f;
+  border-style: solid;
+}
+
+.wishlist-icon {
+  font-size: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .toys-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .toys-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toy-image {
+    height: 180px;
+  }
+}
