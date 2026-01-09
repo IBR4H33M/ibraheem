@@ -96,9 +96,9 @@ const Nav = () => {
       onMouseLeave={handleMouseLeave}
     >
       {/* Logo Container */}
-      <div 
+      <Link 
+        to="/" 
         className="logo-container"
-        onClick={handleLogoClick}
       >
         <div className="logo-wrapper">
           {/* Replace with your actual logo */}
@@ -118,7 +118,7 @@ const Nav = () => {
             </div>
           )}
         </div>
-      </div>
+      </Link>
 
       {/* Menu Toggle Arrow */}
       <motion.button
@@ -183,13 +183,24 @@ const Nav = () => {
                   onClick={handleCoolClick}
                 >
                   <span>All Things Cool</span>
-                  <motion.span 
+                  <motion.svg
                     className="expand-icon"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ rotate: 0 }}
                     animate={{ rotate: showSubMenu ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.25 }}
+                    style={{ transformOrigin: '50% 50%' }}
                   >
-                    ›
-                  </motion.span>
+                    {/* Right-pointing chevron */}
+                    <polyline points="9 6 15 12 9 18" />
+                  </motion.svg>
                 </button>
 
                 {/* Submenu */}
