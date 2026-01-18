@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './Toys.css';
+import './Collectibles.css';
 
-const Toys = () => {
+const Collectibles = () => {
   // Placeholder data for toys/collectibles
   const collections = [
     {
@@ -33,16 +33,16 @@ const Toys = () => {
 
   return (
     <motion.div 
-      className="toys-page page-container"
+      className="collectibles-page page-container"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="page-title">Toys & Collectibles</h1>
+      <h1 className="page-title">Collectibles</h1>
 
-      <div className="toys-content">
+      <div className="collectibles-content">
         <motion.p 
-          className="toys-intro"
+          className="collectibles-intro"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -60,24 +60,24 @@ const Toys = () => {
             transition={{ duration: 0.5, delay: 0.2 + collectionIndex * 0.1 }}
           >
             <h2 className="section-title">{collection.category}</h2>
-            <div className="toys-grid">
+            <div className="collectibles-grid">
               {collection.items.map((item) => (
-                <div key={item.id} className="toy-card">
-                  <div className="toy-image">
-                    <div className="toy-placeholder"></div>
+                <div key={item.id} className="collectible-card">
+                  <div className="collectible-image">
+                    <div className="collectible-placeholder"></div>
                   </div>
-                  <div className="toy-info">
+                  <div className="collectible-info">
                     <h3>{item.name}</h3>
-                    <p className="toy-brand">{item.brand}</p>
-                    <div className="toy-meta">
-                      {item.year && <span className="toy-tag">{item.year}</span>}
-                      {item.scale && <span className="toy-tag">{item.scale}</span>}
-                      {item.edition && <span className="toy-tag edition">{item.edition}</span>}
+                    <p className="collectible-brand">{item.brand}</p>
+                    <div className="collectible-meta">
+                      {item.year && <span className="collectible-tag">{item.year}</span>}
+                      {item.scale && <span className="collectible-tag">{item.scale}</span>}
+                      {item.edition && <span className="collectible-tag edition">{item.edition}</span>}
                     </div>
                   </div>
                 </div>
               ))}
-              <div className="add-toy-card">
+              <div className="add-collectible-card">
                 <span>+ Add Item</span>
               </div>
             </div>
@@ -106,4 +106,4 @@ const Toys = () => {
   );
 };
 
-export default Toys;
+export default Collectibles;

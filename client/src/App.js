@@ -6,7 +6,7 @@ import AboutMe from './pages/AboutMe';
 import TechSpace from './pages/TechSpace';
 import Gaming from './pages/Gaming';
 import Entertainment from './pages/Entertainment';
-import Toys from './pages/Toys';
+import Collectibles from './pages/Collectibles';
 import './styles/App.css';
 
 function AppContent() {
@@ -23,7 +23,7 @@ function AppContent() {
           <Route path="/techspace" element={<TechSpace />} />
           <Route path="/gaming" element={<Gaming />} />
           <Route path="/entertainment" element={<Entertainment />} />
-          <Route path="/toys" element={<Toys />} />
+          <Route path="/collectibles" element={<Collectibles />} />
         </Routes>
       </main>
     </div>

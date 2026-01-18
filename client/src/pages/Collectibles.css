@@ -1,12 +1,12 @@
-.toys-page {
+.collectibles-page {
   max-width: 1200px;
 }
 
-.toys-content {
+.collectibles-content {
   margin-top: 2rem;
 }
 
-.toys-intro {
+.collectibles-intro {
   text-align: center;
   color: var(--color-text-muted);
   font-size: 1.1rem;
@@ -23,16 +23,16 @@
   margin-right: 0.5rem;
 }
 
-/* Toys Grid */
-.toys-grid {
+/* Collectibles Grid */
+.collectibles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-/* Toy Card */
-.toy-card {
+/* Collectible Card */
+.collectible-card {
   background: linear-gradient(135deg, var(--color-dark), var(--color-darker));
   border: 2px solid var(--color-medium);
   border-radius: 12px;
@@ -40,19 +40,19 @@
   transition: all 0.3s ease;
 }
 
-.toy-card:hover {
+.collectible-card:hover {
   border-color: var(--color-accent);
   transform: translateY(-5px) rotate(1deg);
   box-shadow: 0 15px 35px rgba(90, 145, 179, 0.25);
 }
 
-.toy-image {
+.collectible-image {
   width: 100%;
   height: 200px;
   overflow: hidden;
 }
 
-.toy-placeholder {
+.collectible-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
@@ -63,34 +63,34 @@
   transition: transform 0.3s ease;
 }
 
-.toy-card:hover .toy-placeholder {
+.collectible-card:hover .collectible-placeholder {
   transform: scale(1.1);
 }
 
-.toy-info {
+.collectible-info {
   padding: 1rem;
 }
 
-.toy-info h3 {
+.collectible-info h3 {
   font-size: 1rem;
   color: var(--color-highlight);
   margin-bottom: 0.3rem;
   font-family: var(--font-mono);
 }
 
-.toy-brand {
+.collectible-brand {
   font-size: 0.85rem;
   color: var(--color-text-muted);
   margin-bottom: 0.5rem;
 }
 
-.toy-meta {
+.collectible-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
-.toy-tag {
+.collectible-tag {
   padding: 0.2rem 0.5rem;
   background: var(--color-primary);
   border-radius: 4px;
@@ -99,13 +99,13 @@
   font-family: var(--font-mono);
 }
 
-.toy-tag.edition {
+.collectible-tag.edition {
   background: #9b59b6;
   color: white;
 }
 
 /* Add Card */
-.add-toy-card {
+.add-collectible-card {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +119,7 @@
   transition: all 0.3s ease;
 }
 
-.add-toy-card:hover {
+.add-collectible-card:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
@@ -166,17 +166,17 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .toys-grid {
+  .collectibles-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .toys-grid {
+  .collectibles-grid {
     grid-template-columns: 1fr;
   }
 
-  .toy-image {
+  .collectible-image {
     height: 180px;
   }
 }

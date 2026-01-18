@@ -249,11 +249,11 @@ const Nav = () => {
                           transition={{ duration: 0.2, delay: 0.15 }}
                         >
                           <Link 
-                            to="/toys" 
-                            className={`sub-node ${location.pathname === '/toys' ? 'active' : ''}`}
+                            to="/collectibles" 
+                            className={`sub-node ${location.pathname === '/collectibles' ? 'active' : ''}`}
                             onClick={() => setIsOpen(false)}
                           >
-                            <span>Toys</span>
+                            <span>Collectibles</span>
                           </Link>
                         </motion.div>
                       </div>

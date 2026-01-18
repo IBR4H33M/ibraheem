@@ -97,6 +97,60 @@
   box-shadow: 0 6px 20px rgba(90, 145, 179, 0.4);
 }
 
+.content-section {
+  height: auto;
+  padding: 4rem 0;
+  background: var(--color-dark);
+  color: white;
+}
+
+.section-description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  font-family: var(--font-body);
+}
+
+.side-by-side-container {
+  display: flex;
+  width: 100vw;
+}
+
+.half-width-section {
+  width: 50vw;
+  height: 50vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.website-footer {
+  background: var(--color-dark);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--color-highlight);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .section-title {

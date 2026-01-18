@@ -189,9 +189,9 @@ const FlowchartNav = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <Link to="/toys" className="sub-node">
+                      <Link to="/collectibles" className="sub-node">
                         <span className="node-dot"></span>
-                        <span>Toys</span>
+                        <span>Collectibles</span>
                       </Link>
                     </motion.div>
                   </motion.div>
