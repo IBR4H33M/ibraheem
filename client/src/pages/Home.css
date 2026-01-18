@@ -36,10 +36,154 @@
   /* Video specific styles */
 }
 
-.section-bg-image {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.video-slider {
+  position: relative;
+  width: 100vw;
+  height: calc(100vw * 9 / 16);
+  overflow: hidden;
+}
+
+.slider-slide {
+  position: relative;
+  height: calc(100vw * 9 / 16);
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 2;
+}
+
+.overlay-left {
+  flex: 1;
+}
+
+.overlay-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+.overlay-right {
+  display: flex;
+  align-items: center;
+}
+
+.info-icon {
+  width: 50px;
+  height: 50px;
+  border: 3px solid white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.info-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.tooltip h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: var(--color-accent);
+}
+
+.tooltip p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Slick Carousel Custom Styles */
+.slick-slider {
+  height: 100%;
+}
+
+.slick-list {
+  height: 100%;
+}
+
+.slick-track {
+  height: 100%;
+}
+
+.slick-slide {
+  height: 100%;
+}
+
+.slick-slide > div {
+  height: 100%;
+}
+
+/* Custom dots */
+.slick-dots {
+  bottom: 20px !important;
+}
+
+.slick-dots li button:before {
+  color: white !important;
+  opacity: 0.5 !important;
+}
+
+.slick-dots li.slick-active button:before {
+  opacity: 1 !important;
+}
+
+/* Custom arrows */
+.slick-prev,
+.slick-next {
+  width: 50px !important;
+  height: 50px !important;
+  z-index: 3 !important;
+}
+
+.slick-prev {
+  left: 20px !important;
+}
+
+.slick-next {
+  right: 20px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: white !important;
+  font-size: 30px !important;
+  opacity: 0.8 !important;
+}
+
+.slick-prev:hover:before,
+.slick-next:hover:before {
+  opacity: 1 !important;
 }
 
 .section-overlay {
@@ -169,6 +313,14 @@
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
   }
+
+  .welcome-text {
+    font-size: 2.5rem;
+  }
+
+  .welcome-text-section {
+    padding: 3rem 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -178,5 +330,9 @@
 
   .section-subtitle {
     font-size: 1rem;
+  }
+
+  .welcome-text {
+    font-size: 2rem;
   }
 }
