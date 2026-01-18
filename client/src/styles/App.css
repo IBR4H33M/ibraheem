@@ -10,6 +10,10 @@
   transition: padding-top 0.3s ease;
 }
 
+.main-content.home-content {
+  padding-top: 0;
+}
+
 /* Page transition animations */
 .page-enter {
   opacity: 0;
