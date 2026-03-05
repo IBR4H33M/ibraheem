@@ -184,7 +184,7 @@
   padding-left: 12px;
   color: white;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -192,7 +192,7 @@
 
 .sub-node:hover,
 .sub-node.active {
-  font-size: 1rem;
+  font-size: 1.1rem;
   background: rgba(63, 121, 33, 0.4);
   color: white !important;
 }
@@ -207,6 +207,11 @@
   .menu-arrow {
     width: 44px;
     height: 44px;
+  }
+
+  .logo-wrapper {
+    width: 65px;
+    height: 65px;
   }
   
   .nav-node {

@@ -1,3 +1,9 @@
+/* Font Imports */
+@font-face {
+  font-family: 'VCR OSD Mono';
+  src: url('../../public/fonts/Minecraft-Regular.otf') format('opentype');
+}
+
 /* Color Theme - Shades of #223C4F */
 :root {
   --color-darkest: #0f1c24;
@@ -13,6 +19,7 @@
   --color-text-muted: #a0b8c8;
   --font-primary: 'Poppins', sans-serif;
   --font-mono: 'Space Mono', monospace;
+  --font-vcr: 'VCR OSD Mono', monospace;
 }
 
 * {

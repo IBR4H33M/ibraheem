@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -7,25 +6,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 
 const Home = () => {
-  const [showTooltip, setShowTooltip] = useState({ slide: null, visible: false });
   const [sections] = useState([
     {
       id: 1,
       type: 'video',
       src: '/assets/fh5_unb.mp4',
       poster: '/assets/hero-poster.jpg',
-      overlayText: 'My comfort Space',
-      tooltipTitle: 'About this clip',
-      tooltipContent: 'Whether I\'m down or happy as I can be, racing is something that always soothes my mind. The following video was created with a combination of gameplays of Forza Horizon 5 and Need for Speed Unbound gameplay clips recorded at 1440p 60fps on Xbox Series X. Cyberlink PowerDirector 2026 was used to edit the video.'
-    },
-    {
-      id: 2,
-      type: 'video',
-      src: '/assets/video2.mp4',
-      poster: '/assets/video2-poster.jpg',
-      overlayText: 'Placeholder Title',
-      tooltipTitle: 'About this clip',
-      tooltipContent: 'Placeholder description for second video.'
+      tooltipTitle: 'Forza Horizon 5',
+      tooltipContent: 'An open world racing game set in Mexico. One of the most visually stunning racing games ever made.'
     },
     {
       id: 3,
@@ -48,24 +36,28 @@ const Home = () => {
   ]);
 
   const videoRefs = useRef([]);
+  const collectiblesRef = useRef(null);
+  const [collectiblesVisible, setCollectiblesVisible] = useState(false);
+  const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const video = entry.target;
-        if (entry.isIntersecting) {
-          video.play();
-        }
-        // Removed pause logic to keep video playing when scrolling down
-      });
-    }, { threshold: 0.5 });
+  const safePlay = (video) => {
+    if (!video) return;
+    try {
+      const p = video.play();
+      if (p && typeof p.then === 'function') p.catch(() => {});
+    } catch (e) {
+      // ignore play errors
+    }
+  };
 
-    videoRefs.current.forEach(video => {
-      if (video) observer.observe(video);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const safePause = (video) => {
+    if (!video) return;
+    try {
+      video.pause();
+    } catch (e) {
+      // ignore pause errors
+    }
+  };
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -80,26 +72,51 @@ const Home = () => {
     customPaging: i => (
       <div className="slick-dot"></div>
     ),
-    beforeChange: (current, next) => {
-      // Pause current video when changing slides
-      if (videoRefs.current[current]) {
-        videoRefs.current[current].pause();
-      }
+    beforeChange: () => {
+      // Pause the currently active slide's video (works with cloned slides)
+      try {
+        const activeVid = document.querySelector('.slick-slide.slick-active video');
+        if (activeVid) safePause(activeVid);
+      } catch (e) {}
     },
-    afterChange: (current) => {
-      // Play new video when slide changes
-      if (videoRefs.current[current] && !prefersReducedMotion) {
-        videoRefs.current[current].play();
-      }
+    afterChange: () => {
+      // Play the newly active slide's video
+      try {
+        const activeVid = document.querySelector('.slick-slide.slick-active video');
+        if (activeVid && !prefersReducedMotion) safePlay(activeVid);
+      } catch (e) {}
     }
   };
+
+  // Only include videos in the slider; images go to the side-by-side area
+  const videoSlides = sections.filter(s => s.type === 'video');
+
+  // On mount, play the active slide's video (handles slick clones)
+  useEffect(() => {
+    try {
+      const activeVid = document.querySelector('.slick-slide.slick-active video');
+      if (activeVid && !prefersReducedMotion) safePlay(activeVid);
+    } catch (e) {}
+  }, [prefersReducedMotion]);
+
+  // Scroll reveal for collectibles on mobile
+  useEffect(() => {
+    const el = collectiblesRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setCollectiblesVisible(true); },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="home-page">
       {/* Video Slider */}
       <div className="video-slider">
         <Slider {...sliderSettings}>
-          {sections.map((section, index) => (
+          {videoSlides.map((section, index) => (
             <div key={section.id} className="slider-slide">
               <video
                 ref={el => videoRefs.current[index] = el}
@@ -114,14 +131,12 @@ const Home = () => {
                 <source src={section.src} type="video/mp4" />
               </video>
               <div className="video-overlay">
-                <div className="overlay-left">
-                  <h2 className="overlay-text">{section.overlayText}</h2>
-                </div>
                 <div className="overlay-right">
-                  <div 
+                  <div
                     className="info-icon"
                     onMouseEnter={() => setShowTooltip({ slide: index, visible: true })}
                     onMouseLeave={() => setShowTooltip({ slide: index, visible: false })}
+                    onClick={() => setShowTooltip(prev => ({ slide: index, visible: !prev.visible }))}
                   >
                     !
                   </div>
@@ -138,45 +153,33 @@ const Home = () => {
         </Slider>
       </div>
 
-      {/* Welcome Text */}
-      <motion.div
-        className="welcome-text-section"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        <h1 className="welcome-text">Welcome to Ibraheem's Space!</h1>
-      </motion.div>
+      {/* Fandom Section - Full Width */}
+      <div className="fandom-section-container">
+        <div className="fandom-tile">
+          <video className="fandom-video" muted loop autoPlay playsInline preload="metadata">
+            <source src="/assets/fandom.mp4" type="video/mp4" />
+          </video>
+          <Link to="/entertainment" className="fandom-title">&lt;FANDOM&gt;</Link>
+        </div>
+      </div>
 
-      {/* Side by Side Sections (images only) */}
-      <div className="side-by-side-container">
-        {sections.filter(section => section.type === 'image').slice(0,2).map((section, index) => (
-          <motion.section
-            key={section.id}
-            className={`half-width-section ${section.type}-section`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: (index) * 0.2 }}
-          >
-            <div
-              className="section-bg-image"
-              style={{ backgroundImage: `url(${section.src})` }}
-            />
-            <div className="section-overlay">
-              <div className="section-content">
-                <h3 className="section-title">{section.title}</h3>
-                <p className="section-subtitle">{section.subtitle}</p>
-                <Link to={section.link} className="section-link">{section.linkText}</Link>
-              </div>
+      {/* Two-Column Section Below Fandom */}
+      <div className="two-column-container">
+        <div className="ducati-column" ref={collectiblesRef}>
+          <div className="ducati-image-section">
+            <div className={`collectibles-section${collectiblesVisible ? ' visible' : ''}`}>
+              <Link to="/collectibles" className="collectibles-text">&lt;Collectibles&gt;</Link>
             </div>
-          </motion.section>
-        ))}
+          </div>
+        </div>
+        <div className="empty-column">
+        </div>
       </div>
 
       {/* Footer */}
       <footer className="website-footer">
         <div className="footer-content">
-          <p>&copy; 2024 My Space. All rights reserved.</p>
+          <p>&copy; 2026 Ibraheems Space</p>
           <div className="footer-links">
             <Link to="/about">About</Link>
             <Link to="/gaming">Gaming</Link>

@@ -2,6 +2,9 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
 }
 
 .full-width-section {
@@ -51,41 +54,30 @@
 .video-overlay {
   position: absolute;
   bottom: 0;
-  left: 0;
   right: 0;
   padding: 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-end;
   z-index: 2;
 }
 
-.overlay-left {
-  flex: 1;
-}
-
-.overlay-text {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  margin: 0;
-}
-
 .overlay-right {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
 }
 
 .info-icon {
-  width: 50px;
-  height: 50px;
-  border: 3px solid white;
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: white;
   cursor: pointer;
@@ -100,27 +92,29 @@
 
 .tooltip {
   position: absolute;
-  bottom: 70px;
+  bottom: 55px;
   right: 0;
-  width: 300px;
+  width: 250px;
   background: rgba(0, 0, 0, 0.9);
   color: white;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   z-index: 10;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .tooltip h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 0.95rem;
   color: var(--color-accent);
 }
 
 .tooltip p {
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  font-size: 0.8rem;
+  line-height: 1.3;
 }
 
 /* Slick Carousel Custom Styles */
@@ -272,6 +266,8 @@
   color: white;
   padding: 2rem;
   text-align: center;
+  margin-top: auto;
+  font-size: clamp(0.7rem, 1.5vw + 0.3rem, 1rem);
 }
 
 .footer-content {
@@ -282,8 +278,9 @@
 .footer-links {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  margin-top: 0.8rem;
 }
 
 .footer-links a {
@@ -321,6 +318,7 @@
   .welcome-text-section {
     padding: 3rem 1rem;
   }
+
 }
 
 @media (max-width: 480px) {
@@ -335,4 +333,253 @@
   .welcome-text {
     font-size: 2rem;
   }
+
+  .info-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .tooltip {
+    width: 220px;
+    font-size: 0.75rem;
+  }
+
+  .tooltip h4 {
+    font-size: 0.85rem;
+  }
+
+  .tooltip p {
+    font-size: 0.7rem;
+  }
+
+
+  .fandom-video {
+    max-width: 80%;
+  }
+
+  .tiled-section-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+}
+
+/* Featured Sections Container */
+.featured-sections-container {
+  display: none;
+}
+
+/* Fandom Section - Full Width */
+.fandom-section-container {
+  width: 100vw;
+  height: calc(100vw * 9 / 21);
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.fandom-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 2rem;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fandom-video {
+  max-width: 60%;
+  height: auto;
+  aspect-ratio: 21 / 9;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.fandom-title {
+  font-size: clamp(1.1rem, 2vw + 0.8rem, 2.8rem);
+  font-weight: 700;
+  color: #444444;
+  text-shadow: none;
+  font-family: var(--font-vcr);
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fandom-title:hover {
+  color: #90ee90;
+}
+
+@media (max-width: 768px) {
+  .fandom-section-container {
+    height: auto;
+  }
+
+  .fandom-tile {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+    height: auto;
+  }
+
+  .fandom-video {
+    max-width: 90%;
+    width: 90%;
+  }
+
+  .fandom-title {
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    text-align: center;
+    white-space: normal;
+    order: 2;
+  }
+
+  .ducati-image-section {
+    height: calc(50vw * 6 / 10);
+  }
+
+  .footer-links a {
+    font-size: 0.75rem;
+  }
+}
+
+/* Two-Column Section Below Fandom */
+.two-column-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100vw;
+  background-color: #08192B;
+}
+
+.ducati-column {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  position: relative;
+}
+
+.ducati-image-section {
+  width: 100%;
+  height: calc(100vw * 6 / 20);
+  position: relative;
+  overflow: hidden;
+}
+
+.ducati-image-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../../public/assets/ducati1.webp');
+  background-size: cover;
+  background-position: center;
+  transition: filter 0.4s ease;
+  z-index: 0;
+}
+
+.ducati-column:hover .ducati-image-section::before {
+  filter: blur(3px);
+}
+
+/* Collectibles overlay - hidden by default */
+.collectibles-section {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%) scaleY(0.8);
+  background-color: rgba(30, 100, 200, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  height: 30%;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Desktop: show on hover */
+.ducati-column:hover .collectibles-section {
+  opacity: 1;
+  transform: translateY(-50%) scaleY(1);
+  pointer-events: auto;
+}
+
+/* Mobile: show when scrolled into view */
+@media (max-width: 768px) {
+  .collectibles-section.visible {
+    opacity: 1;
+    transform: translateY(-50%) scaleY(1);
+    pointer-events: auto;
+  }
+}
+
+.collectibles-text {
+  font-size: clamp(0.85rem, 2vw + 0.8rem, 2.8rem);
+  font-weight: 400;
+  color: #ffffff;
+  font-family: var(--font-vcr);
+  margin: 0;
+  opacity: 1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.collectibles-text:hover {
+  color: #90ee90;
+}
+
+.empty-column {
+  background-color: #08192B;
+}
+
+@keyframes slideUpOnScroll {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Collectibles Full Section */
+.collectibles-full-section {
+  width: 100vw;
+  aspect-ratio: 20 / 6;
+  background: linear-gradient(135deg, var(--color-dark), var(--color-darker));
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+}
+
+.collectibles-header {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-family: var(--font-vcr);
+}
+
+.collectibles-header a {
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.collectibles-header a:hover {
+  color: var(--color-accent);
 }

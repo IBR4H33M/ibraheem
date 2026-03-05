@@ -8,6 +8,7 @@ const Nav = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [logoHovered, setLogoHovered] = useState(false);
   const location = useLocation();
   
   // Refs for timeout delays
@@ -99,11 +100,13 @@ const Nav = () => {
       <Link 
         to="/" 
         className="logo-container"
+        onMouseEnter={() => setLogoHovered(true)}
+        onMouseLeave={() => setLogoHovered(false)}
       >
         <div className="logo-wrapper">
           {/* Replace with your actual logo */}
           <img 
-            src="/logo.png" 
+            src={logoHovered ? "/logo2.png" : "/logo.png"} 
             alt="Ibraheem Ibn Anwar" 
             className="logo"
             onLoad={() => setLogoLoaded(true)}
