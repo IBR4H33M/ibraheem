@@ -37,7 +37,6 @@ const Home = () => {
 
   const videoRefs = useRef([]);
   const collectiblesRef = useRef(null);
-  const [collectiblesVisible, setCollectiblesVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
 
   const safePlay = (video) => {
@@ -103,12 +102,6 @@ const Home = () => {
   useEffect(() => {
     const el = collectiblesRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setCollectiblesVisible(true); },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -163,16 +156,18 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Two-Column Section Below Fandom */}
-      <div className="two-column-container">
-        <div className="ducati-column" ref={collectiblesRef}>
-          <div className="ducati-image-section">
-            <div className={`collectibles-section${collectiblesVisible ? ' visible' : ''}`}>
-              <Link to="/collectibles" className="collectibles-text">&lt;Collectibles&gt;</Link>
-            </div>
-          </div>
+      {/* Collectibles Section */}
+      <div className="collectibles-horizontal-section" ref={collectiblesRef}>
+        {/* Left: Text */}
+        <div className="collectibles-left">
+          <Link to="/collectibles" className="collectibles-heading">
+            <span>&lt;Collected</span>
+            <span>Collectibles&gt;</span>
+          </Link>
         </div>
-        <div className="empty-column">
+        {/* Right: bg image + f40 overlay */}
+        <div className="collectibles-right">
+          <img src="/assets/f40.webp" alt="Ferrari F40" className="f40-image" />
         </div>
       </div>
 

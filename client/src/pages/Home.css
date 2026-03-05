@@ -443,105 +443,86 @@
     order: 2;
   }
 
-  .ducati-image-section {
-    height: calc(50vw * 6 / 10);
-  }
-
   .footer-links a {
     font-size: 0.75rem;
   }
+
 }
 
-/* Two-Column Section Below Fandom */
-.two-column-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100vw;
-  background-color: #08192B;
-}
-
-.ducati-column {
+/* Collectibles Horizontal Section */
+.collectibles-horizontal-section {
   display: flex;
-  flex-direction: column;
-  grid-column: 1;
+  width: 100vw;
+  height: calc(100vw * 9 / 20);
+  background-color: #000;
   position: relative;
-}
-
-.ducati-image-section {
-  width: 100%;
-  height: calc(100vw * 6 / 20);
-  position: relative;
-  overflow: hidden;
-}
-
-.ducati-image-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url('../../public/assets/ducati1.webp');
-  background-size: cover;
-  background-position: center;
-  transition: filter 0.4s ease;
   z-index: 0;
 }
 
-.ducati-column:hover .ducati-image-section::before {
-  filter: blur(3px);
-}
-
-/* Collectibles overlay - hidden by default */
-.collectibles-section {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%) scaleY(0.8);
-  background-color: rgba(30, 100, 200, 0.6);
+/* Left: text */
+.collectibles-left {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 1.5rem;
-  height: 30%;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  pointer-events: none;
-  z-index: 1;
+  background-color: #000;
+  padding: 2rem;
 }
 
-/* Desktop: show on hover */
-.ducati-column:hover .collectibles-section {
-  opacity: 1;
-  transform: translateY(-50%) scaleY(1);
-  pointer-events: auto;
+.collectibles-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  text-decoration: none;
 }
 
-/* Mobile: show when scrolled into view */
-@media (max-width: 768px) {
-  .collectibles-section.visible {
-    opacity: 1;
-    transform: translateY(-50%) scaleY(1);
-    pointer-events: auto;
-  }
-}
-
-.collectibles-text {
-  font-size: clamp(0.85rem, 2vw + 0.8rem, 2.8rem);
-  font-weight: 400;
+.collectibles-heading span {
+  font-size: clamp(1.1rem, 2vw + 0.8rem, 2.8rem);
+  font-weight: 700;
   color: #ffffff;
   font-family: var(--font-vcr);
-  margin: 0;
-  opacity: 1;
-  text-decoration: none;
+  white-space: nowrap;
   transition: color 0.3s ease;
-  cursor: pointer;
+  line-height: 1.2;
 }
 
-.collectibles-text:hover {
+.collectibles-heading:hover span {
   color: #90ee90;
 }
 
-.empty-column {
-  background-color: #08192B;
+/* Right: bg image + f40 overlay */
+.collectibles-right {
+  flex: 1;
+  position: relative;
+  background-color: #000;
+}
+
+.collectibles-right::before {
+  content: '';
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  left: 0%;
+  right: 14%;
+  background-image: url('../../public/assets/bg1.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.f40-image {
+  position: absolute;
+  top: 50%;
+  left: 44%;
+  width: 58vw;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -54%);
+  z-index: 1;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.7));
 }
 
 @keyframes slideUpOnScroll {
@@ -582,4 +563,56 @@
 
 .collectibles-header a:hover {
   color: var(--color-accent);
+}
+
+/* Collectibles mobile — placed AFTER base styles so these win */
+@media (max-width: 768px) {
+  .collectibles-horizontal-section {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .collectibles-right {
+    flex: none;
+    width: 100%;
+    height: 40vw;
+    order: 1;
+    padding: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .collectibles-right::before {
+    top: 18%;
+    bottom: 0%;
+    left: 50%;
+    right: auto;
+    width: 92%;
+    height: auto;
+    transform: translateX(-50%);
+  }
+
+  .f40-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 88%;
+    height: auto;
+    max-height: 90%;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .collectibles-left {
+    flex: none;
+    width: 100%;
+    order: 2;
+    height: auto;
+    min-height: unset;
+    padding: 0.5rem 1.5rem 1.25rem;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 }
