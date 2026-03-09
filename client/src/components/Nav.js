@@ -1,298 +1,147 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Nav.css';
 
+const mainItems = [
+  { id: 'about',    label: 'About Me',       path: '/about',     hasSub: false },
+  { id: 'cool',     label: 'All Things Cool', path: null,         hasSub: true  },
+  { id: 'techspace',label: 'TechSpace',       path: '/techspace', hasSub: false },
+];
+
+const subItemsMap = {
+  cool: [
+    { id: 'gaming',      label: 'Gaming',      path: '/gaming'      },
+    { id: 'fandom',      label: 'Fandom',       path: '/fandom'      },
+    { id: 'collectibles',label: 'Collectibles', path: '/collectibles' },
+  ],
+};
+
 const Nav = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showSubMenu, setShowSubMenu] = useState(false);
-  const [logoLoaded, setLogoLoaded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [logoHovered, setLogoHovered] = useState(false);
+  const [isOpen, setIsOpen]           = useState(false);
+  const [activeParent, setActiveParent] = useState(null);
+  const [logoHovered, setLogoHovered]  = useState(false);
+  const [logoLoaded, setLogoLoaded]    = useState(true);
   const location = useLocation();
-  
-  // Refs for timeout delays
-  const menuTimeoutRef = React.useRef(null);
-  const subMenuTimeoutRef = React.useRef(null);
+  const navigate = useNavigate();
+  const logoClickCount = useRef(0);
+  const logoClickTimer = useRef(null);
 
-  // Detect mobile/touch device
-  React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const handleLogoClick = (e) => {
+    logoClickCount.current += 1;
+    clearTimeout(logoClickTimer.current);
+    if (logoClickCount.current >= 10) {
+      logoClickCount.current = 0;
+      e.preventDefault();
+      navigate('/admin');
+      return;
+    }
+    logoClickTimer.current = setTimeout(() => {
+      logoClickCount.current = 0;
+    }, 3000);
+  };
 
-  // Close menu when route changes
   React.useEffect(() => {
     setIsOpen(false);
-    setShowSubMenu(false);
+    setActiveParent(null);
   }, [location.pathname]);
-  
-  // Cleanup timeouts on unmount
-  React.useEffect(() => {
-    return () => {
-      if (menuTimeoutRef.current) clearTimeout(menuTimeoutRef.current);
-      if (subMenuTimeoutRef.current) clearTimeout(subMenuTimeoutRef.current);
-    };
-  }, []);
 
-  const handleMouseEnter = () => {
-    if (!isMobile) {
-      // Clear any pending close timeout
-      if (menuTimeoutRef.current) clearTimeout(menuTimeoutRef.current);
-      setIsOpen(true);
+  const handleToggle = () => {
+    setIsOpen(prev => {
+      if (prev) setActiveParent(null);
+      return !prev;
+    });
+  };
+
+  const handleMainClick = (item) => {
+    if (item.hasSub) {
+      setActiveParent(prev => (prev === item.id ? null : item.id));
+    } else {
+      setIsOpen(false);
+      setActiveParent(null);
     }
   };
 
-  const handleMouseLeave = () => {
-    if (!isMobile) {
-      // Delay closing to allow user to move back
-      menuTimeoutRef.current = setTimeout(() => {
-        setIsOpen(false);
-        setShowSubMenu(false);
-      }, 300);
-    }
-  };
-
-  const handleNavEnter = () => {
-    // Keep menu open when hovering nav items
-    if (!isMobile && menuTimeoutRef.current) {
-      clearTimeout(menuTimeoutRef.current);
-    }
-  };
-
-  const handleLogoClick = () => {
-    if (isMobile) {
-      setIsOpen(!isOpen);
-      if (isOpen) setShowSubMenu(false);
-    }
-  };
-
-  const handleCoolHover = () => {
-    if (!isMobile) {
-      if (subMenuTimeoutRef.current) clearTimeout(subMenuTimeoutRef.current);
-      setShowSubMenu(true);
-    }
-  };
-
-  const handleCoolLeave = () => {
-    if (!isMobile) {
-      subMenuTimeoutRef.current = setTimeout(() => {
-        setShowSubMenu(false);
-      }, 200);
-    }
-  };
-
-  const handleCoolClick = () => {
-    if (isMobile) setShowSubMenu(!showSubMenu);
+  const handleSubClick = () => {
+    setIsOpen(false);
+    setActiveParent(null);
   };
 
   return (
-    <div 
-      className="flowchart-nav"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Logo Container */}
-      <Link 
-        to="/" 
-        className="logo-container"
-        onMouseEnter={() => setLogoHovered(true)}
-        onMouseLeave={() => setLogoHovered(false)}
-      >
-        <div className="logo-wrapper">
-          {/* Replace with your actual logo */}
-          <img 
-            src={logoHovered ? "/logo2.png" : "/logo.png"} 
-            alt="Ibraheem Ibn Anwar" 
-            className="logo"
-            onLoad={() => setLogoLoaded(true)}
-            onError={(e) => {
-              e.target.style.display = 'none';
-              setLogoLoaded(false);
-            }}
-          />
-          {!logoLoaded && (
-            <div className="logo-placeholder">
-              <span>IIA</span>
-            </div>
+    <>
+      {/* Logo & toggle — always on top */}
+      <div className="nav-root">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="logo-container"
+          onMouseEnter={() => setLogoHovered(true)}
+          onMouseLeave={() => setLogoHovered(false)}
+          onClick={handleLogoClick}
+        >
+          <div className="logo-wrapper">
+            <img
+              src={logoHovered ? '/logo2.png' : '/logo.png'}
+              alt="Ibraheem"
+              className="logo"
+              onLoad={() => setLogoLoaded(true)}
+              onError={(e) => { e.target.style.display = 'none'; setLogoLoaded(false); }}
+            />
+            {!logoLoaded && <div className="logo-placeholder">IIA</div>}
+          </div>
+        </Link>
+
+        {/* Toggle button */}
+        <button className="nav-toggle" onClick={handleToggle} aria-label="Toggle menu">
+          {isOpen ? '✕' : '>'}
+        </button>
+      </div>
+
+      {/* Transparent backdrop */}
+      {isOpen && (
+        <div className="nav-backdrop" onClick={() => { setIsOpen(false); setActiveParent(null); }} />
+      )}
+
+      {/* Slide-in panel — sibling of nav-root, not a child */}
+      <div className={`nav-panel${isOpen ? ' open' : ''}`}>
+        <div className="nav-col">
+          {mainItems.map(item =>
+            item.hasSub ? (
+              <button
+                key={item.id}
+                className={`nav-btn${activeParent === item.id ? ' selected' : ''}`}
+                onClick={() => handleMainClick(item)}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`nav-btn${location.pathname === item.path ? ' selected' : ''}`}
+                onClick={() => handleMainClick(item)}
+              >
+                {item.label}
+              </Link>
+            )
           )}
         </div>
-      </Link>
 
-      {/* Menu Toggle Arrow */}
-      <motion.button
-        className="menu-arrow"
-        onClick={handleLogoClick}
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
-        aria-label="Toggle menu"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </motion.button>
-
-      {/* Navigation Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <div className="nav-menu">
-            {/* Navigation items */}
-            <div className="nav-items">
-              {/* About Me */}
-              <motion.div 
-                className="nav-item"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ 
-                  duration: 0.4,
-                  delay: 0.1,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 25
-                }}
-              >
-                <Link 
-                  to="/about" 
-                  className={`nav-node ${location.pathname === '/about' ? 'active' : ''}`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>About Me</span>
-                </Link>
-              </motion.div>
-
-              {/* All Things Cool with submenu */}
-              <motion.div 
-                className="nav-item nav-item-with-sub"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ 
-                  duration: 0.4,
-                  delay: 0.2,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 25
-                }}
-                onMouseEnter={handleCoolHover}
-                onMouseLeave={handleCoolLeave}
-              >
-                <button
-                  className={`nav-node has-children ${showSubMenu ? 'expanded' : ''}`}
-                  onClick={handleCoolClick}
-                >
-                  <span>All Things Cool</span>
-                  <motion.svg
-                    className="expand-icon"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: showSubMenu ? 180 : 0 }}
-                    transition={{ duration: 0.25 }}
-                    style={{ transformOrigin: '50% 50%' }}
-                  >
-                    {/* Right-pointing chevron */}
-                    <polyline points="9 6 15 12 9 18" />
-                  </motion.svg>
-                </button>
-
-                {/* Submenu */}
-                <AnimatePresence>
-                  {showSubMenu && (
-                    <motion.div 
-                      className="sub-container"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="sub-items">
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2, delay: 0.05 }}
-                        >
-                          <Link 
-                            to="/gaming" 
-                            className={`sub-node ${location.pathname === '/gaming' ? 'active' : ''}`}
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <span>Gaming</span>
-                          </Link>
-                        </motion.div>
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2, delay: 0.1 }}
-                        >
-                          <Link 
-                            to="/entertainment" 
-                            className={`sub-node ${location.pathname === '/entertainment' ? 'active' : ''}`}
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <span>Entertainment</span>
-                          </Link>
-                        </motion.div>
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2, delay: 0.15 }}
-                        >
-                          <Link 
-                            to="/collectibles" 
-                            className={`sub-node ${location.pathname === '/collectibles' ? 'active' : ''}`}
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <span>Collectibles</span>
-                          </Link>
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-
-              {/* TechSpace */}
-              <motion.div 
-                className="nav-item"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ 
-                  duration: 0.4,
-                  delay: 0.3,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 25
-                }}
-              >
-                <Link 
-                  to="/techspace" 
-                  className={`nav-node ${location.pathname === '/techspace' ? 'active' : ''}`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>TechSpace</span>
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
+        <div className={`nav-col nav-col-sub${activeParent ? ' visible' : ''}`}>
+          {activeParent && subItemsMap[activeParent]?.map(item => (
+            <Link
+              key={item.id}
+              to={item.path}
+              className={`nav-btn${location.pathname === item.path ? ' selected' : ''}`}
+              onClick={handleSubClick}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
 export default Nav;
+

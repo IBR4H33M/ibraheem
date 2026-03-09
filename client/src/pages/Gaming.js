@@ -60,14 +60,16 @@ const Gaming = () => {
 
   return (
     <motion.div 
-      className="gaming-page page-container"
+      className="gaming-page"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="page-title">Gaming</h1>
+      <div className="gaming-page-header">
+        <h1 className="gaming-page-title">GAMING</h1>
+      </div>
 
-      <div className="gaming-content">
+      <div className="gaming-content gaming-dark-bg">
         {/* Games I Currently Play - Moved to Top */}
         <motion.section 
           className="gaming-section current-section"

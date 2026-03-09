@@ -152,7 +152,7 @@ const Home = () => {
           <video className="fandom-video" muted loop autoPlay playsInline preload="metadata">
             <source src="/assets/fandom.mp4" type="video/mp4" />
           </video>
-          <Link to="/entertainment" className="fandom-title">&lt;FANDOM&gt;</Link>
+          <Link to="/fandom" className="fandom-title">&lt;FANDOM&gt;</Link>
         </div>
       </div>
 
@@ -161,8 +161,7 @@ const Home = () => {
         {/* Left: Text */}
         <div className="collectibles-left">
           <Link to="/collectibles" className="collectibles-heading">
-            <span>&lt;Collected</span>
-            <span>Collectibles&gt;</span>
+            <span>&lt;COLLECTIBLES&gt;</span>
           </Link>
         </div>
         {/* Right: bg image + f40 overlay */}
@@ -179,7 +178,7 @@ const Home = () => {
             <Link to="/about">About</Link>
             <Link to="/gaming">Gaming</Link>
             <Link to="/techspace">Tech</Link>
-            <Link to="/entertainment">Entertainment</Link>
+            <Link to="/fandom">Entertainment</Link>
             <Link to="/collectibles">Collectibles</Link>
           </div>
         </div>

@@ -8,10 +8,11 @@
 /dist
 /build
 
-# Environment variables
+# Environment variables — NEVER commit these
 .env
 .env.local
 .env.*.local
+.env.production
 /client/.env
 /server/.env
 
@@ -41,7 +42,4 @@ coverage-*
 # Misc
 .cache/
 *.tgz
-
-# Optional: lockfiles should be committed (do NOT ignore package-lock.json)
-# Optional: add specific exclusions for secret files or large binaries
 

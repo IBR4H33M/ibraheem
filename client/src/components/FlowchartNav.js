@@ -233,8 +233,8 @@ const FlowchartNav = () => {
                           transition={{ duration: 0.2, delay: 0.1 }}
                         >
                           <Link 
-                            to="/entertainment" 
-                            className={`sub-node ${location.pathname === '/entertainment' ? 'active' : ''}`}
+                            to="/fandom" 
+                            className={`sub-node ${location.pathname === '/fandom' ? 'active' : ''}`}
                             onClick={() => setIsOpen(false)}
                           >
                             <span>Entertainment</span>

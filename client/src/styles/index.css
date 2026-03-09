@@ -4,6 +4,11 @@
   src: url('../../public/fonts/Minecraft-Regular.otf') format('opentype');
 }
 
+@font-face {
+  font-family: 'Fastelar';
+  src: url('../../public/fonts/Fastelar.ttf') format('truetype');
+}
+
 /* Color Theme - Shades of #223C4F */
 :root {
   --color-darkest: #0f1c24;
@@ -20,6 +25,7 @@
   --font-primary: 'Poppins', sans-serif;
   --font-mono: 'Space Mono', monospace;
   --font-vcr: 'VCR OSD Mono', monospace;
+  --font-fastelar: 'Fastelar', sans-serif;
 }
 
 * {
