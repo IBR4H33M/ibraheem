@@ -8,6 +8,7 @@ import Gaming from './pages/Gaming';
 import Entertainment from './pages/Entertainment';
 import Collectibles from './pages/Collectibles';
 import AdminLogin from './pages/AdminLogin';
+import Contact from './pages/Contact';
 import { AuthProvider } from './context/AuthContext';
 import './styles/App.css';
 
@@ -19,7 +20,7 @@ function AppContent() {
   return (
     <div className="app">
       {!isAdminPage && <Nav />}
-      <main className={`main-content ${isHomePage ? 'home-content' : ''}`}>
+      <main className={`main-content ${isHomePage ? 'home-content' : ''} ${isAdminPage ? 'admin-content' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutMe />} />
@@ -28,6 +29,7 @@ function AppContent() {
           <Route path="/fandom" element={<Entertainment />} />
           <Route path="/collectibles" element={<Collectibles />} />
           <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
     </div>

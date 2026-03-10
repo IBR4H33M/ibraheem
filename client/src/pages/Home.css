@@ -1,6 +1,7 @@
 .home-page {
   width: 100%;
   min-height: 100vh;
+  background: #0a0f2e;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -262,7 +263,7 @@
 }
 
 .website-footer {
-  background: var(--color-dark);
+  background: #0a0f2e;
   color: white;
   padding: 2rem;
   text-align: center;
@@ -454,9 +455,7 @@
   display: flex;
   width: 100vw;
   height: calc(100vw * 9 / 20);
-  background-color: #000;
-  position: relative;
-  z-index: 0;
+  background-color: #1e1e21;
 }
 
 /* Left: text */
@@ -465,7 +464,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: #1e1e21;
   padding: 2rem;
 }
 
@@ -495,7 +494,7 @@
 .collectibles-right {
   flex: 1;
   position: relative;
-  background-color: #000;
+  background-color: #1e1e21;
 }
 
 .collectibles-right::before {

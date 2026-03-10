@@ -1,25 +1,27 @@
+/* ── Gaming Page ── */
 .gaming-page {
-  max-width: 100%;
-  padding: 0;
+  width: 100%;
+  min-height: 100vh;
   margin-top: -200px;
 }
 
-.gaming-page-header {
-  width: 100%;
-  background-color: #ffffff;
-  padding: 3rem 0 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+/* Title fixed top-left, same level as logo (matches fandom) */
 .gaming-page-title {
+  position: fixed;
+  top: 30px;
+  left: 160px;
   font-family: var(--font-vcr);
-  font-size: clamp(2rem, 4vw + 1rem, 4.5rem);
-  color: #000;
-  text-align: center;
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  color: #ffffff;
   margin: 0;
   font-weight: 700;
+  z-index: 1100;
+  pointer-events: none;
+  text-shadow:
+    1px  1px 0 #0a0f2e,
+    -1px -1px 0 #0a0f2e,
+    1px -1px 0 #0a0f2e,
+    -1px  1px 0 #0a0f2e;
 }
 
 .gaming-dark-bg {
@@ -28,169 +30,168 @@
   padding: 2rem;
 }
 
-/* Slideshow Section */
-.slideshow-section {
+/* ── Captures Slideshow ── */
+.gaming-captures-section {
   width: 100%;
-  padding: 3rem 0;
-  background: var(--color-bg);
+  background: #0a0f2e;
 }
 
-.slideshow-container {
+.gaming-captures-slider {
   position: relative;
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
+  line-height: 0;
 }
 
-.slideshow-content {
+.gaming-captures-image-wrap {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  background: #000;
+  aspect-ratio: 18 / 9;
   overflow: hidden;
+  background: #111;
 }
 
-.slideshow-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* fallback for older browsers */
+@supports not (aspect-ratio: 18/9) {
+  .gaming-captures-image-wrap {
+    padding-bottom: 50%;
+    height: 0;
+  }
+  .gc-img,
+  .gc-placeholder {
+    position: absolute;
+    top: 0; left: 0;
+  }
 }
 
-.slideshow-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
-  padding: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  z-index: 2;
-}
-
-.slideshow-info {
-  flex: 1;
-  text-align: left;
-}
-
-.slideshow-image {
+.gc-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
+  display: block;
+  animation: gc-fade-in 0.7s ease;
 }
 
-.slideshow-placeholder {
+@keyframes gc-fade-in {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.gc-placeholder {
   width: 100%;
   height: 100%;
+  background: #1a1a1a;
+}
+
+/* Delete button — top-right corner of image, admin only */
+.gc-delete-btn {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 4;
+  background: rgba(180, 30, 30, 0.82);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-medium), var(--color-dark));
-  color: rgba(255,255,255,0.3);
-  font-size: 2rem;
-  font-family: var(--font-mono);
+  transition: background 0.2s;
+}
+.gc-delete-btn:hover { background: rgba(200, 20, 20, 1); }
+.gc-delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Game name — bottom-left of image */
+.gc-game-name {  position: absolute;
+  bottom: 1.1rem;
+  left: 1.5rem;
+  font-family: var(--font-vcr);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  color: #ffffff;
+  text-shadow:
+    1px  1px 0 #333,
+    -1px -1px 0 #333,
+    1px -1px 0 #333,
+    -1px  1px 0 #333,
+    0 2px 6px rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 2;
+  line-height: 1;
 }
 
-.slideshow-game-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-mono);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-}
-
-.slideshow-caption {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.9);
-  line-height: 1.6;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-.slideshow-counter {
-  font-size: 1.2rem;
-  color: rgba(255,255,255,0.8);
-  font-family: var(--font-mono);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-.counter-divider {
-  color: rgba(255,255,255,0.3);
-}
-
-/* Slideshow Arrow Buttons */
-.slideshow-arrow {
+/* Prev / Next arrows — overlaid on image */
+.gc-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  z-index: 3;
+  background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 3rem;
-  line-height: 1;
   cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
+  padding: 0.5rem;
+  color: rgba(255,255,255,0.75);
+  transition: opacity 0.2s;
+}
+.gc-arrow svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.7));
+}
+.gc-arrow:hover { opacity: 0.5; }
+.gc-arrow-left  { left: 1rem; }
+.gc-arrow-right { right: 1rem; }
+
+/* Footer bar — below image */
+.gaming-captures-footer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: 300;
-  padding: 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.5rem;
+  background: #080d25;
+  line-height: normal;
 }
 
-.slideshow-arrow:hover {
-  color: #fff;
-  transform: translateY(-50%) scale(1.3);
+.gaming-captures-label {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.6rem, 4vw, 3.5rem);
+  letter-spacing: 0.12em;
+  color: rgba(167, 188, 214, 0.85);
 }
 
-.slideshow-arrow:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-.slideshow-arrow-left {
-  left: 2rem;
-}
-
-.slideshow-arrow-right {
-  right: 2rem;
-}
-
-.slideshow-controls {
+/* Admin controls inside captures footer */
+.gc-admin-controls {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding: 0 2rem;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-left: auto;
 }
 
-.slide-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid var(--color-medium);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
+.gc-add-form {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
-.slide-dot:hover {
-  background: var(--color-medium);
-  transform: scale(1.2);
+.gc-add-input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  color: #fff;
+  font-family: var(--font-vcr);
+  font-size: 0.8rem;
+  outline: none;
 }
-
-.slide-dot.active {
-  background: var(--color-highlight);
-  border-color: var(--color-highlight);
-  transform: scale(1.3);
-}
+.gc-add-input:focus { border-color: #90ee90; }
 
 /* Full-width colored sections */
 .gaming-section {
@@ -389,40 +390,15 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .gaming-page .page-title {
-    font-size: 2.5rem;
-    padding: 0.5rem 1rem;
+  .gaming-page-title {
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    top: 22px;
+    left: 100px;
   }
 
-  .slideshow-overlay {
-    padding: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .slideshow-game-title {
-    font-size: 1.2rem;
-  }
-
-  .slideshow-caption {
-    font-size: 0.85rem;
-  }
-
-  .slideshow-counter {
-    font-size: 1rem;
-  }
-
-  .slideshow-arrow-left {
-    left: 0.5rem;
-  }
-
-  .slideshow-arrow-right {
-    right: 0.5rem;
-  }
-
-  .slideshow-arrow {
-    font-size: 2.5rem;
+  .gc-arrow svg {
+    width: 28px;
+    height: 28px;
   }
 
   .gaming-section {
@@ -439,8 +415,10 @@
 }
 
 @media (max-width: 480px) {
-  .gaming-page .page-title {
-    font-size: 2rem;
+  .gaming-page-title {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    top: 18px;
+    left: 80px;
   }
 
   .game-meta {

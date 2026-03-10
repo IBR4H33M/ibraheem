@@ -1,0 +1,164 @@
+/* Contact Page — mirrors Fandom UI */
+.contact-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -200px;
+  padding-top: 0;
+}
+
+.contact-page-title {
+  position: fixed;
+  top: 30px;
+  left: 160px;
+  font-family: var(--font-vcr);
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  color: #0a0f2e;
+  margin: 0;
+  font-weight: 700;
+  z-index: 1100;
+  pointer-events: none;
+}
+
+.contact-outer {
+  width: 100%;
+  padding: 160px 2rem 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.contact-wrapper {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section label above each box */
+.contact-section-label {
+  font-family: var(--font-vcr);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: #1a2a6c;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+/* Container box */
+.contact-section-box {
+  background-color: #A7BCD6;
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Email button */
+.contact-mail-btn {
+  font-family: var(--font-vcr);
+  font-size: clamp(0.95rem, 1.8vw, 1.3rem);
+  color: #0a0f2e;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid #0a0f2e;
+  border-radius: 8px;
+  padding: 0.75rem 1.6rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s ease;
+  display: inline-block;
+}
+
+.contact-mail-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Social grid */
+.contact-social-box {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.social-item {
+  display: flex;
+}
+
+.social-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  color: #0a0f2e;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.45);
+  min-width: 80px;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  opacity: 0.8;
+}
+
+.social-label {
+  font-family: var(--font-vcr);
+  font-size: 0.72rem;
+  color: #0a0f2e;
+}
+
+/* Admin edit inputs */
+.contact-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.contact-edit-label {
+  font-family: var(--font-vcr);
+  font-size: 0.8rem;
+  color: #0a0f2e;
+  font-weight: 700;
+}
+
+.contact-edit-input {
+  font-family: var(--font-vcr);
+  font-size: 0.9rem;
+  color: #404852;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid #0a0f2e;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-edit-input:focus {
+  border-color: #1a2a6c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-page-title {
+    top: 20px;
+    left: 90px;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+  }
+
+  .contact-outer {
+    padding: 120px 1rem 2rem;
+  }
+
+  .social-link {
+    min-width: 65px;
+    padding: 0.7rem 0.7rem;
+  }
+}

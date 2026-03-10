@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Nav.css';
 
 const mainItems = [
@@ -23,6 +24,7 @@ const Nav = () => {
   const [logoLoaded, setLogoLoaded]    = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
+  const { isAdmin, logout } = useAuth();
   const logoClickCount = useRef(0);
   const logoClickTimer = useRef(null);
 
@@ -96,6 +98,15 @@ const Nav = () => {
         </button>
       </div>
 
+      {/* Admin icon — top right, same z-layer as logo */}
+      {isAdmin && (
+        <div className="admin-indicator">
+          <button className="admin-indicator-btn" onClick={logout} title="Logged in as admin — click to logout">
+            <span>ADMIN</span>
+          </button>
+        </div>
+      )}
+
       {/* Transparent backdrop */}
       {isOpen && (
         <div className="nav-backdrop" onClick={() => { setIsOpen(false); setActiveParent(null); }} />
@@ -124,6 +135,13 @@ const Nav = () => {
               </Link>
             )
           )}
+          <Link
+            to="/contact"
+            className={`nav-btn nav-contact-btn${location.pathname === '/contact' ? ' selected' : ''}`}
+            onClick={() => { setIsOpen(false); setActiveParent(null); }}
+          >
+            Contact
+          </Link>
         </div>
 
         <div className={`nav-col nav-col-sub${activeParent ? ' visible' : ''}`}>

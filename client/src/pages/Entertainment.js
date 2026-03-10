@@ -70,7 +70,9 @@ const Entertainment = () => {
           <div className="top10-movies-section">
 
           <div className="movie-slide">
-            <button className="slide-btn slide-prev" onClick={prev} aria-label="Previous">&#8249;</button>
+            <button className="slide-btn slide-prev" onClick={prev} aria-label="Previous">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" /></svg>
+            </button>
 
             <div className="slide-content">
               <div className="slide-poster" onClick={isAdmin && editing ? () => fileInputRef.current.click() : undefined}
@@ -97,7 +99,9 @@ const Entertainment = () => {
               </div>
             </div>
 
-            <button className="slide-btn slide-next" onClick={next} aria-label="Next">&#8250;</button>
+            <button className="slide-btn slide-next" onClick={next} aria-label="Next">
+              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
           </div>
 
           {isAdmin && (

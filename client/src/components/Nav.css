@@ -52,7 +52,7 @@
 
 /* ── Toggle > button ──────────────────────── */
 .nav-toggle {
-  background: rgba(5, 15, 50, 0.65);
+  background: transparent;
   border: none;
   color: #fff;
   font-size: 1.4rem;
@@ -65,14 +65,20 @@
   justify-content: center;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: opacity 0.2s ease;
   line-height: 1;
   z-index: 1002;
   position: relative;
+  text-shadow:
+    0 0 3px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000;
 }
 
 .nav-toggle:hover {
-  background: rgba(5, 15, 50, 0.9);
+  opacity: 0.75;
 }
 
 /* ── Backdrop ─────────────────────────────── */
@@ -88,16 +94,18 @@
   top: 0;
   left: 0;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
   background: rgba(5, 15, 50, 0.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transform: translateX(-100%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
-  padding-top: 220px;
-  padding-bottom: 2rem;
+  padding-top: 0;
+  padding-bottom: 0;
   overflow: hidden;
 }
 
@@ -111,9 +119,13 @@
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
-  padding: 0 20px;
+  padding: 220px 20px 2rem;
   width: 220px;
   flex-shrink: 0;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .nav-col-sub {
@@ -128,7 +140,7 @@
 
 .nav-col-sub.visible {
   width: 220px;
-  padding: 0 20px;
+  padding: 220px 20px 2rem;
   border-left-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -179,15 +191,17 @@
   }
 
   .nav-panel {
-    padding-top: 160px;
+    padding-top: 0;
   }
 
   .nav-col {
     width: 190px;
+    padding-top: 160px;
   }
 
   .nav-col-sub.visible {
     width: 190px;
+    padding-top: 160px;
   }
 
   .nav-btn {
@@ -204,6 +218,14 @@
   }
 
   .nav-panel {
+    padding-top: 0;
+  }
+
+  .nav-col {
+    padding-top: 140px;
+  }
+
+  .nav-col-sub.visible {
     padding-top: 140px;
   }
 }
@@ -568,4 +590,49 @@
 .dropdown-wrap .dropdown-toggle,
 .dropdown-wrap .dropdown-menu {
   pointer-events: auto;
+}
+
+/* ── Admin indicator (top-right, shown when admin is logged in) ── */
+.admin-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+}
+
+.admin-indicator-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(5, 15, 50, 0.85);
+  border: 1px solid rgba(144, 238, 144, 0.45);
+  color: #90ee90;
+  font-family: var(--font-vcr);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-indicator-btn:hover {
+  background: rgba(5, 15, 50, 1);
+}
+
+/* ── Contact button pinned to panel bottom ── */
+.nav-contact-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #a8d8a8 !important;
+  letter-spacing: 0.08em;
+  margin-top: auto !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1rem;
+}
+
+.nav-contact-btn.selected {
+  color: #55ee55 !important;
+  font-weight: bold;
 }
