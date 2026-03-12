@@ -55,10 +55,9 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-          cache-dependency-path: server/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install server dependencies
-        working-directory: server
         run: npm ci
 
       - name: Verify server entry point parses without error
