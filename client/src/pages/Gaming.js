@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import useScrollTitle from '../hooks/useScrollTitle';
 import './Gaming.css';
 
 const Gaming = () => {
@@ -14,10 +14,26 @@ const Gaming = () => {
   const [saveMsg, setSaveMsg]       = useState('');
   const addFileRef                  = useRef(null);
   const { isAdmin, token }          = useAuth();
+  const titleVisible                = useScrollTitle();
+
+  // Recently Played Games state
+  const [recentGames, setRecentGames]       = useState([]);
+  const [rgAdding, setRgAdding]             = useState(false);
+  const [rgTitle, setRgTitle]               = useState('');
+  const [rgFile, setRgFile]                 = useState(null);
+  const [rgSaving, setRgSaving]             = useState(false);
+  const [rgMsg, setRgMsg]                   = useState('');
+  const rgFileRef                           = useRef(null);
+  const rgTrackRef                          = useRef(null);
+  const [rgCanScrollLeft, setRgCanScrollLeft]   = useState(false);
+  const [rgCanScrollRight, setRgCanScrollRight] = useState(false);
 
   useEffect(() => {
     axios.get('/api/game-captures')
       .then(({ data }) => { if (data.length) setCaptures(data); })
+      .catch(() => {});
+    axios.get('/api/recent-games')
+      .then(({ data }) => { if (data.length) setRecentGames(data); })
       .catch(() => {});
   }, []);
 
@@ -81,33 +97,52 @@ const Gaming = () => {
 
   const capture = captures[current] || null;
 
-  const sectionVariants = {
-    hidden:  { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-  const cardVariants = {
-    hidden:  { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  const handleRgAdd = async () => {
+    if (!rgTitle.trim() || !rgFile) { setRgMsg('Enter a title and choose an image.'); return; }
+    setRgSaving(true); setRgMsg('');
+    try {
+      const form = new FormData();
+      form.append('title', rgTitle.trim());
+      form.append('image', rgFile);
+      const { data } = await axios.post('/api/recent-games', form, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+      });
+      setRecentGames(prev => [...prev, data]);
+      setRgAdding(false); setRgTitle(''); setRgFile(null); setRgMsg('Added!');
+    } catch { setRgMsg('Failed to add.'); }
+    finally { setRgSaving(false); }
   };
 
-  const [gamesNostalgic] = useState([
-    { id: 1, title: 'Game Title',   platform: 'PC',          genre: 'RPG',       image: null },
-    { id: 2, title: 'Another Game', platform: 'PlayStation', genre: 'Action',    image: null },
-    { id: 3, title: 'Classic Game', platform: 'Multi',       genre: 'Adventure', image: null },
-  ]);
-  const [gamesCurrentlyPlaying] = useState([
-    { id: 1, title: 'Current Game',    platform: 'PC',   progress: '60%', image: null },
-    { id: 2, title: 'Another Current', platform: 'Xbox', progress: '25%', image: null },
-  ]);
-  const [gamesLookingForward] = useState([
-    { id: 1, title: 'Upcoming Game',    releaseDate: '2026', platform: 'PC',    image: null },
-    { id: 2, title: 'Anticipated Title',releaseDate: 'TBA',  platform: 'PS5',   image: null },
-    { id: 3, title: 'Sequel Game',      releaseDate: '2026', platform: 'Multi', image: null },
-  ]);
+  const handleRgDelete = async (id) => {
+    setRgSaving(true); setRgMsg('');
+    try {
+      await axios.delete(`/api/recent-games/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      setRecentGames(prev => prev.filter(g => g._id !== id));
+      setRgMsg('Removed!');
+    } catch { setRgMsg('Failed to remove.'); }
+    finally { setRgSaving(false); }
+  };
+
+  const updateRgScrollBtns = () => {
+    const el = rgTrackRef.current;
+    if (!el) return;
+    setRgCanScrollLeft(el.scrollLeft > 0);
+    setRgCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  };
+
+  useEffect(() => {
+    updateRgScrollBtns();
+  }, [recentGames]);
+
+  const rgScrollBy = (dir) => {
+    const el = rgTrackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  };
 
   return (
     <div className="gaming-page">
-      <h1 className="gaming-page-title">GAMING</h1>
+      <h1 className="gaming-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>GAMING</h1>
 
       {/* ── Full-width 16:9 in-game captures slideshow ── */}
       <section className="gaming-captures-section">
@@ -149,7 +184,7 @@ const Gaming = () => {
         </div>
 
         <div className="gaming-captures-footer">
-          <span className="gaming-captures-label">RECENT IN-GAME CAPTURES</span>
+          <span className="gaming-captures-label">RECENT IN-GAME CAPTURES <svg className="title-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg></span>
 
           {isAdmin && (
             <div className="gc-admin-controls">
@@ -189,92 +224,89 @@ const Gaming = () => {
         </div>
       </section>
 
-      {/* ── Game sections ── */}
-      <div className="gaming-content gaming-dark-bg">
-
-        {/* Currently Playing */}
-        <motion.section
-          className="gaming-section current-section"
-          variants={sectionVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }}
-        >
-          <h2 className="section-title">Games I Currently Play</h2>
-          <p className="section-description">What I'm currently grinding through and enjoying right now.</p>
-          <div className="games-grid">
-            {gamesCurrentlyPlaying.map((game, index) => (
-              <motion.div key={game.id} className="game-card current"
-                variants={cardVariants} initial="hidden" animate="visible"
-                transition={{ delay: 0.3 + index * 0.1 }} whileHover={{ scale: 1.03, y: -5 }}>
-                <div className="game-image">
-                  {game.image ? <img src={game.image} alt={game.title} /> : <div className="game-placeholder"><span>🕹️</span></div>}
-                  <div className="now-playing-badge">Now Playing</div>
-                </div>
-                <div className="game-info">
-                  <h3>{game.title}</h3>
-                  <div className="game-meta">
-                    <span className="platform">{game.platform}</span>
-                    <div className="progress-bar"><div className="progress-fill" style={{ width: game.progress }} /></div>
-                    <span className="progress-text">{game.progress}</span>
+      {/* ── Recently Played Games ── */}
+      <div className="rg-outer">
+        <h2 className="rg-heading"><svg className="title-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>&nbsp;RECENTLY PLAYED</h2>
+        <div className="rg-scroll-wrapper">
+          {rgCanScrollLeft && (
+            <button className="rg-arrow rg-arrow-left" onClick={() => rgScrollBy(-1)} aria-label="Scroll left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+          )}
+          <div
+            className="rg-section"
+            ref={rgTrackRef}
+            onScroll={updateRgScrollBtns}
+          >
+            <div className="rg-track">
+              {recentGames.map(game => (
+                <div key={game._id} className="rg-card">
+                  {isAdmin && (
+                    <button
+                      className="rg-delete-btn"
+                      onClick={() => handleRgDelete(game._id)}
+                      disabled={rgSaving}
+                      title="Remove game"
+                    >✕</button>
+                  )}
+                  <div className="rg-img-wrap">
+                    {game.image?.url
+                      ? <img src={game.image.url} alt={game.title} className="rg-img" />
+                      : <div className="rg-img-placeholder" />}
                   </div>
+                  <span className="rg-title">{game.title}</span>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
+              ))}
 
-        {/* Nostalgic */}
-        <motion.section
-          className="gaming-section nostalgic-section"
-          variants={sectionVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }}
-        >
-          <h2 className="section-title">Games Which Make Me Nostalgic</h2>
-          <p className="section-description">These are the games that shaped my gaming journey and hold a special place in my heart.</p>
-          <div className="games-grid">
-            {gamesNostalgic.map((game, index) => (
-              <motion.div key={game.id} className="game-card nostalgic"
-                variants={cardVariants} initial="hidden" animate="visible"
-                transition={{ delay: 0.3 + index * 0.1 }} whileHover={{ scale: 1.03, y: -5 }}>
-                <div className="game-image">
-                  {game.image ? <img src={game.image} alt={game.title} /> : <div className="game-placeholder"><span>🎮</span></div>}
-                </div>
-                <div className="game-info">
-                  <h3>{game.title}</h3>
-                  <div className="game-meta">
-                    <span className="platform">{game.platform}</span>
-                    <span className="genre">{game.genre}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+              {recentGames.length === 0 && !isAdmin && (
+                <p className="rg-empty">No games yet.</p>
+              )}
+            </div>
           </div>
-        </motion.section>
+          {rgCanScrollRight && (
+            <button className="rg-arrow rg-arrow-right" onClick={() => rgScrollBy(1)} aria-label="Scroll right">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          )}
+        </div>
 
-        {/* Looking Forward */}
-        <motion.section
-          className="gaming-section upcoming-section"
-          variants={sectionVariants} initial="hidden" animate="visible" transition={{ delay: 0.6 }}
-        >
-          <h2 className="section-title">Games I Look Forward to Playing</h2>
-          <p className="section-description">The upcoming titles I can't wait to get my hands on.</p>
-          <div className="games-grid">
-            {gamesLookingForward.map((game, index) => (
-              <motion.div key={game.id} className="game-card upcoming"
-                variants={cardVariants} initial="hidden" animate="visible"
-                transition={{ delay: 0.7 + index * 0.1 }} whileHover={{ scale: 1.03, y: -5 }}>
-                <div className="game-image">
-                  {game.image ? <img src={game.image} alt={game.title} /> : <div className="game-placeholder"><span>⏳</span></div>}
-                  <div className="release-badge">{game.releaseDate}</div>
-                </div>
-                <div className="game-info">
-                  <h3>{game.title}</h3>
-                  <div className="game-meta">
-                    <span className="platform">{game.platform}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+        {isAdmin && (
+          <div className="rg-admin-bar">
+            {!rgAdding ? (
+              <button className="admin-edit-btn" onClick={() => { setRgAdding(true); setRgMsg(''); }}>+ ADD GAME</button>
+            ) : (
+              <div className="rg-add-form">
+                <input
+                  className="gc-add-input"
+                  placeholder="Game title"
+                  value={rgTitle}
+                  onChange={e => setRgTitle(e.target.value)}
+                />
+                <button className="admin-edit-btn" onClick={() => rgFileRef.current.click()}>
+                  {rgFile ? '✓ Image selected' : 'Choose Image'}
+                </button>
+                <input
+                  ref={rgFileRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={e => setRgFile(e.target.files[0])}
+                />
+                <button className="admin-save-btn" onClick={handleRgAdd} disabled={rgSaving}>
+                  {rgSaving ? 'Saving…' : 'SAVE'}
+                </button>
+                <button className="admin-cancel-btn" onClick={() => { setRgAdding(false); setRgTitle(''); setRgFile(null); setRgMsg(''); }}>
+                  CANCEL
+                </button>
+              </div>
+            )}
+            {rgMsg && <span className="admin-save-msg">{rgMsg}</span>}
           </div>
-        </motion.section>
-
+        )}
       </div>
     </div>
   );

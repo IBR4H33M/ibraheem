@@ -19,7 +19,7 @@ const AdminLogin = () => {
     try {
       const { data } = await axios.post('/api/auth/login', { email, password });
       login(data.token);
-      navigate('/fandom');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {

@@ -21,9 +21,11 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/content', require('./routes/content'));
 app.use('/api/gaming', require('./routes/gaming'));
 app.use('/api/game-captures', require('./routes/gameCaptures'));
+app.use('/api/recent-games', require('./routes/recentGames'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/movies', require('./routes/movies'));
 app.use('/api/contact-settings', require('./routes/contactSettings'));
+app.use('/api/projects', require('./routes/projects'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import useScrollTitle from '../hooks/useScrollTitle';
 import './Entertainment.css';
 
 const DEFAULT_MOVIES = Array.from({ length: 10 }, (_, i) => ({
@@ -19,6 +20,7 @@ const Entertainment = () => {
   const [saveMsg, setSaveMsg]     = useState('');
   const fileInputRef              = useRef(null);
   const { isAdmin, token }        = useAuth();
+  const titleVisible              = useScrollTitle();
 
   useEffect(() => {
     axios.get('/api/movies')
@@ -62,7 +64,14 @@ const Entertainment = () => {
 
   return (
     <div className="fandom-page">
-      <h1 className="fandom-page-title">FANDOM</h1>
+      <h1 className="fandom-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>FANDOM</h1>
+
+      {/* Hero Video — full width 21:9 */}
+      <div className="fandom-hero-video-wrap">
+        <video className="fandom-hero-video" muted loop autoPlay playsInline preload="metadata">
+          <source src="/assets/fandom.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       <div className="top10-outer">
         <div className="top10-wrapper">

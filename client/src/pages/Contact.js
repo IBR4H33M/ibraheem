@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import useScrollTitle from '../hooks/useScrollTitle';
 import './Contact.css';
 
 const FacebookIcon = () => (
@@ -51,6 +52,7 @@ const Contact = () => {
   const [saving, setSaving]       = useState(false);
   const [saveMsg, setSaveMsg]     = useState('');
   const { isAdmin, token }        = useAuth();
+  const titleVisible              = useScrollTitle();
 
   useEffect(() => {
     axios.get('/api/contact-settings')
@@ -86,7 +88,7 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
-      <h1 className="contact-page-title">CONTACT IBRAHEEM</h1>
+      <h1 className="contact-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>CONTACT IBRAHEEM</h1>
 
       <div className="contact-outer">
         <div className="contact-wrapper">

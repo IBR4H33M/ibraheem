@@ -170,19 +170,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="website-footer">
-        <div className="footer-content">
-          <p>&copy; 2026 Ibraheems Space</p>
-          <div className="footer-links">
-            <Link to="/about">About</Link>
-            <Link to="/gaming">Gaming</Link>
-            <Link to="/techspace">Tech</Link>
-            <Link to="/fandom">Entertainment</Link>
-            <Link to="/collectibles">Collectibles</Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

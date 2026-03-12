@@ -1,172 +1,233 @@
-.techspace-page {
-  max-width: 1200px;
+/* ── TechSpace Page ── */
+.ts-page {
+  width: 100%;
+  min-height: 100vh;
+  margin-top: -200px;
+  background: #d0d0d0;
 }
 
-.techspace-content {
-  margin-top: 2rem;
+/* Fixed title — identical pattern to GAMING / FANDOM */
+.ts-page-title {
+  position: fixed;
+  top: 30px;
+  left: 160px;
+  font-family: var(--font-vcr);
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+  z-index: 1100;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  text-shadow:
+     1px  1px 0 #0a0f2e,
+    -1px -1px 0 #0a0f2e,
+     1px -1px 0 #0a0f2e,
+    -1px  1px 0 #0a0f2e;
 }
 
-.tech-section {
-  margin-bottom: 4rem;
+/* ── Projects outer section ── */
+.ts-projects-outer {
+  width: 100%;
+  background: #b0b0b0;
+  padding: 200px 0 3rem;
 }
 
-/* Projects Grid */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+.ts-projects-heading {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  color: #1a1a2e;
+  font-weight: normal;
+  margin: 0 0 1.5rem 2.5rem;
 }
 
-.project-card {
-  background: linear-gradient(135deg, var(--color-dark), var(--color-darker));
-  border: 2px solid var(--color-medium);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.project-card:hover {
-  border-color: var(--color-accent);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(90, 145, 179, 0.2);
-}
-
-.project-header {
+.ts-projects-list {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 0 1.5rem;
 }
 
-.project-header h3 {
-  font-size: 1.3rem;
-  color: var(--color-highlight);
-  font-family: var(--font-mono);
-}
-
-.project-tag {
-  padding: 0.3rem 0.8rem;
-  background: var(--color-primary);
-  border-radius: 20px;
-  font-size: 0.75rem;
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-}
-
-.project-card p {
-  color: var(--color-text-muted);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.project-links {
+/* ── Project card ── */
+.ts-project-card {
+  position: relative;
   display: flex;
-  gap: 1rem;
-}
-
-.project-link {
-  padding: 0.5rem 1rem;
-  background: var(--color-primary);
-  border: 1px solid var(--color-medium);
-  border-radius: 6px;
-  color: var(--color-text);
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-}
-
-.project-link:hover {
-  background: var(--color-medium);
-  border-color: var(--color-accent);
-}
-
-/* Tech Stack */
-.tech-stack {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  flex-direction: row;
+  align-items: flex-start;
   gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.tech-category h3 {
-  font-size: 1.2rem;
-  color: var(--color-accent);
-  margin-bottom: 1rem;
-  font-family: var(--font-mono);
-}
-
-.tech-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tech-item {
-  padding: 0.5rem 1rem;
-  background: var(--color-dark);
-  border: 1px solid var(--color-medium);
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  transition: all 0.3s ease;
-}
-
-.tech-item:hover {
-  border-color: var(--color-accent);
-  color: var(--color-text);
-  background: var(--color-primary);
-}
-
-/* Articles */
-.articles-list {
-  margin-top: 1.5rem;
-}
-
-.article-card {
-  background: linear-gradient(135deg, var(--color-dark), var(--color-darker));
-  border: 2px solid var(--color-medium);
+  background: #e4e4e4;
   border-radius: 12px;
   padding: 1.5rem;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
 }
 
-.article-card:hover {
-  border-color: var(--color-accent);
+.ts-delete-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.8rem;
+  background: rgba(0, 0, 0, 0.12);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.ts-delete-btn:hover { background: rgba(200, 0, 0, 0.2); }
+
+/* Left column — image + links */
+.ts-project-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  width: 200px;
 }
 
-.article-date {
-  font-size: 0.8rem;
-  color: var(--color-light);
-  font-family: var(--font-mono);
+.ts-project-img-wrap {
+  width: 200px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #c4c4c4;
 }
 
-.article-card h3 {
-  font-size: 1.2rem;
-  color: var(--color-highlight);
-  margin: 0.5rem 0;
+.ts-project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.article-card p {
-  color: var(--color-text-muted);
-  margin-bottom: 1rem;
+.ts-project-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #bbb;
 }
 
-.read-more {
-  color: var(--color-accent);
-  font-family: var(--font-mono);
+.ts-project-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-vcr);
+  font-size: 0.62rem;
+  color: #1a3a6c;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.ts-project-link:hover { color: #2a6aad; }
+
+.ts-link-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+}
+
+.ts-link-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 158px;
+}
+
+/* Right column — title + description */
+.ts-project-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-right: 2rem;
+}
+
+.ts-project-title {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  color: #1a1a2e;
+  font-weight: normal;
+  margin: 0;
+}
+
+.ts-project-desc {
+  font-family: var(--font-vcr);
+  font-size: 0.78rem;
+  color: #444;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.ts-empty {
+  font-family: var(--font-vcr);
+  color: #555;
   font-size: 0.9rem;
-  transition: color 0.3s ease;
+  padding: 1rem 2.5rem;
 }
 
-.read-more:hover {
-  color: var(--color-highlight);
+/* ── Admin bar ── */
+.ts-admin-bar {
+  padding: 1.5rem 2.5rem;
+  background: #d0d0d0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.ts-add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.ts-add-input {
+  font-family: var(--font-vcr);
+  font-size: 0.8rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background: #fff;
+  color: #1a1a2e;
+  outline: none;
+  min-width: 180px;
+}
+
+.ts-textarea {
+  resize: vertical;
+  min-height: 60px;
+  align-self: flex-start;
+  width: 340px;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
+  .ts-page-title {
+    top: 20px;
+    left: 90px;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .ts-project-card {
+    flex-direction: column;
+  }
+
+  .ts-project-left {
+    width: 100%;
+  }
+
+  .ts-project-img-wrap {
+    width: 100%;
+    height: 200px;
+  }
+
+  .ts-project-right {
+    padding-right: 0;
+  }
+
+  .ts-textarea {
+    width: 100%;
   }
 }
+

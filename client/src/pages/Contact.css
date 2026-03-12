@@ -21,6 +21,7 @@
   font-weight: 700;
   z-index: 1100;
   pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .contact-outer {

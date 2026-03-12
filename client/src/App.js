@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import AboutMe from './pages/AboutMe';
 import TechSpace from './pages/TechSpace';
@@ -16,6 +17,7 @@ function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isAdminPage = location.pathname === '/admin';
+  const showFooter = !isAdminPage;
 
   return (
     <div className="app">
@@ -32,6 +34,7 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
+      {showFooter && <Footer />}
     </div>
   );
 }
