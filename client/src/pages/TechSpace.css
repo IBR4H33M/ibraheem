@@ -113,7 +113,7 @@
   align-items: center;
   gap: 0.4rem;
   font-family: var(--font-vcr);
-  font-size: 0.62rem;
+  font-size: 1.2rem;
   color: #1a3a6c;
   text-decoration: none;
   transition: color 0.2s;
@@ -121,16 +121,15 @@
 .ts-project-link:hover { color: #2a6aad; }
 
 .ts-link-icon {
-  width: 0.85rem;
-  height: 0.85rem;
+  width: 1.05rem;
+  height: 1.05rem;
   flex-shrink: 0;
 }
 
 .ts-link-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 158px;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 /* Right column — title + description */
@@ -144,17 +143,17 @@
 
 .ts-project-title {
   font-family: var(--font-vcr);
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-size: clamp(2rem, 4vw, 3.4rem);
   color: #1a1a2e;
-  font-weight: normal;
+  font-weight: 700;
   margin: 0;
 }
 
 .ts-project-desc {
   font-family: var(--font-vcr);
-  font-size: 0.78rem;
+  font-size: 1.4rem;
   color: #444;
-  line-height: 1.65;
+  line-height: 1.75;
   margin: 0;
 }
 
