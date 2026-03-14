@@ -110,6 +110,12 @@ const TechSpace = () => {
   };
 
   const renderProjectDescription = (text = '') => {
+    const emphasizedLabels = new Set([
+      'background',
+      'tech stack',
+      'my role',
+    ]);
+
     const lines = String(text)
       .split('\n')
       .map(line => line.trim())
@@ -125,9 +131,13 @@ const TechSpace = () => {
 
       const label = match[1].trim();
       const value = match[2].trim();
+      const shouldEmphasize = emphasizedLabels.has(label.toLowerCase());
       return (
         <p key={i} className="ts-project-desc">
-          <span className="ts-desc-label">{label}:</span>{value ? ` ${value}` : ''}
+          {shouldEmphasize
+            ? <span className="ts-desc-label">{label}:</span>
+            : <span className="ts-desc-label-normal">{label}:</span>}
+          {value ? ` ${value}` : ''}
         </p>
       );
     });

@@ -4,6 +4,7 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Movie = require('../models/Movie');
+const MovieRecommendation = require('../models/MovieRecommendation');
 const adminAuth = require('../middleware/adminAuth');
 
 // Configure Cloudinary
@@ -43,6 +44,105 @@ router.get('/', async (req, res) => {
   try {
     const movies = await Movie.find().sort({ rank: 1 });
     res.json(movies);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET /api/movies/tmdb/search?q=... — public TMDB v3 proxy search
+router.get('/tmdb/search', async (req, res) => {
+  try {
+    const query = (req.query.q || '').trim();
+    if (!query) {
+      return res.status(400).json({ message: 'Query is required' });
+    }
+
+    if (!process.env.TMDB_BEARER_TOKEN) {
+      return res.status(500).json({ message: 'TMDB token is not configured' });
+    }
+
+    const tmdbHeaders = {
+      Authorization: `Bearer ${process.env.TMDB_BEARER_TOKEN}`,
+      accept: 'application/json',
+    };
+
+    const tmdbUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`;
+    const tmdbRes = await fetch(tmdbUrl, {
+      headers: tmdbHeaders,
+    });
+
+    if (!tmdbRes.ok) {
+      return res.status(502).json({ message: 'TMDB request failed' });
+    }
+
+    const data = await tmdbRes.json();
+    const baseResults = (data.results || []).slice(0, 8);
+
+    const results = await Promise.all(baseResults.map(async (movie) => {
+      let publisher = 'Unknown';
+
+      try {
+        const detailUrl = `https://api.themoviedb.org/3/movie/${movie.id}?language=en-US`;
+        const detailRes = await fetch(detailUrl, { headers: tmdbHeaders });
+        if (detailRes.ok) {
+          const detail = await detailRes.json();
+          if (Array.isArray(detail.production_companies) && detail.production_companies.length > 0) {
+            publisher = detail.production_companies[0].name || 'Unknown';
+          }
+        }
+      } catch {
+        publisher = 'Unknown';
+      }
+
+      return {
+        tmdbId: movie.id,
+        title: movie.title,
+        year: movie.release_date ? movie.release_date.slice(0, 4) : '',
+        posterPath: movie.poster_path || null,
+        posterUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w185${movie.poster_path}` : null,
+        publisher,
+      };
+    }));
+
+    res.json(results);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST /api/movies/recommend — public movie recommendation submit
+router.post('/recommend', async (req, res) => {
+  try {
+    const { name, tmdbId, title, year, posterPath } = req.body || {};
+    if (!name || !String(name).trim()) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+    if (!tmdbId || !title) {
+      return res.status(400).json({ message: 'Movie selection is required' });
+    }
+
+    const recommendation = await MovieRecommendation.create({
+      name: String(name).trim(),
+      tmdbId: Number(tmdbId),
+      title: String(title).trim(),
+      year: year ? String(year).trim() : '',
+      posterPath: posterPath || null,
+    });
+
+    res.status(201).json({
+      message: 'Recommendation received',
+      recommendation,
+    });
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET /api/movies/recommendations — admin only
+router.get('/recommendations', adminAuth, async (req, res) => {
+  try {
+    const recommendations = await MovieRecommendation.find().sort({ createdAt: -1 });
+    res.json(recommendations);
   } catch {
     res.status(500).json({ message: 'Server error' });
   }

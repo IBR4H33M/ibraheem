@@ -18,6 +18,13 @@ const Entertainment = () => {
   const [editFile, setEditFile]   = useState(null);
   const [saving, setSaving]       = useState(false);
   const [saveMsg, setSaveMsg]     = useState('');
+  const [recommenderName, setRecommenderName] = useState('');
+  const [movieQuery, setMovieQuery] = useState('');
+  const [searchingMovies, setSearchingMovies] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [submittingRecommendation, setSubmittingRecommendation] = useState(false);
+  const [recommendationMsg, setRecommendationMsg] = useState('');
   const fileInputRef              = useRef(null);
   const { isAdmin, token }        = useAuth();
   const titleVisible              = useScrollTitle();
@@ -27,6 +34,30 @@ const Entertainment = () => {
       .then(({ data }) => { if (data.length) setMovies(data); })
       .catch(() => {/* use defaults */});
   }, []);
+
+  useEffect(() => {
+    const query = movieQuery.trim();
+
+    if (query.length < 2) {
+      setSearchResults([]);
+      setSelectedMovie(null);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      setSearchingMovies(true);
+      try {
+        const { data } = await axios.get('/api/movies/tmdb/search', { params: { q: query } });
+        setSearchResults(data || []);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchingMovies(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timeout);
+  }, [movieQuery]);
 
   const prev = () => { setCurrent(i => (i - 1 + movies.length) % movies.length); setEditing(false); };
   const next = () => { setCurrent(i => (i + 1) % movies.length); setEditing(false); };
@@ -59,6 +90,37 @@ const Entertainment = () => {
       setSaveMsg('Save failed. Please try again.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleRecommend = async () => {
+    if (!recommenderName.trim()) {
+      setRecommendationMsg('Please enter your name first.');
+      return;
+    }
+    if (!selectedMovie) {
+      setRecommendationMsg('Please select a movie from search results.');
+      return;
+    }
+
+    setSubmittingRecommendation(true);
+    setRecommendationMsg('');
+    try {
+      await axios.post('/api/movies/recommend', {
+        name: recommenderName.trim(),
+        tmdbId: selectedMovie.tmdbId,
+        title: selectedMovie.title,
+        year: selectedMovie.year,
+        posterPath: selectedMovie.posterPath,
+      });
+      setRecommendationMsg('Thanks, your recommendation was submitted.');
+      setMovieQuery('');
+      setSearchResults([]);
+      setSelectedMovie(null);
+    } catch {
+      setRecommendationMsg('Could not submit recommendation. Please try again.');
+    } finally {
+      setSubmittingRecommendation(false);
     }
   };
 
@@ -136,6 +198,72 @@ const Entertainment = () => {
             </div>
           )}
 
+          </div>
+
+          <div className="recommend-movie-section">
+            <h3 className="recommend-movie-title">Recommend a movie to Ibraheem</h3>
+
+            <div className="recommend-form-row">
+              <input
+                className="recommend-name-input"
+                type="text"
+                placeholder="Who are you? -_-"
+                value={recommenderName}
+                onChange={(e) => setRecommenderName(e.target.value)}
+              />
+            </div>
+
+            <div className="recommend-form-row">
+              <input
+                className="recommend-search-input"
+                type="text"
+                placeholder="Search a movie title"
+                value={movieQuery}
+                onChange={(e) => {
+                  setMovieQuery(e.target.value);
+                  setRecommendationMsg('');
+                }}
+              />
+            </div>
+
+            <div className="recommend-results-wrap">
+              {searchingMovies && <p className="recommend-search-state">Searching TMDB...</p>}
+
+              {!searchingMovies && movieQuery.trim().length >= 2 && searchResults.length === 0 && (
+                <p className="recommend-search-state">No movies found.</p>
+              )}
+
+              {searchResults.length > 0 && (
+                <ul className="recommend-results-list">
+                  {searchResults.map((result) => (
+                    <li key={result.tmdbId}>
+                      <button
+                        type="button"
+                        className={`recommend-result-btn ${selectedMovie?.tmdbId === result.tmdbId ? 'selected' : ''}`}
+                        onClick={() => setSelectedMovie(result)}
+                      >
+                        <span className="recommend-result-line">
+                          {result.title} | {result.year || 'N/A'} | {result.publisher || 'Unknown'}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="recommend-submit-row">
+              <button
+                type="button"
+                className="recommend-submit-btn"
+                onClick={handleRecommend}
+                disabled={submittingRecommendation}
+              >
+                {submittingRecommendation ? 'Submitting...' : 'recommend this movie'}
+              </button>
+            </div>
+
+            {recommendationMsg && <p className="recommend-message">{recommendationMsg}</p>}
           </div>
         </div>
       </div>

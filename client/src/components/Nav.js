@@ -4,22 +4,16 @@ import { useAuth } from '../context/AuthContext';
 import './Nav.css';
 
 const mainItems = [
-  { id: 'about',    label: 'About Me',       path: '/about',     hasSub: false },
-  { id: 'cool',     label: 'All Things Cool', path: null,         hasSub: true  },
-  { id: 'techspace',label: 'TechSpace',       path: '/techspace', hasSub: false },
+  { id: 'about',        label: 'About Me',     path: '/about' },
+  { id: 'techspace',    label: 'TechSpace',    path: '/techspace' },
+  { id: 'gaming',       label: 'Gaming',       path: '/gaming' },
+  { id: 'fandom',       label: 'Fandom',       path: '/fandom' },
+  { id: 'collectibles', label: 'Collectibles', path: '/collectibles' },
+  { id: 'contact',      label: 'Contact',      path: '/contact' },
 ];
-
-const subItemsMap = {
-  cool: [
-    { id: 'gaming',      label: 'Gaming',      path: '/gaming'      },
-    { id: 'fandom',      label: 'Fandom',       path: '/fandom'      },
-    { id: 'collectibles',label: 'Collectibles', path: '/collectibles' },
-  ],
-};
 
 const Nav = () => {
   const [isOpen, setIsOpen]           = useState(false);
-  const [activeParent, setActiveParent] = useState(null);
   const [logoHovered, setLogoHovered]  = useState(false);
   const [logoLoaded, setLogoLoaded]    = useState(true);
   const location = useLocation();
@@ -44,28 +38,10 @@ const Nav = () => {
 
   React.useEffect(() => {
     setIsOpen(false);
-    setActiveParent(null);
   }, [location.pathname]);
 
   const handleToggle = () => {
-    setIsOpen(prev => {
-      if (prev) setActiveParent(null);
-      return !prev;
-    });
-  };
-
-  const handleMainClick = (item) => {
-    if (item.hasSub) {
-      setActiveParent(prev => (prev === item.id ? null : item.id));
-    } else {
-      setIsOpen(false);
-      setActiveParent(null);
-    }
-  };
-
-  const handleSubClick = () => {
-    setIsOpen(false);
-    setActiveParent(null);
+    setIsOpen(prev => !prev);
   };
 
   return (
@@ -109,48 +85,18 @@ const Nav = () => {
 
       {/* Transparent backdrop */}
       {isOpen && (
-        <div className="nav-backdrop" onClick={() => { setIsOpen(false); setActiveParent(null); }} />
+        <div className="nav-backdrop" onClick={() => { setIsOpen(false); }} />
       )}
 
       {/* Slide-in panel — sibling of nav-root, not a child */}
       <div className={`nav-panel${isOpen ? ' open' : ''}`}>
         <div className="nav-col">
-          {mainItems.map(item =>
-            item.hasSub ? (
-              <button
-                key={item.id}
-                className={`nav-btn${activeParent === item.id ? ' selected' : ''}`}
-                onClick={() => handleMainClick(item)}
-              >
-                {item.label}
-              </button>
-            ) : (
-              <Link
-                key={item.id}
-                to={item.path}
-                className={`nav-btn${location.pathname === item.path ? ' selected' : ''}`}
-                onClick={() => handleMainClick(item)}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-          <Link
-            to="/contact"
-            className={`nav-btn nav-contact-btn${location.pathname === '/contact' ? ' selected' : ''}`}
-            onClick={() => { setIsOpen(false); setActiveParent(null); }}
-          >
-            Contact
-          </Link>
-        </div>
-
-        <div className={`nav-col nav-col-sub${activeParent ? ' visible' : ''}`}>
-          {activeParent && subItemsMap[activeParent]?.map(item => (
+          {mainItems.map(item => (
             <Link
               key={item.id}
               to={item.path}
               className={`nav-btn${location.pathname === item.path ? ' selected' : ''}`}
-              onClick={handleSubClick}
+              onClick={() => setIsOpen(false)}
             >
               {item.label}
             </Link>
