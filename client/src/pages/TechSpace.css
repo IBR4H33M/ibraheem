@@ -60,10 +60,17 @@
   padding: 1.5rem;
 }
 
-.ts-delete-btn {
+.ts-card-actions {
   position: absolute;
   top: 0.7rem;
   right: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ts-delete-btn {
+  position: static;
   background: rgba(0, 0, 0, 0.12);
   border: none;
   border-radius: 50%;
@@ -113,7 +120,7 @@
   align-items: center;
   gap: 0.4rem;
   font-family: var(--font-vcr);
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   color: #1a3a6c;
   text-decoration: none;
   transition: color 0.2s;
@@ -141,6 +148,25 @@
   padding-right: 2rem;
 }
 
+.ts-edit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ts-edit-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.ts-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .ts-project-title {
   font-family: var(--font-vcr);
   font-size: clamp(2rem, 4vw, 3.4rem);
@@ -151,10 +177,21 @@
 
 .ts-project-desc {
   font-family: var(--font-vcr);
-  font-size: 1.4rem;
+  font-size: 1rem;
   color: #444;
   line-height: 1.75;
   margin: 0;
+}
+
+.ts-project-desc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ts-desc-label {
+  font-weight: 700;
+  color: #1f1f30;
 }
 
 .ts-empty {

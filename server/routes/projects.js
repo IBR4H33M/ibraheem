@@ -52,6 +52,31 @@ router.post('/', adminAuth, upload.single('image'), async (req, res) => {
   }
 });
 
+// PUT — admin
+router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ message: 'Not found' });
+
+    if (typeof req.body.title === 'string') project.title = req.body.title;
+    if (typeof req.body.description === 'string') project.description = req.body.description;
+    if (typeof req.body.url === 'string') project.url = req.body.url;
+    if (typeof req.body.githubUrl === 'string') project.githubUrl = req.body.githubUrl;
+
+    if (req.file) {
+      if (project.image?.publicId) {
+        await cloudinary.uploader.destroy(project.image.publicId);
+      }
+      project.image = { url: req.file.path, publicId: req.file.filename };
+    }
+
+    await project.save();
+    res.json(project);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // DELETE — admin
 router.delete('/:id', adminAuth, async (req, res) => {
   try {

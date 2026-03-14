@@ -7,14 +7,21 @@ import './TechSpace.css';
 const TechSpace = () => {
   const [projects, setProjects]     = useState([]);
   const [adding, setAdding]         = useState(false);
+  const [editingId, setEditingId]   = useState('');
   const [formTitle, setFormTitle]   = useState('');
   const [formDesc, setFormDesc]     = useState('');
   const [formUrl, setFormUrl]       = useState('');
   const [formGithub, setFormGithub] = useState('');
   const [formFile, setFormFile]     = useState(null);
+  const [editTitle, setEditTitle]   = useState('');
+  const [editDesc, setEditDesc]     = useState('');
+  const [editUrl, setEditUrl]       = useState('');
+  const [editGithub, setEditGithub] = useState('');
+  const [editFile, setEditFile]     = useState(null);
   const [saving, setSaving]         = useState(false);
   const [saveMsg, setSaveMsg]       = useState('');
   const imgRef                      = useRef(null);
+  const editImgRef                  = useRef(null);
   const { isAdmin, token }          = useAuth();
   const titleVisible                = useScrollTitle();
 
@@ -59,6 +66,73 @@ const TechSpace = () => {
     finally { setSaving(false); }
   };
 
+  const startEdit = (project) => {
+    setEditingId(project._id);
+    setEditTitle(project.title || '');
+    setEditDesc(project.description || '');
+    setEditUrl(project.url || '');
+    setEditGithub(project.githubUrl || '');
+    setEditFile(null);
+    setSaveMsg('');
+  };
+
+  const cancelEdit = () => {
+    setEditingId('');
+    setEditTitle('');
+    setEditDesc('');
+    setEditUrl('');
+    setEditGithub('');
+    setEditFile(null);
+  };
+
+  const handleUpdate = async (id) => {
+    if (!editTitle.trim()) { setSaveMsg('Enter a project title.'); return; }
+    setSaving(true); setSaveMsg('');
+    try {
+      const form = new FormData();
+      form.append('title', editTitle.trim());
+      form.append('description', editDesc.trim());
+      form.append('url', editUrl.trim());
+      form.append('githubUrl', editGithub.trim());
+      if (editFile) form.append('image', editFile);
+      const { data } = await axios.put(`/api/projects/${id}`, form, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+      });
+      setProjects(prev => prev.map(p => (p._id === id ? data : p)));
+      setEditingId('');
+      setEditFile(null);
+      setSaveMsg('Updated!');
+    } catch {
+      setSaveMsg('Failed to update.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const renderProjectDescription = (text = '') => {
+    const lines = String(text)
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean);
+
+    if (!lines.length) {
+      return <p className="ts-project-desc">No description provided.</p>;
+    }
+
+    return lines.map((line, i) => {
+      const match = line.match(/^([^:]{2,40}):\s*(.*)$/);
+      if (!match) return <p key={i} className="ts-project-desc">{line}</p>;
+
+      const label = match[1].trim();
+      const value = match[2].trim();
+      return (
+        <p key={i} className="ts-project-desc">
+          <span className="ts-desc-label">{label}:</span>{value ? ` ${value}` : ''}
+        </p>
+      );
+    });
+  };
+
   return (
     <div className="ts-page">
       <h1 className="ts-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>TECH SPACE</h1>
@@ -69,12 +143,20 @@ const TechSpace = () => {
           {projects.map(project => (
             <div key={project._id} className="ts-project-card">
               {isAdmin && (
-                <button
-                  className="ts-delete-btn"
-                  onClick={() => handleDelete(project._id)}
-                  disabled={saving}
-                  title="Remove project"
-                >✕</button>
+                <div className="ts-card-actions">
+                  <button
+                    className="admin-edit-btn"
+                    onClick={() => startEdit(project)}
+                    disabled={saving}
+                    title="Edit project"
+                  >EDIT</button>
+                  <button
+                    className="ts-delete-btn"
+                    onClick={() => handleDelete(project._id)}
+                    disabled={saving}
+                    title="Remove project"
+                  >✕</button>
+                </div>
               )}
               <div className="ts-project-left">
                 <div className="ts-project-img-wrap">
@@ -102,8 +184,58 @@ const TechSpace = () => {
                 )}
               </div>
               <div className="ts-project-right">
-                <h3 className="ts-project-title">{project.title}</h3>
-                <p className="ts-project-desc">{project.description}</p>
+                {editingId === project._id ? (
+                  <div className="ts-edit-form">
+                    <input
+                      className="ts-add-input ts-edit-title"
+                      value={editTitle}
+                      onChange={e => setEditTitle(e.target.value)}
+                      placeholder="Title"
+                    />
+                    <textarea
+                      className="ts-add-input ts-textarea"
+                      value={editDesc}
+                      onChange={e => setEditDesc(e.target.value)}
+                      placeholder="Short description"
+                      rows={3}
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editUrl}
+                      onChange={e => setEditUrl(e.target.value)}
+                      placeholder="Live URL"
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editGithub}
+                      onChange={e => setEditGithub(e.target.value)}
+                      placeholder="GitHub URL"
+                    />
+                    <div className="ts-edit-actions">
+                      <button className="admin-edit-btn" onClick={() => editImgRef.current.click()}>
+                        {editFile ? '✓ Image selected' : 'Change Image'}
+                      </button>
+                      <input
+                        ref={editImgRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={e => setEditFile(e.target.files[0])}
+                      />
+                      <button className="admin-save-btn" onClick={() => handleUpdate(project._id)} disabled={saving}>
+                        {saving ? 'Saving…' : 'SAVE'}
+                      </button>
+                      <button className="admin-cancel-btn" onClick={cancelEdit}>CANCEL</button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="ts-project-title">{project.title}</h3>
+                    <div className="ts-project-desc-block">
+                      {renderProjectDescription(project.description)}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -122,7 +254,7 @@ const TechSpace = () => {
               <input className="ts-add-input" placeholder="Title" value={formTitle} onChange={e => setFormTitle(e.target.value)} />
               <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
               <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />
-              <textarea className="ts-add-input ts-textarea" placeholder="Short description" value={formDesc} onChange={e => setFormDesc(e.target.value)} rows={3} />
+              <textarea className="ts-add-input ts-textarea" placeholder="Short description (use lines like: Background: ..., Tech Stack: ...)" value={formDesc} onChange={e => setFormDesc(e.target.value)} rows={3} />
               <button className="admin-edit-btn" onClick={() => imgRef.current.click()}>
                 {formFile ? '✓ Image selected' : 'Choose Image'}
               </button>
