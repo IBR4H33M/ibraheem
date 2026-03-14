@@ -177,6 +177,16 @@
   color: #e9ffe9;
 }
 
+.nav-spacer {
+  flex: 1 1 auto;
+  min-height: 1rem;
+}
+
+.nav-btn-contact {
+  margin-top: 0;
+  margin-bottom: 0.2rem;
+}
+
 /* ── Mobile ───────────────────────────────── */
 @media (max-width: 768px) {
   .logo-wrapper {

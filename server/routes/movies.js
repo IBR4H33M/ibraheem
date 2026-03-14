@@ -97,6 +97,7 @@ router.get('/tmdb/search', async (req, res) => {
       return {
         tmdbId: movie.id,
         title: movie.title,
+        releaseDate: movie.release_date || '',
         year: movie.release_date ? movie.release_date.slice(0, 4) : '',
         posterPath: movie.poster_path || null,
         posterUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w185${movie.poster_path}` : null,

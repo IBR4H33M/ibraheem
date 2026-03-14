@@ -149,9 +149,11 @@ const Home = () => {
       {/* Fandom Section - Full Width */}
       <div className="fandom-section-container">
         <div className="fandom-tile">
-          <video className="fandom-video" muted loop autoPlay playsInline preload="metadata">
-            <source src="/assets/fandom.mp4" type="video/mp4" />
-          </video>
+          <div className="fandom-video-frame">
+            <video className="fandom-video" muted loop autoPlay playsInline preload="metadata">
+              <source src="/assets/fandom.mp4" type="video/mp4" />
+            </video>
+          </div>
           <Link to="/fandom" className="fandom-title">&lt;FANDOM&gt;</Link>
         </div>
       </div>

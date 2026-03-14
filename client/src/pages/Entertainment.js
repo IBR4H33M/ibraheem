@@ -25,6 +25,8 @@ const Entertainment = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [submittingRecommendation, setSubmittingRecommendation] = useState(false);
   const [recommendationMsg, setRecommendationMsg] = useState('');
+  const [adminRecommendations, setAdminRecommendations] = useState([]);
+  const [loadingAdminRecommendations, setLoadingAdminRecommendations] = useState(false);
   const fileInputRef              = useRef(null);
   const { isAdmin, token }        = useAuth();
   const titleVisible              = useScrollTitle();
@@ -58,6 +60,35 @@ const Entertainment = () => {
 
     return () => clearTimeout(timeout);
   }, [movieQuery]);
+
+  useEffect(() => {
+    if (!isAdmin || !token) {
+      setAdminRecommendations([]);
+      return;
+    }
+
+    let mounted = true;
+
+    const fetchRecommendations = async () => {
+      setLoadingAdminRecommendations(true);
+      try {
+        const { data } = await axios.get('/api/movies/recommendations', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (mounted) setAdminRecommendations(data || []);
+      } catch {
+        if (mounted) setAdminRecommendations([]);
+      } finally {
+        if (mounted) setLoadingAdminRecommendations(false);
+      }
+    };
+
+    fetchRecommendations();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAdmin, token]);
 
   const prev = () => { setCurrent(i => (i - 1 + movies.length) % movies.length); setEditing(false); };
   const next = () => { setCurrent(i => (i + 1) % movies.length); setEditing(false); };
@@ -106,13 +137,18 @@ const Entertainment = () => {
     setSubmittingRecommendation(true);
     setRecommendationMsg('');
     try {
-      await axios.post('/api/movies/recommend', {
+      const { data } = await axios.post('/api/movies/recommend', {
         name: recommenderName.trim(),
         tmdbId: selectedMovie.tmdbId,
         title: selectedMovie.title,
         year: selectedMovie.year,
         posterPath: selectedMovie.posterPath,
       });
+
+      if (isAdmin && data?.recommendation) {
+        setAdminRecommendations(prev => [data.recommendation, ...prev]);
+      }
+
       setRecommendationMsg('Thanks, your recommendation was submitted.');
       setMovieQuery('');
       setSearchResults([]);
@@ -137,6 +173,43 @@ const Entertainment = () => {
 
       <div className="top10-outer">
         <div className="top10-wrapper">
+          {isAdmin && (
+            <div className="admin-recommendations-section">
+              <h2 className="admin-recommendations-title">Recommended Movies (Admin)</h2>
+
+              {loadingAdminRecommendations ? (
+                <p className="admin-recommendations-state">Loading recommendations...</p>
+              ) : adminRecommendations.length === 0 ? (
+                <p className="admin-recommendations-state">No recommendations yet.</p>
+              ) : (
+                <ul className="admin-recommendations-list">
+                  {adminRecommendations.map((rec) => (
+                    <li key={rec._id} className="admin-recommendation-item">
+                      <div className="admin-recommendation-poster-wrap">
+                        {rec.posterPath ? (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w185${rec.posterPath}`}
+                            alt={rec.title}
+                            className="admin-recommendation-poster"
+                          />
+                        ) : (
+                          <span className="admin-recommendation-poster-fallback">No Image</span>
+                        )}
+                      </div>
+
+                      <div className="admin-recommendation-meta">
+                        <span className="admin-recommendation-title">
+                          {rec.title}{rec.year ? ` (${rec.year})` : ''}
+                        </span>
+                        <span className="admin-recommendation-by">Recommended by: {rec.name}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
           <h2 className="top10-title">Ibraheem's Top 10 Movies</h2>
           <div className="top10-movies-section">
 
@@ -242,8 +315,24 @@ const Entertainment = () => {
                         className={`recommend-result-btn ${selectedMovie?.tmdbId === result.tmdbId ? 'selected' : ''}`}
                         onClick={() => setSelectedMovie(result)}
                       >
-                        <span className="recommend-result-line">
-                          {result.title} | {result.year || 'N/A'} | {result.publisher || 'Unknown'}
+                        <span className="recommend-result-poster-wrap">
+                          {result.posterUrl ? (
+                            <img
+                              src={result.posterUrl}
+                              alt={result.title}
+                              className="recommend-result-poster"
+                            />
+                          ) : (
+                            <span className="recommend-result-poster-fallback">No Image</span>
+                          )}
+                        </span>
+
+                        <span className="recommend-result-meta">
+                          <span className="recommend-result-title">{result.title}</span>
+                          <span className="recommend-result-release">
+                            Release date: {result.releaseDate || 'N/A'}
+                          </span>
+                          <span className="recommend-result-publisher">{result.publisher || 'Unknown'}</span>
                         </span>
                       </button>
                     </li>

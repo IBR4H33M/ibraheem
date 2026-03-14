@@ -9,8 +9,9 @@ const mainItems = [
   { id: 'gaming',       label: 'Gaming',       path: '/gaming' },
   { id: 'fandom',       label: 'Fandom',       path: '/fandom' },
   { id: 'collectibles', label: 'Collectibles', path: '/collectibles' },
-  { id: 'contact',      label: 'Contact',      path: '/contact' },
 ];
+
+const contactItem = { id: 'contact', label: 'Contact', path: '/contact' };
 
 const Nav = () => {
   const [isOpen, setIsOpen]           = useState(false);
@@ -101,6 +102,16 @@ const Nav = () => {
               {item.label}
             </Link>
           ))}
+
+          <div className="nav-spacer" />
+
+          <Link
+            to={contactItem.path}
+            className={`nav-btn nav-btn-contact${location.pathname === contactItem.path ? ' selected' : ''}`}
+            onClick={() => setIsOpen(false)}
+          >
+            {contactItem.label}
+          </Link>
         </div>
       </div>
     </>
