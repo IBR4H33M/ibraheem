@@ -26,6 +26,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/movies', require('./routes/movies'));
 app.use('/api/contact-settings', require('./routes/contactSettings'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/games', require('./routes/games'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

@@ -28,6 +28,17 @@ const Gaming = () => {
   const [rgCanScrollLeft, setRgCanScrollLeft]   = useState(false);
   const [rgCanScrollRight, setRgCanScrollRight] = useState(false);
 
+  // Game recommendation states
+  const [recommenderName, setRecommenderName] = useState('');
+  const [gameQuery, setGameQuery] = useState('');
+  const [searchingGames, setSearchingGames] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [submittingRecommendation, setSubmittingRecommendation] = useState(false);
+  const [recommendationMsg, setRecommendationMsg] = useState('');
+  const [adminRecommendations, setAdminRecommendations] = useState([]);
+  const [loadingAdminRecommendations, setLoadingAdminRecommendations] = useState(false);
+
   useEffect(() => {
     axios.get('/api/game-captures')
       .then(({ data }) => { if (data.length) setCaptures(data); })
@@ -36,6 +47,54 @@ const Gaming = () => {
       .then(({ data }) => { if (data.length) setRecentGames(data); })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const query = gameQuery.trim();
+    if (query.length < 2) {
+      setSearchResults([]);
+      setSelectedGame(null);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      setSearchingGames(true);
+      try {
+        const { data } = await axios.get('/api/games/search', { params: { q: query } });
+        setSearchResults(data || []);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchingGames(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timeout);
+  }, [gameQuery]);
+
+  useEffect(() => {
+    if (!isAdmin || !token) {
+      setAdminRecommendations([]);
+      return;
+    }
+
+    let mounted = true;
+    const fetchRecommended = async () => {
+      setLoadingAdminRecommendations(true);
+      try {
+        const { data } = await axios.get('/api/games/recommendations', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (mounted) setAdminRecommendations(data || []);
+      } catch {
+        if (mounted) setAdminRecommendations([]);
+      } finally {
+        if (mounted) setLoadingAdminRecommendations(false);
+      }
+    };
+
+    fetchRecommended();
+    return () => { mounted = false; };
+  }, [isAdmin, token]);
 
   const total = captures.length;
   const prev  = () => setCurrent(i => (i - 1 + Math.max(total, 1)) % Math.max(total, 1));
@@ -121,6 +180,43 @@ const Gaming = () => {
       setRgMsg('Removed!');
     } catch { setRgMsg('Failed to remove.'); }
     finally { setRgSaving(false); }
+  };
+
+  const handleRecommend = async () => {
+    if (!recommenderName.trim()) {
+      setRecommendationMsg('Please enter your name first.');
+      return;
+    }
+    if (!selectedGame) {
+      setRecommendationMsg('Please select a game from the search results.');
+      return;
+    }
+
+    setSubmittingRecommendation(true);
+    setRecommendationMsg('');
+    try {
+      const { data } = await axios.post('/api/games/recommend', {
+        name: recommenderName.trim(),
+        igdbId: selectedGame.igdbId,
+        title: selectedGame.title,
+        year: selectedGame.year,
+        coverUrl: selectedGame.coverUrl,
+        platforms: selectedGame.platforms,
+      });
+
+      if (isAdmin && data?.recommendation) {
+        setAdminRecommendations(prev => [data.recommendation, ...prev]);
+      }
+
+      setRecommendationMsg('Thanks, your recommendation was submitted.');
+      setGameQuery('');
+      setSearchResults([]);
+      setSelectedGame(null);
+    } catch {
+      setRecommendationMsg('Could not submit recommendation. Please try again.');
+    } finally {
+      setSubmittingRecommendation(false);
+    }
   };
 
   const updateRgScrollBtns = () => {
@@ -226,7 +322,7 @@ const Gaming = () => {
 
       {/* ── Recently Played Games ── */}
       <div className="rg-outer">
-        <h2 className="rg-heading"><svg className="title-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>&nbsp;RECENTLY PLAYED</h2>
+        <h2 className="rg-heading"><svg className="title-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>&nbsp;RECENTLY PLAYED GAMES</h2>
         <div className="rg-scroll-wrapper">
           {rgCanScrollLeft && (
             <button className="rg-arrow rg-arrow-left" onClick={() => rgScrollBy(-1)} aria-label="Scroll left">
@@ -305,6 +401,123 @@ const Gaming = () => {
               </div>
             )}
             {rgMsg && <span className="admin-save-msg">{rgMsg}</span>}
+          </div>
+        )}
+      </div>
+
+      {/* ── Game Recommendations ── */}
+      <div className="gr-outer">
+        <h2 className="gr-heading"><svg className="title-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>&nbsp;RECOMMEND A GAME</h2>
+
+        <div className="gr-container">
+          <div className="gr-box">
+          <div className="gr-form-row">
+            <input
+              className="gr-name-input"
+              placeholder="Who are you? -_-"
+              value={recommenderName}
+              onChange={e => setRecommenderName(e.target.value)}
+            />
+          </div>
+
+          <div className="gr-form-row">
+            <input
+              className="gr-search-input"
+              placeholder="Search a game title"
+              value={gameQuery}
+              onChange={e => {
+                setGameQuery(e.target.value);
+                setRecommendationMsg('');
+              }}
+            />
+          </div>
+
+          <div className="gr-results-wrap">
+            {searchingGames && <p className="gr-search-state">Searching IGDB...</p>}
+            {!searchingGames && gameQuery.trim().length >= 2 && searchResults.length === 0 && (
+              <p className="gr-search-state">No games found.</p>
+            )}
+
+            {!selectedGame && searchResults.length > 0 && (
+              <ul className="gr-results-list">
+                {searchResults.slice(0, 8).map(result => (
+                  <li key={result.igdbId}>
+                    <button
+                      type="button"
+                      className={`gr-result-btn ${selectedGame?.igdbId === result.igdbId ? 'selected' : ''}`}
+                      onClick={() => setSelectedGame(result)}
+                    >
+                      <span className="gr-result-poster-wrap">
+                        {result.coverUrl ? (
+                          <img src={result.coverUrl} alt={result.title} className="gr-result-poster" />
+                        ) : (
+                          <span className="gr-result-poster-fallback">No Image</span>
+                        )}
+                      </span>
+                      <span className="gr-result-meta">
+                        <span className="gr-result-title">{result.title}</span>
+                        <span className="gr-result-release">Release: {result.year || 'N/A'}</span>
+                        <span className="gr-result-platform">{(result.platforms || []).join(', ') || 'Unknown'}</span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {selectedGame && (
+              <div className="gr-selected">
+                <div className="gr-selected-poster">
+                  {selectedGame.coverUrl ? (
+                    <img src={selectedGame.coverUrl} alt={selectedGame.title} />
+                  ) : (
+                    <div className="gr-selected-poster-fallback">No Image</div>
+                  )}
+                </div>
+                <div className="gr-selected-meta">
+                  <div className="gr-selected-title">{selectedGame.title}</div>
+                  <div className="gr-selected-sub">Release: {selectedGame.year || 'N/A'}</div>
+                  <div className="gr-selected-sub">{(selectedGame.platforms || []).join(', ') || 'Unknown'}</div>
+                </div>
+                <button className="gr-clear-btn" type="button" onClick={() => setSelectedGame(null)}>
+                  Change
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="gr-submit-row">
+            <button
+              type="button"
+              className="gr-submit-btn"
+              onClick={handleRecommend}
+              disabled={submittingRecommendation}
+            >
+              {submittingRecommendation ? 'Submitting...' : 'recommend this game'}
+            </button>
+          </div>
+
+          {recommendationMsg && <p className="gr-message">{recommendationMsg}</p>}
+          </div>
+        </div>
+
+        {isAdmin && (
+          <div className="gr-admin-section">
+            <h3 className="gr-admin-title">Received Recommendations</h3>
+            {loadingAdminRecommendations ? (
+              <p className="gr-admin-state">Loading recommendations...</p>
+            ) : adminRecommendations.length === 0 ? (
+              <p className="gr-admin-state">No recommendations yet.</p>
+            ) : (
+              <ul className="gr-admin-list">
+                {adminRecommendations.map(rec => (
+                  <li key={rec._id} className="gr-admin-item">
+                    <span className="gr-admin-game">{rec.title}{rec.year ? ` (${rec.year})` : ''}</span>
+                    <span className="gr-admin-by">— {rec.name}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
       </div>

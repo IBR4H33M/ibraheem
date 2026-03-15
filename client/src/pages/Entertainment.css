@@ -48,15 +48,13 @@
 /* Outer wrapper — full width, dark bg */
 .top10-outer {
   width: 100%;
-  padding: 3rem 2rem 4rem;
-  display: flex;
-  justify-content: center;
+  padding: 3rem 1.5rem 4rem;
+  display: block;
 }
 
 /* Top 10 container — #4E6B71 */
 .top10-movies-section {
   width: 100%;
-  max-width: 900px;
   background-color: #eef9ef;
   border: 2px solid #8fb79a;
   border-radius: 16px;
@@ -70,10 +68,7 @@
 /* Wrapper for title + container */
 .top10-wrapper {
   width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: block;
 }
 
 .top10-title {
@@ -83,11 +78,12 @@
   text-align: left;
   margin: 0 0 0.8rem 0;
   font-weight: 700;
+  padding: 0 1.5rem;
 }
 
 .admin-recommendations-section {
   width: 100%;
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 0 1.2rem;
   background: #e8f4ea;
   border: 2px solid #8fb79a;
@@ -181,12 +177,18 @@
 
 .recommend-movie-section {
   width: 100%;
-  max-width: 900px;
+  max-width: 50%;
   margin-top: 1.6rem;
   background: #8fb79a;
   border-radius: 16px;
   padding: 1.4rem 1.3rem 1.2rem;
   box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .recommend-movie-section {
+    max-width: 100%;
+  }
 }
 
 .recommend-movie-title {
@@ -440,6 +442,10 @@
   justify-content: center;
 }
 
+.slide-rank::after {
+  content: '.';
+}
+
 .slide-poster {
   width: 200px;
   height: 280px;
@@ -465,6 +471,14 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+@media (min-width: 769px) {
+  .slide-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
 .slide-rank {
