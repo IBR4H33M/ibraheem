@@ -1,5 +1,27 @@
+
 .collectibles-page {
-  max-width: 1200px;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Title fixed top-left, same as gaming page */
+.collectibles-page-title {
+  position: fixed;
+  top: 30px;
+  left: 160px;
+  font-family: var(--font-vcr);
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+  z-index: 1100;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  text-shadow:
+    1px  1px 0 #0a0f2e,
+    -1px -1px 0 #0a0f2e,
+    1px -1px 0 #0a0f2e,
+    -1px  1px 0 #0a0f2e;
 }
 
 .collectibles-content {

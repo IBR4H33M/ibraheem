@@ -531,8 +531,8 @@
 }
 
 .admin-cancel-btn {
-  background: rgba(0,0,0,0.15);
-  color: #0a0f2e;
+  background: #d32f2f;
+  color: #ffffff;
 }
 
 .admin-edit-btn:hover,

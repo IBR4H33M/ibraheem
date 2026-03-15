@@ -1,5 +1,80 @@
+
 .about-page {
-  max-width: 1200px;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Title fixed top-left, same as gaming page */
+.about-page-title {
+  position: fixed;
+  top: 30px;
+  left: 160px;
+  font-family: var(--font-vcr);
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+  z-index: 1100;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  text-shadow:
+    1px  1px 0 #0a0f2e,
+    -1px -1px 0 #0a0f2e,
+    1px -1px 0 #0a0f2e,
+    -1px  1px 0 #0a0f2e;
+}
+
+.about-profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 70px;
+  margin-left: 60px;
+  gap: 2.2rem;
+}
+
+.about-profile-pic-col {
+  display: flex;
+  align-items: center;
+}
+
+.about-profile-greeting {
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+}
+
+.about-greeting-text {
+  font-size: 2.2rem;
+  color: var(--color-highlight, #90ee90);
+  font-family: var(--font-vcr), var(--font-mono), monospace;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.profile-upload-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.18);
+  color: #90ee90;
+  font-size: 1.1rem;
+  font-family: var(--font-mono);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.profile-image-container:hover .profile-upload-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+.profile-upload-msg {
+  margin-top: 8px;
+  color: #90ee90;
+  font-size: 1rem;
+  font-family: var(--font-mono);
 }
 
 .about-content {

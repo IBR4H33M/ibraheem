@@ -1,102 +1,57 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+
+import React, { useRef, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import useScrollTitle from '../hooks/useScrollTitle';
 import './AboutMe.css';
 
 const AboutMe = () => {
+  const { isAdmin } = useAuth();
+  const titleVisible = useScrollTitle();
+  const [profileImg, setProfileImg] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState('');
+  const fileInputRef = useRef();
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadMsg('');
+    // TODO: Implement upload to server and get URL
+    // For now, just preview
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setProfileImg(ev.target.result);
+      setUploading(false);
+      setUploadMsg('Preview only (not saved)');
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
-    <motion.div 
-      className="about-page page-container"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h1 className="page-title">About Me</h1>
-      
-      <div className="about-content">
-        <div className="about-intro">
-          <motion.div 
-            className="profile-section"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="profile-image-container">
-              {/* Add your profile image here */}
-              <div className="profile-placeholder">
-                <span>Your Photo</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="intro-text"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <h2>Hi, I'm Ibraheem Ibn Anwar</h2>
-            <p className="tagline">
-              Welcome to my personal corner of the internet
-            </p>
-            <p className="bio">
-              {/* Add your bio here */}
-              This is where you can share your story, background, and what drives you. 
-              Tell visitors about your journey, your passions, and what makes you unique.
-            </p>
-          </motion.div>
+    <div className="about-page">
+      <h1 className="about-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>ABOUT IBRAHEEM</h1>
+      <div className="about-profile-row">
+        <div className="about-profile-pic-col">
+          <div className="profile-image-container" style={{ cursor: isAdmin ? 'pointer' : 'default', outline: isAdmin ? '2px dashed #90ee90' : 'none' }} onClick={() => isAdmin && fileInputRef.current.click()}>
+            {profileImg
+              ? <img src={profileImg} alt="Profile" />
+              : <div className="profile-placeholder"><span>Profile</span></div>}
+            {isAdmin && (
+              <>
+                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                {uploading && <div className="profile-upload-msg">Uploading…</div>}
+                {uploadMsg && <div className="profile-upload-msg">{uploadMsg}</div>}
+                <div className="profile-upload-overlay">Click to upload</div>
+              </>
+            )}
+          </div>
         </div>
-
-        <motion.section 
-          className="about-section"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <h2 className="section-title">What I Do</h2>
-          <div className="skills-grid">
-            <div className="skill-card">
-              <h3>Development</h3>
-              <p>Description of your development skills and experience</p>
-            </div>
-            <div className="skill-card">
-              <h3>Gaming</h3>
-              <p>Your passion for gaming and favorite genres</p>
-            </div>
-            <div className="skill-card">
-              <h3>Entertainment</h3>
-              <p>Movies, shows, and content you enjoy</p>
-            </div>
-            <div className="skill-card">
-              <h3>Tech</h3>
-              <p>Technology interests and expertise</p>
-            </div>
-          </div>
-        </motion.section>
-
-        <motion.section 
-          className="about-section"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <h2 className="section-title">Connect With Me</h2>
-          <div className="social-links">
-            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="social-link">
-              <span className="social-icon">GitHub</span>
-            </a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="social-link">
-              <span className="social-icon">LinkedIn</span>
-            </a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="social-link">
-              <span className="social-icon">Twitter</span>
-            </a>
-            <a href="mailto:contact@ibraheemibnanwar.me" className="social-link">
-              <span className="social-icon">Email</span>
-            </a>
-          </div>
-        </motion.section>
+        <div className="about-profile-greeting">
+          <span className="about-greeting-text">Hi, this is ibraheem!</span>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -11,7 +11,6 @@ const Footer = () => {
         <Link to="/techspace" className="footer-link">TECH SPACE</Link>
         <Link to="/gaming" className="footer-link">GAMING</Link>
         <Link to="/fandom" className="footer-link">FANDOM</Link>
-        <Link to="/collectibles" className="footer-link">COLLECTIBLES</Link>
         <Link to="/contact" className="footer-link">CONTACT</Link>
       </nav>
 

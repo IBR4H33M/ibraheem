@@ -19,11 +19,12 @@ const Gaming = () => {
   // Recently Played Games state
   const [recentGames, setRecentGames]       = useState([]);
   const [rgAdding, setRgAdding]             = useState(false);
-  const [rgTitle, setRgTitle]               = useState('');
-  const [rgFile, setRgFile]                 = useState(null);
+  const [rgSearchQuery, setRgSearchQuery]   = useState('');
+  const [rgSearching, setRgSearching]       = useState(false);
+  const [rgSearchResults, setRgSearchResults] = useState([]);
+  const [rgSelectedGame, setRgSelectedGame] = useState(null);
   const [rgSaving, setRgSaving]             = useState(false);
   const [rgMsg, setRgMsg]                   = useState('');
-  const rgFileRef                           = useRef(null);
   const rgTrackRef                          = useRef(null);
   const [rgCanScrollLeft, setRgCanScrollLeft]   = useState(false);
   const [rgCanScrollRight, setRgCanScrollRight] = useState(false);
@@ -70,6 +71,29 @@ const Gaming = () => {
 
     return () => clearTimeout(timeout);
   }, [gameQuery]);
+
+  useEffect(() => {
+    const query = rgSearchQuery.trim();
+    if (query.length < 2) {
+      setRgSearchResults([]);
+      setRgSelectedGame(null);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      setRgSearching(true);
+      try {
+        const { data } = await axios.get('/api/games/search', { params: { q: query } });
+        setRgSearchResults(data || []);
+      } catch {
+        setRgSearchResults([]);
+      } finally {
+        setRgSearching(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timeout);
+  }, [rgSearchQuery]);
 
   useEffect(() => {
     if (!isAdmin || !token) {
@@ -157,17 +181,20 @@ const Gaming = () => {
   const capture = captures[current] || null;
 
   const handleRgAdd = async () => {
-    if (!rgTitle.trim() || !rgFile) { setRgMsg('Enter a title and choose an image.'); return; }
+    if (!rgSelectedGame) { setRgMsg('Please select a game from search results.'); return; }
     setRgSaving(true); setRgMsg('');
     try {
-      const form = new FormData();
-      form.append('title', rgTitle.trim());
-      form.append('image', rgFile);
-      const { data } = await axios.post('/api/recent-games', form, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+      const { data } = await axios.post('/api/recent-games', {
+        title: rgSelectedGame.title,
+        igdbId: rgSelectedGame.igdbId,
+        coverUrl: rgSelectedGame.coverUrl,
+        year: rgSelectedGame.year,
+        platforms: rgSelectedGame.platforms
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setRecentGames(prev => [...prev, data]);
-      setRgAdding(false); setRgTitle(''); setRgFile(null); setRgMsg('Added!');
+      setRgAdding(false); setRgSearchQuery(''); setRgSelectedGame(null); setRgSearchResults([]); setRgMsg('Added!');
     } catch { setRgMsg('Failed to add.'); }
     finally { setRgSaving(false); }
   };
@@ -348,8 +375,8 @@ const Gaming = () => {
                     >✕</button>
                   )}
                   <div className="rg-img-wrap">
-                    {game.image?.url
-                      ? <img src={game.image.url} alt={game.title} className="rg-img" />
+                    {game.coverUrl
+                      ? <img src={game.coverUrl} alt={game.title} className="rg-img" />
                       : <div className="rg-img-placeholder" />}
                   </div>
                   <span className="rg-title">{game.title}</span>
@@ -378,24 +405,37 @@ const Gaming = () => {
               <div className="rg-add-form">
                 <input
                   className="gc-add-input"
-                  placeholder="Game title"
-                  value={rgTitle}
-                  onChange={e => setRgTitle(e.target.value)}
+                  placeholder="Search game title"
+                  value={rgSearchQuery}
+                  onChange={e => setRgSearchQuery(e.target.value)}
                 />
-                <button className="admin-edit-btn" onClick={() => rgFileRef.current.click()}>
-                  {rgFile ? '✓ Image selected' : 'Choose Image'}
-                </button>
-                <input
-                  ref={rgFileRef}
-                  type="file"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={e => setRgFile(e.target.files[0])}
-                />
+                {rgSearching && <span className="rg-search-state">Searching...</span>}
+                {!rgSearching && rgSearchQuery.trim().length >= 2 && rgSearchResults.length === 0 && (
+                  <span className="rg-search-state">No games found.</span>
+                )}
+                {rgSearchResults.length > 0 && !rgSelectedGame && (
+                  <div className="rg-search-results">
+                    {rgSearchResults.slice(0, 5).map(result => (
+                      <button
+                        key={result.igdbId}
+                        className="rg-search-result-btn"
+                        onClick={() => setRgSelectedGame(result)}
+                      >
+                        {result.title} {result.year ? `(${result.year})` : ''}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {rgSelectedGame && (
+                  <div className="rg-selected-game">
+                    <span>{rgSelectedGame.title} {rgSelectedGame.year ? `(${rgSelectedGame.year})` : ''}</span>
+                    <button className="rg-clear-btn" onClick={() => setRgSelectedGame(null)}>✕</button>
+                  </div>
+                )}
                 <button className="admin-save-btn" onClick={handleRgAdd} disabled={rgSaving}>
                   {rgSaving ? 'Saving…' : 'SAVE'}
                 </button>
-                <button className="admin-cancel-btn" onClick={() => { setRgAdding(false); setRgTitle(''); setRgFile(null); setRgMsg(''); }}>
+                <button className="admin-cancel-btn" onClick={() => { setRgAdding(false); setRgSearchQuery(''); setRgSelectedGame(null); setRgSearchResults([]); setRgMsg(''); }}>
                   CANCEL
                 </button>
               </div>

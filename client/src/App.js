@@ -7,7 +7,6 @@ import AboutMe from './pages/AboutMe';
 import TechSpace from './pages/TechSpace';
 import Gaming from './pages/Gaming';
 import Entertainment from './pages/Entertainment';
-import Collectibles from './pages/Collectibles';
 import AdminLogin from './pages/AdminLogin';
 import Contact from './pages/Contact';
 import { AuthProvider } from './context/AuthContext';
@@ -38,7 +37,6 @@ function AppContent() {
           <Route path="/techspace" element={<TechSpace />} />
           <Route path="/gaming" element={<Gaming />} />
           <Route path="/fandom" element={<Entertainment />} />
-          <Route path="/collectibles" element={<Collectibles />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>

@@ -8,7 +8,6 @@ const mainItems = [
   { id: 'techspace',    label: 'TechSpace',    path: '/techspace' },
   { id: 'gaming',       label: 'Gaming',       path: '/gaming' },
   { id: 'fandom',       label: 'Fandom',       path: '/fandom' },
-  { id: 'collectibles', label: 'Collectibles', path: '/collectibles' },
 ];
 
 const contactItem = { id: 'contact', label: 'Contact', path: '/contact' };

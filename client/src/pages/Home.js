@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import axios from 'axios';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
@@ -36,8 +37,13 @@ const Home = () => {
   ]);
 
   const videoRefs = useRef([]);
-  const collectiblesRef = useRef(null);
+  const gamingRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
+  const [recentGames, setRecentGames] = useState([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const [manualRotation, setManualRotation] = useState(0);
 
   const safePlay = (video) => {
     if (!video) return;
@@ -98,11 +104,50 @@ const Home = () => {
     } catch (e) {}
   }, [prefersReducedMotion]);
 
-  // Scroll reveal for collectibles on mobile
+  // Scroll reveal for gaming section
   useEffect(() => {
-    const el = collectiblesRef.current;
+    const el = gamingRef.current;
     if (!el) return;
+
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const elementTop = rect.top;
+      const elementHeight = rect.height;
+      
+      if (elementTop < windowHeight && elementTop + elementHeight > 0) {
+        const progress = (windowHeight - elementTop) / (windowHeight + elementHeight);
+        setScrollProgress(Math.max(0, Math.min(1, progress)));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    axios.get('/api/recent-games')
+      .then(({ data }) => { if (data.length) setRecentGames(data); })
+      .catch(() => {});
+  }, []);
+
+  const handleDragStart = (e) => {
+    setIsDragging(true);
+    setDragStart(e.type.includes('mouse') ? e.clientX : e.touches[0].clientX);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const delta = currentX - dragStart;
+    setManualRotation(prev => prev - delta * 0.01);
+    setDragStart(currentX);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   return (
     <div className="home-page">
@@ -158,17 +203,50 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Collectibles Section */}
-      <div className="collectibles-horizontal-section" ref={collectiblesRef}>
-        {/* Left: Text */}
-        <div className="collectibles-left">
-          <Link to="/collectibles" className="collectibles-heading">
-            <span>&lt;COLLECTIBLES&gt;</span>
+      {/* Gaming Section */}
+      <div className="gaming-horizontal-section" ref={gamingRef}>
+        <div className="gaming-left">
+          <Link to="/gaming" className="gaming-heading">
+            <span>&lt;GAMING&gt;</span>
           </Link>
         </div>
-        {/* Right: bg image + f40 overlay */}
-        <div className="collectibles-right">
-          <img src="/assets/f40.webp" alt="Ferrari F40" className="f40-image" />
+        <div className="gaming-right">
+          <div 
+            className="gaming-carousel"
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
+          >
+            {recentGames.map((game, index) => {
+              const totalGames = recentGames.length;
+              const angle = (index / totalGames) * Math.PI * 2 + manualRotation;
+              const radius = 280;
+              const x = Math.cos(angle) * radius;
+              const z = Math.sin(angle) * radius;
+              const scale = 0.6 + (z + radius) / (radius * 2) * 0.6;
+              const opacity = 0.3 + (z + radius) / (radius * 2) * 0.7;
+              
+              return (
+                <div
+                  key={game._id}
+                  className="gaming-card"
+                  style={{
+                    transform: `translateX(${x}px) translateZ(${z}px) scale(${scale})`,
+                    opacity: opacity,
+                    zIndex: Math.round(z + radius)
+                  }}
+                >
+                  {game.coverUrl && (
+                    <img src={game.coverUrl} alt={game.title} className="gaming-card-img" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
