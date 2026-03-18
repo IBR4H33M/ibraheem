@@ -40,10 +40,9 @@ const Home = () => {
   const gamingRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
   const [recentGames, setRecentGames] = useState([]);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [manualRotation, setManualRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
-  const [manualRotation, setManualRotation] = useState(0);
 
   const safePlay = (video) => {
     if (!video) return;
@@ -104,28 +103,6 @@ const Home = () => {
     } catch (e) {}
   }, [prefersReducedMotion]);
 
-  // Scroll reveal for gaming section
-  useEffect(() => {
-    const el = gamingRef.current;
-    if (!el) return;
-
-    const handleScroll = () => {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const elementTop = rect.top;
-      const elementHeight = rect.height;
-      
-      if (elementTop < windowHeight && elementTop + elementHeight > 0) {
-        const progress = (windowHeight - elementTop) / (windowHeight + elementHeight);
-        setScrollProgress(Math.max(0, Math.min(1, progress)));
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   useEffect(() => {
     axios.get('/api/recent-games')
       .then(({ data }) => { if (data.length) setRecentGames(data); })
@@ -133,19 +110,22 @@ const Home = () => {
   }, []);
 
   const handleDragStart = (e) => {
+    e.preventDefault();
     setIsDragging(true);
     setDragStart(e.type.includes('mouse') ? e.clientX : e.touches[0].clientX);
   };
 
   const handleDragMove = (e) => {
     if (!isDragging) return;
+    e.preventDefault();
     const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
     const delta = currentX - dragStart;
-    setManualRotation(prev => prev - delta * 0.01);
+    setManualRotation(prev => prev - delta * 0.005);
     setDragStart(currentX);
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (e) => {
+    e.preventDefault();
     setIsDragging(false);
   };
 

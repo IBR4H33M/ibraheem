@@ -160,6 +160,12 @@
   color: #e4e4e4;
 }
 
+@media (max-width: 768px) {
+  .gaming-captures-label {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+  }
+}
+
 .title-chevron {
   display: inline-block;
   vertical-align: middle;
@@ -263,6 +269,16 @@
   color: #e4e4e4;
   margin: 0 0 1.2rem 0;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .gr-heading {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    white-space: normal;
+    word-break: break-word;
+  }
 }
 
 .gr-results-list {
@@ -599,6 +615,16 @@
   color: #e4e4e4;
   margin: 0 0 1.2rem 0;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .rg-heading {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    white-space: normal;
+    word-break: break-word;
+  }
 }
 
 /* Wrapper that holds arrows + grey scroll box */

@@ -1,3 +1,11 @@
+.about-greeting-desc {
+  margin-top: 0.7rem;
+  font-size: 1.18rem;
+  color: #e0e0e0;
+  font-family: var(--font-mono);
+  max-width: 420px;
+  line-height: 1.6;
+}
 
 .about-page {
   width: 100%;
@@ -35,7 +43,9 @@
 
 .about-profile-pic-col {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
 .about-profile-greeting {
@@ -66,10 +76,12 @@
   pointer-events: none;
   transition: opacity 0.2s;
 }
+
 .profile-image-container:hover .profile-upload-overlay {
   opacity: 1;
   pointer-events: auto;
 }
+
 .profile-upload-msg {
   margin-top: 8px;
   color: #90ee90;
@@ -77,8 +89,69 @@
   font-family: var(--font-mono);
 }
 
+.profile-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.profile-save-btn,
+.profile-cancel-btn {
+  font-family: var(--font-vcr);
+  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.profile-save-btn {
+  background: #90ee90;
+  color: #0a0f2e;
+}
+
+.profile-cancel-btn {
+  background: #d32f2f;
+  color: #ffffff;
+}
+
+.profile-save-btn:hover:not(:disabled),
+.profile-cancel-btn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.profile-save-btn:disabled,
+.profile-cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.about-profile-info-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 0.2rem;
+}
+
 .about-content {
   margin-top: 2rem;
+.about-page-title {
+  font-family: var(--font-vcr);
+  font-size: clamp(3.8rem, 7vw, 7rem);
+  color: #ffffff;
+  margin: 0 0 1.2rem 0;
+  font-weight: 700;
+  line-height: 1.05;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  text-shadow:
+    1px  1px 0 #0a0f2e,
+    -1px -1px 0 #0a0f2e,
+    1px -1px 0 #0a0f2e,
+    -1px  1px 0 #0a0f2e;
+}
 }
 
 /* Intro Section */

@@ -518,6 +518,9 @@
   transform-style: preserve-3d;
   cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .gaming-carousel:active {
@@ -530,8 +533,9 @@
   height: 267px;
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 .gaming-card-img {
@@ -562,9 +566,17 @@
     padding: 1rem 1.5rem 1.5rem;
   }
 
+  .gaming-heading span {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+
   .gaming-card {
     width: 120px;
     height: 160px;
+  }
+
+  .fandom-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
   }
 }
 
