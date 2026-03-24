@@ -28,6 +28,7 @@ app.use('/api/contact-settings', require('./routes/contactSettings'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/games', require('./routes/games'));
 app.use('/api/student-performance', require('./routes/studentPerformance'));
+app.use('/api/profile', require('./routes/profile'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

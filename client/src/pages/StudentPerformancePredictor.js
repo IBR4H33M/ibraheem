@@ -61,8 +61,13 @@ const StudentPerformancePredictor = () => {
             if (response.data.success) {
                 setResult(response.data);
 
-                const timing = response.data.timing || {};
-                logMessage(`Model runtime: ${timing.total_ms ?? 'N/A'} ms (knn ${timing.knn_ms ?? 'N/A'} ms, linear ${timing.linear_ms ?? 'N/A'} ms)`);
+                const timing = response.data.timing;
+                if (timing && typeof timing.total_ms !== 'undefined') {
+                    logMessage(`Model runtime: ${timing.total_ms} ms (knn ${timing.knn_ms} ms, linear ${timing.linear_ms} ms)`);
+                } else {
+                    logMessage('Model runtime not provided by API (check backend /predict timing capture).');
+                }
+
                 logMessage('Prediction complete: values returned');
             } else {
                 setError(response.data.error || 'Prediction failed');
