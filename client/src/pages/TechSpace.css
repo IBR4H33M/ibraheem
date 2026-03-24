@@ -48,6 +48,58 @@
   padding: 0 1.5rem;
 }
 
+/* ML Project Card */
+.ts-ml-project-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  margin: 0 1.5rem 2rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.ts-ml-project-card:hover {
+  transform: translateY(-5px);
+  border-color: #e94560;
+  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+}
+
+.ts-ml-card-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.ts-ml-card-content {
+  flex: 1;
+}
+
+.ts-ml-card-title {
+  font-family: var(--font-vcr);
+  font-size: 1.5rem;
+  color: #e94560;
+  margin: 0 0 0.5rem;
+}
+
+.ts-ml-card-desc {
+  font-size: 1rem;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+.ts-ml-card-arrow {
+  font-size: 2rem;
+  color: #e94560;
+  transition: transform 0.3s ease;
+}
+
+.ts-ml-project-card:hover .ts-ml-card-arrow {
+  transform: translateX(10px);
+}
+
 /* ── Project card ── */
 .ts-project-card {
   position: relative;
@@ -126,6 +178,19 @@
   transition: color 0.2s;
 }
 .ts-project-link:hover { color: #2a6aad; }
+
+.ts-custom-btn {
+  background: rgba(233, 69, 96, 0.15);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.ts-custom-btn:hover {
+  background: rgba(233, 69, 96, 0.25);
+}
 
 .ts-link-icon {
   width: 1.05rem;

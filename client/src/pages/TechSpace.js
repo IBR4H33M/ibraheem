@@ -12,11 +12,15 @@ const TechSpace = () => {
   const [formDesc, setFormDesc]     = useState('');
   const [formUrl, setFormUrl]       = useState('');
   const [formGithub, setFormGithub] = useState('');
+  const [formCustomBtnText, setFormCustomBtnText] = useState('');
+  const [formCustomBtnUrl, setFormCustomBtnUrl] = useState('');
   const [formFile, setFormFile]     = useState(null);
   const [editTitle, setEditTitle]   = useState('');
   const [editDesc, setEditDesc]     = useState('');
   const [editUrl, setEditUrl]       = useState('');
   const [editGithub, setEditGithub] = useState('');
+  const [editCustomBtnText, setEditCustomBtnText] = useState('');
+  const [editCustomBtnUrl, setEditCustomBtnUrl] = useState('');
   const [editFile, setEditFile]     = useState(null);
   const [saving, setSaving]         = useState(false);
   const [saveMsg, setSaveMsg]       = useState('');
@@ -33,7 +37,8 @@ const TechSpace = () => {
 
   const resetForm = () => {
     setAdding(false);
-    setFormTitle(''); setFormDesc(''); setFormUrl(''); setFormGithub(''); setFormFile(null);
+    setFormTitle(''); setFormDesc(''); setFormUrl(''); setFormGithub(''); 
+    setFormCustomBtnText(''); setFormCustomBtnUrl(''); setFormFile(null);
     setSaveMsg('');
   };
 
@@ -46,6 +51,8 @@ const TechSpace = () => {
       form.append('description', formDesc.trim());
       form.append('url',         formUrl.trim());
       form.append('githubUrl',   formGithub.trim());
+      form.append('customButtonText', formCustomBtnText.trim());
+      form.append('customButtonUrl', formCustomBtnUrl.trim());
       if (formFile) form.append('image', formFile);
       const { data } = await axios.post('/api/projects', form, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
@@ -72,6 +79,8 @@ const TechSpace = () => {
     setEditDesc(project.description || '');
     setEditUrl(project.url || '');
     setEditGithub(project.githubUrl || '');
+    setEditCustomBtnText(project.customButtonText || '');
+    setEditCustomBtnUrl(project.customButtonUrl || '');
     setEditFile(null);
     setSaveMsg('');
   };
@@ -82,6 +91,8 @@ const TechSpace = () => {
     setEditDesc('');
     setEditUrl('');
     setEditGithub('');
+    setEditCustomBtnText('');
+    setEditCustomBtnUrl('');
     setEditFile(null);
   };
 
@@ -94,6 +105,8 @@ const TechSpace = () => {
       form.append('description', editDesc.trim());
       form.append('url', editUrl.trim());
       form.append('githubUrl', editGithub.trim());
+      form.append('customButtonText', editCustomBtnText.trim());
+      form.append('customButtonUrl', editCustomBtnUrl.trim());
       if (editFile) form.append('image', editFile);
       const { data } = await axios.put(`/api/projects/${id}`, form, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
@@ -192,6 +205,16 @@ const TechSpace = () => {
                     <span className="ts-link-text">{project.githubUrl}</span>
                   </a>
                 )}
+                {project.customButtonText && project.customButtonUrl && (
+                  <a href={project.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link ts-custom-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-link-icon">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    <span className="ts-link-text">{project.customButtonText}</span>
+                  </a>
+                )}
               </div>
               <div className="ts-project-right">
                 {editingId === project._id ? (
@@ -220,6 +243,18 @@ const TechSpace = () => {
                       value={editGithub}
                       onChange={e => setEditGithub(e.target.value)}
                       placeholder="GitHub URL"
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editCustomBtnText}
+                      onChange={e => setEditCustomBtnText(e.target.value)}
+                      placeholder="Custom Button Text"
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editCustomBtnUrl}
+                      onChange={e => setEditCustomBtnUrl(e.target.value)}
+                      placeholder="Custom Button URL"
                     />
                     <div className="ts-edit-actions">
                       <button className="admin-edit-btn" onClick={() => editImgRef.current.click()}>
@@ -264,6 +299,8 @@ const TechSpace = () => {
               <input className="ts-add-input" placeholder="Title" value={formTitle} onChange={e => setFormTitle(e.target.value)} />
               <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
               <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />
+              <input className="ts-add-input" placeholder="Custom Button Text" value={formCustomBtnText} onChange={e => setFormCustomBtnText(e.target.value)} />
+              <input className="ts-add-input" placeholder="Custom Button URL" value={formCustomBtnUrl} onChange={e => setFormCustomBtnUrl(e.target.value)} />
               <textarea className="ts-add-input ts-textarea" placeholder="Short description (use lines like: Background: ..., Tech Stack: ...)" value={formDesc} onChange={e => setFormDesc(e.target.value)} rows={3} />
               <button className="admin-edit-btn" onClick={() => imgRef.current.click()}>
                 {formFile ? '✓ Image selected' : 'Choose Image'}

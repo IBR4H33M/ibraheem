@@ -135,6 +135,55 @@
   margin-top: 0.2rem;
 }
 
+/* Social Media Section */
+.about-social-section {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.about-social-title {
+  font-family: var(--font-vcr);
+  font-size: 1.3rem;
+  color: #ffe066;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.about-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.about-social-links .social-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  min-width: 80px;
+  border: 2px solid transparent;
+}
+
+.about-social-links .social-link:hover {
+  transform: translateY(-3px);
+  opacity: 0.85;
+  border-color: #ffe066;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.about-social-links .social-label {
+  font-family: var(--font-vcr);
+  font-size: 0.72rem;
+  color: #e0e0e0;
+}
+
 .about-content {
   margin-top: 2rem;
 .about-page-title {
