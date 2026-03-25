@@ -7,8 +7,9 @@
     "start": "node server/index.js",
     "server": "nodemon server/index.js",
     "client": "npm start --prefix client",
-    "flask": "cd ml-service && python app.py",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run flask\"",
+    "flask": "cd ml-service-GradePredict && python app.py",
+    "flask-product-review": "cd ml-service-ProductReview && python app.py",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run flask\" \"npm run flask-product-review\"",
     "install-all": "npm install && cd client && npm install"
   },
   "keywords": [

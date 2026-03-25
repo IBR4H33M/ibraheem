@@ -9,6 +9,7 @@ import Gaming from './pages/Gaming';
 import Entertainment from './pages/Entertainment';
 import AdminLogin from './pages/AdminLogin';
 import StudentPerformancePredictor from './pages/StudentPerformancePredictor';
+import SentimentAnalysisProductReview from './pages/SentimentAnalysisProductReview';
 import Contact from './pages/Contact';
 import { AuthProvider } from './context/AuthContext';
 import './styles/App.css';
@@ -41,6 +42,7 @@ function AppContent() {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/techspace/StudentPerformancePredictor" element={<StudentPerformancePredictor />} />
+          <Route path="/techspace/Sentiment-Analysis-of-Product-Reviews" element={<SentimentAnalysisProductReview />} />
         </Routes>
       </main>
       {showFooter && <Footer />}

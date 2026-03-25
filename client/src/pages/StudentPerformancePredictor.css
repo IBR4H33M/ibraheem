@@ -161,8 +161,9 @@
 }
 
 .spp-submit-btn:hover:not(:disabled) {
-  background: #0a4f1d;
-  opacity: 0.95;
+  background: #16a34a; /* lighter on hover */
+  color: #000;
+  opacity: 1;
   box-shadow: none;
 }
 
@@ -178,8 +179,10 @@
 }
 
 .spp-reset-btn:hover {
-  opacity: 0.8;
+  background: #1f3b60;
+  opacity: 0.9;
 }
+
 
 /* Error message */
 .spp-error {
