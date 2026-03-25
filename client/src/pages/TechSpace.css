@@ -180,16 +180,24 @@
 .ts-project-link:hover { color: #2a6aad; }
 
 .ts-custom-btn {
-  background: rgba(233, 69, 96, 0.15);
-  padding: 8px 12px;
-  border-radius: 6px;
+  background: #2d9d57; /* lighter green */
+  color: #000000; /* black text */
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
   margin-top: 10px;
   display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   width: fit-content;
+  border: 1px solid #248a45;
+  box-shadow: none;
 }
 
 .ts-custom-btn:hover {
-  background: rgba(233, 69, 96, 0.25);
+  background: #248a45;
+  color: #000000;
+  box-shadow: none;
 }
 
 .ts-link-icon {

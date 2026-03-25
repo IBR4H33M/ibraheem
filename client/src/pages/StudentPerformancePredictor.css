@@ -155,17 +155,21 @@
 }
 
 .spp-submit-btn {
-  background: #90ee90;
-  color: #0a0f2e;
+  background: #0b5c23; /* much darker green */
+  color: #000000; /* black text */
+  box-shadow: none;
 }
 
 .spp-submit-btn:hover:not(:disabled) {
-  opacity: 0.8;
+  background: #0a4f1d;
+  opacity: 0.95;
+  box-shadow: none;
 }
 
 .spp-submit-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .spp-reset-btn {
