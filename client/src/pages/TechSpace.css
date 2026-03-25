@@ -110,6 +110,19 @@
   background: #e4e4e4;
   border-radius: 12px;
   padding: 1.5rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.ts-project-right {
+  min-width: 0;
+}
+
+.ts-project-link,
+.ts-project-desc,
+.ts-project-desc-block {
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .ts-card-actions {

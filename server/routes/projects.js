@@ -37,11 +37,16 @@ router.post('/', adminAuth, upload.single('image'), async (req, res) => {
   try {
     const count   = await Project.countDocuments();
     const project = await Project.create({
-      title:       req.body.title,
-      description: req.body.description || '',
-      url:         req.body.url         || '',
-      githubUrl:   req.body.githubUrl   || '',
-      datasetUrl:  req.body.datasetUrl  || '',
+      title:        req.body.title,
+      description:  req.body.description || '', // legacy fallback
+      introduction: req.body.introduction || '',
+      background:   req.body.background || '',
+      datasetTitle: req.body.datasetTitle || '',
+      datasetUrl:   req.body.datasetUrl || '',
+      techStack:    req.body.techStack || '',
+      myRole:       req.body.myRole || '',
+      url:          req.body.url || '',
+      githubUrl:    req.body.githubUrl || '',
       customButtonText: req.body.customButtonText || '',
       customButtonUrl: req.body.customButtonUrl || '',
       image: req.file
@@ -63,9 +68,14 @@ router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
 
     if (typeof req.body.title === 'string') project.title = req.body.title;
     if (typeof req.body.description === 'string') project.description = req.body.description;
+    if (typeof req.body.introduction === 'string') project.introduction = req.body.introduction;
+    if (typeof req.body.background === 'string') project.background = req.body.background;
+    if (typeof req.body.datasetTitle === 'string') project.datasetTitle = req.body.datasetTitle;
+    if (typeof req.body.datasetUrl === 'string') project.datasetUrl = req.body.datasetUrl;
+    if (typeof req.body.techStack === 'string') project.techStack = req.body.techStack;
+    if (typeof req.body.myRole === 'string') project.myRole = req.body.myRole;
     if (typeof req.body.url === 'string') project.url = req.body.url;
     if (typeof req.body.githubUrl === 'string') project.githubUrl = req.body.githubUrl;
-    if (typeof req.body.datasetUrl === 'string') project.datasetUrl = req.body.datasetUrl;
     if (typeof req.body.customButtonText === 'string') project.customButtonText = req.body.customButtonText;
     if (typeof req.body.customButtonUrl === 'string') project.customButtonUrl = req.body.customButtonUrl;
 

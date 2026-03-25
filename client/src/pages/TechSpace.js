@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
@@ -10,18 +9,26 @@ const TechSpace = () => {
   const [adding, setAdding]         = useState(false);
   const [editingId, setEditingId]   = useState('');
   const [formTitle, setFormTitle]   = useState('');
-  const [formDesc, setFormDesc]     = useState('');
+  const [formIntroduction, setFormIntroduction] = useState('');
+  const [formBackground, setFormBackground] = useState('');
+  const [formDatasetTitle, setFormDatasetTitle] = useState('');
+  const [formDatasetUrl, setFormDatasetUrl] = useState('');
+  const [formTechStack, setFormTechStack] = useState('');
+  const [formMyRole, setFormMyRole] = useState('');
   const [formUrl, setFormUrl]       = useState('');
   const [formGithub, setFormGithub] = useState('');
-  const [formDataset, setFormDataset] = useState('');
   const [formCustomBtnText, setFormCustomBtnText] = useState('');
   const [formCustomBtnUrl, setFormCustomBtnUrl] = useState('');
   const [formFile, setFormFile]     = useState(null);
   const [editTitle, setEditTitle]   = useState('');
-  const [editDesc, setEditDesc]     = useState('');
+  const [editIntroduction, setEditIntroduction] = useState('');
+  const [editBackground, setEditBackground] = useState('');
+  const [editDatasetTitle, setEditDatasetTitle] = useState('');
+  const [editDatasetUrl, setEditDatasetUrl] = useState('');
+  const [editTechStack, setEditTechStack] = useState('');
+  const [editMyRole, setEditMyRole] = useState('');
   const [editUrl, setEditUrl]       = useState('');
   const [editGithub, setEditGithub] = useState('');
-  const [editDataset, setEditDataset] = useState('');
   const [editCustomBtnText, setEditCustomBtnText] = useState('');
   const [editCustomBtnUrl, setEditCustomBtnUrl] = useState('');
   const [editFile, setEditFile]     = useState(null);
@@ -40,7 +47,8 @@ const TechSpace = () => {
 
   const resetForm = () => {
     setAdding(false);
-    setFormTitle(''); setFormDesc(''); setFormUrl(''); setFormGithub(''); setFormDataset('');
+    setFormTitle(''); setFormIntroduction(''); setFormBackground(''); setFormDatasetTitle(''); setFormDatasetUrl(''); setFormTechStack(''); setFormMyRole('');
+    setFormUrl(''); setFormGithub('');
     setFormCustomBtnText(''); setFormCustomBtnUrl(''); setFormFile(null);
     setSaveMsg('');
   };
@@ -50,11 +58,15 @@ const TechSpace = () => {
     setSaving(true); setSaveMsg('');
     try {
       const form = new FormData();
-      form.append('title',       formTitle.trim());
-      form.append('description', formDesc.trim());
-      form.append('url',         formUrl.trim());
-      form.append('githubUrl',   formGithub.trim());
-      form.append('datasetUrl',  formDataset.trim());
+      form.append('title', formTitle.trim());
+      form.append('introduction', formIntroduction.trim());
+      form.append('background', formBackground.trim());
+      form.append('datasetTitle', formDatasetTitle.trim());
+      form.append('datasetUrl', formDatasetUrl.trim());
+      form.append('techStack', formTechStack.trim());
+      form.append('myRole', formMyRole.trim());
+      form.append('url', formUrl.trim());
+      form.append('githubUrl', formGithub.trim());
       form.append('customButtonText', formCustomBtnText.trim());
       form.append('customButtonUrl', formCustomBtnUrl.trim());
       if (formFile) form.append('image', formFile);
@@ -80,10 +92,14 @@ const TechSpace = () => {
   const startEdit = (project) => {
     setEditingId(project._id);
     setEditTitle(project.title || '');
-    setEditDesc(project.description || '');
+    setEditIntroduction(project.introduction || '');
+    setEditBackground(project.background || '');
+    setEditDatasetTitle(project.datasetTitle || '');
+    setEditDatasetUrl(project.datasetUrl || '');
+    setEditTechStack(project.techStack || '');
+    setEditMyRole(project.myRole || '');
     setEditUrl(project.url || '');
     setEditGithub(project.githubUrl || '');
-    setEditDataset(project.datasetUrl || '');
     setEditCustomBtnText(project.customButtonText || '');
     setEditCustomBtnUrl(project.customButtonUrl || '');
     setEditFile(null);
@@ -93,10 +109,14 @@ const TechSpace = () => {
   const cancelEdit = () => {
     setEditingId('');
     setEditTitle('');
-    setEditDesc('');
+    setEditIntroduction('');
+    setEditBackground('');
+    setEditDatasetTitle('');
+    setEditDatasetUrl('');
+    setEditTechStack('');
+    setEditMyRole('');
     setEditUrl('');
     setEditGithub('');
-    setEditDataset('');
     setEditCustomBtnText('');
     setEditCustomBtnUrl('');
     setEditFile(null);
@@ -108,10 +128,14 @@ const TechSpace = () => {
     try {
       const form = new FormData();
       form.append('title', editTitle.trim());
-      form.append('description', editDesc.trim());
+      form.append('introduction', editIntroduction.trim());
+      form.append('background', editBackground.trim());
+      form.append('datasetTitle', editDatasetTitle.trim());
+      form.append('datasetUrl', editDatasetUrl.trim());
+      form.append('techStack', editTechStack.trim());
+      form.append('myRole', editMyRole.trim());
       form.append('url', editUrl.trim());
       form.append('githubUrl', editGithub.trim());
-      form.append('datasetUrl', editDataset.trim());
       form.append('customButtonText', editCustomBtnText.trim());
       form.append('customButtonUrl', editCustomBtnUrl.trim());
       if (editFile) form.append('image', editFile);
@@ -129,38 +153,143 @@ const TechSpace = () => {
     }
   };
 
-  const renderProjectDescription = (text = '') => {
-    const emphasizedLabels = new Set([
-      'background',
-      'tech stack',
-      'my role',
-    ]);
+  const renderProjectDescription = (project) => {
+    const {
+      introduction,
+      background,
+      datasetTitle,
+      datasetUrl,
+      techStack,
+      myRole,
+      description,
+    } = project || {};
 
-    const lines = String(text)
-      .split('\n')
-      .map(line => line.trim())
-      .filter(Boolean);
+    const normalizedIntroduction = String(introduction || '').trim();
+    const normalizedBackground = String(background || '').trim();
+    const normalizedDatasetTitle = String(datasetTitle || '').trim();
+    const normalizedDatasetUrl = String(datasetUrl || '').trim();
+    const normalizedTechStack = String(techStack || '').trim();
+    const normalizedMyRole = String(myRole || '').trim();
 
-    if (!lines.length) {
+    const hasStructuredData = normalizedIntroduction || normalizedBackground || normalizedDatasetTitle || normalizedDatasetUrl || normalizedTechStack || normalizedMyRole;
+
+    if (!hasStructuredData) {
+      const plainText = String(description || '').trim();
+      if (!plainText) return <p className="ts-project-desc">No description provided.</p>;
+
+      const lines = plainText.split('\n');
+      const elements = [];
+      let elementKey = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (!trimmed) continue;
+
+        const match = trimmed.match(/^([^:]{2,40}):\s*(.*)$/);
+        if (!match) {
+          elements.push(
+            <p key={`line-${elementKey++}`} className="ts-project-desc">{trimmed}</p>
+          );
+          continue;
+        }
+
+        const label = match[1].trim();
+        let value = match[2].trim();
+
+        if (!value && label.toLowerCase() === 'url' && i + 1 < lines.length) {
+          const nextLine = lines[i + 1].trim();
+          if (/^https?:\/\//i.test(nextLine)) {
+            value = nextLine;
+            i += 1;
+          }
+        }
+
+        const shouldEmphasize = ['background', 'tech stack', 'my role'].includes(label.toLowerCase());
+
+        if (label.toLowerCase() === 'url' && value) {
+          elements.push(
+            <p key={`line-${elementKey++}`} className="ts-project-desc">
+              <strong>URL:</strong>{' '}
+              <a href={value} target="_blank" rel="noopener noreferrer" className="ts-project-link">{value}</a>
+            </p>
+          );
+        } else {
+          elements.push(
+            <p key={`line-${elementKey++}`} className="ts-project-desc">
+              <span className={shouldEmphasize ? 'ts-desc-label' : 'ts-desc-label-normal'}>{label}:</span>
+              {value ? ` ${value}` : ''}
+            </p>
+          );
+        }
+      }
+
+      return elements;
+    }
+
+    const rows = [];
+
+    if (normalizedIntroduction) {
+      rows.push(<p key="intro" className="ts-project-desc">{normalizedIntroduction}</p>);
+    }
+    if (normalizedBackground) {
+      rows.push(
+        <p key="background" className="ts-project-desc">
+          <span className="ts-desc-label">Background:</span> {normalizedBackground}
+        </p>
+      );
+    }
+
+    if (normalizedDatasetTitle || normalizedDatasetUrl) {
+      rows.push(
+        <div key="dataset" className="ts-project-desc">
+          <span className="ts-desc-label">Dataset:</span>
+          {normalizedDatasetTitle && <p className="ts-project-desc" style={{ margin: '0.25rem 0 0 0' }}><strong>Title:</strong> {normalizedDatasetTitle}</p>}
+          {normalizedDatasetUrl && (
+            <p className="ts-project-desc" style={{ margin: '0.25rem 0 0 0' }}>
+              <strong>URL:</strong> <a href={normalizedDatasetUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link">{normalizedDatasetUrl}</a>
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    if (normalizedTechStack) {
+      const techLines = normalizedTechStack.split('\n').map(line => line.trim()).filter(Boolean);
+      rows.push(
+        <div key="techstack" className="ts-project-desc">
+          <span className="ts-desc-label">Tech Stack:</span>
+          {techLines.map((line, idx) => {
+            const m = line.match(/^([^:]+):\s*(.*)$/);
+            if (m) {
+              return (
+                <p key={idx} className="ts-project-desc" style={{ margin: '0.2rem 0 0 0.25rem' }}>
+                  <strong>{m[1]}:</strong> {m[2]}
+                </p>
+              );
+            }
+            return (
+              <p key={idx} className="ts-project-desc" style={{ margin: '0.2rem 0 0 0.25rem' }}>
+                {line}
+              </p>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (normalizedMyRole) {
+      rows.push(
+        <p key="myrole" className="ts-project-desc">
+          <span className="ts-desc-label">My Role:</span> {normalizedMyRole}
+        </p>
+      );
+    }
+
+    if (!rows.length) {
       return <p className="ts-project-desc">No description provided.</p>;
     }
 
-    return lines.map((line, i) => {
-      const match = line.match(/^([^:]{2,40}):\s*(.*)$/);
-      if (!match) return <p key={i} className="ts-project-desc">{line}</p>;
-
-      const label = match[1].trim();
-      const value = match[2].trim();
-      const shouldEmphasize = emphasizedLabels.has(label.toLowerCase());
-      return (
-        <p key={i} className="ts-project-desc">
-          {shouldEmphasize
-            ? <span className="ts-desc-label">{label}:</span>
-            : <span className="ts-desc-label-normal">{label}:</span>}
-          {value ? ` ${value}` : ''}
-        </p>
-      );
-    });
+    return rows;
   };
 
   return (
@@ -212,15 +341,7 @@ const TechSpace = () => {
                     <span className="ts-link-text">{project.githubUrl}</span>
                   </a>
                 )}
-                {project.datasetUrl && (
-                  <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-link-icon">
-                      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
-                      <path d="M8 9h8M8 12h4" />
-                    </svg>
-                    <span className="ts-link-text">{project.datasetUrl}</span>
-                  </a>
-                )}
+
                 {project.customButtonText && project.customButtonUrl && (
                   <a href={project.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link ts-custom-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-link-icon">
@@ -243,10 +364,43 @@ const TechSpace = () => {
                     />
                     <textarea
                       className="ts-add-input ts-textarea"
-                      value={editDesc}
-                      onChange={e => setEditDesc(e.target.value)}
-                      placeholder="Short description"
-                      rows={3}
+                      value={editIntroduction}
+                      onChange={e => setEditIntroduction(e.target.value)}
+                      placeholder="Introduction"
+                      rows={2}
+                    />
+                    <textarea
+                      className="ts-add-input ts-textarea"
+                      value={editBackground}
+                      onChange={e => setEditBackground(e.target.value)}
+                      placeholder="Background"
+                      rows={2}
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editDatasetTitle}
+                      onChange={e => setEditDatasetTitle(e.target.value)}
+                      placeholder="Dataset Title"
+                    />
+                    <input
+                      className="ts-add-input"
+                      value={editDatasetUrl}
+                      onChange={e => setEditDatasetUrl(e.target.value)}
+                      placeholder="Dataset URL"
+                    />
+                    <textarea
+                      className="ts-add-input ts-textarea"
+                      value={editTechStack}
+                      onChange={e => setEditTechStack(e.target.value)}
+                      placeholder="Tech Stack"
+                      rows={2}
+                    />
+                    <textarea
+                      className="ts-add-input ts-textarea"
+                      value={editMyRole}
+                      onChange={e => setEditMyRole(e.target.value)}
+                      placeholder="My Role"
+                      rows={2}
                     />
                     <input
                       className="ts-add-input"
@@ -259,12 +413,6 @@ const TechSpace = () => {
                       value={editGithub}
                       onChange={e => setEditGithub(e.target.value)}
                       placeholder="GitHub URL"
-                    />
-                    <input
-                      className="ts-add-input"
-                      value={editDataset}
-                      onChange={e => setEditDataset(e.target.value)}
-                      placeholder="Dataset URL (optional)"
                     />
                     <input
                       className="ts-add-input"
@@ -299,7 +447,7 @@ const TechSpace = () => {
                   <>
                     <h3 className="ts-project-title">{project.title}</h3>
                     <div className="ts-project-desc-block">
-                      {renderProjectDescription(project.description)}
+                      {renderProjectDescription(project)}
                     </div>
                   </>
                 )}
@@ -319,12 +467,16 @@ const TechSpace = () => {
           ) : (
             <div className="ts-add-form">
               <input className="ts-add-input" placeholder="Title" value={formTitle} onChange={e => setFormTitle(e.target.value)} />
+              <textarea className="ts-add-input ts-textarea" placeholder="Introduction" value={formIntroduction} onChange={e => setFormIntroduction(e.target.value)} rows={2} />
+              <textarea className="ts-add-input ts-textarea" placeholder="Background" value={formBackground} onChange={e => setFormBackground(e.target.value)} rows={2} />
+              <input className="ts-add-input" placeholder="Dataset Title" value={formDatasetTitle} onChange={e => setFormDatasetTitle(e.target.value)} />
+              <input className="ts-add-input" placeholder="Dataset URL" value={formDatasetUrl} onChange={e => setFormDatasetUrl(e.target.value)} />
+              <textarea className="ts-add-input ts-textarea" placeholder="Tech Stack" value={formTechStack} onChange={e => setFormTechStack(e.target.value)} rows={2} />
+              <textarea className="ts-add-input ts-textarea" placeholder="My Role" value={formMyRole} onChange={e => setFormMyRole(e.target.value)} rows={2} />
               <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
               <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />
-              <input className="ts-add-input" placeholder="Dataset URL (optional)" value={formDataset} onChange={e => setFormDataset(e.target.value)} />
               <input className="ts-add-input" placeholder="Custom Button Text" value={formCustomBtnText} onChange={e => setFormCustomBtnText(e.target.value)} />
               <input className="ts-add-input" placeholder="Custom Button URL" value={formCustomBtnUrl} onChange={e => setFormCustomBtnUrl(e.target.value)} />
-              <textarea className="ts-add-input ts-textarea" placeholder="Short description (use lines like: Background: ..., Tech Stack: ...)" value={formDesc} onChange={e => setFormDesc(e.target.value)} rows={3} />
               <button className="admin-edit-btn" onClick={() => imgRef.current.click()}>
                 {formFile ? '✓ Image selected' : 'Choose Image'}
               </button>

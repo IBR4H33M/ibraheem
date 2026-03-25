@@ -78,8 +78,8 @@ const SentimentAnalysisProductReview = () => {
           <h2 className="spr-section-title">ENTER A PRODUCT REVIEW</h2>
 
           <form className="spr-form-section" onSubmit={handleSubmit}>
-            <div className="spr-form-grid">
-              <div className="spr-form-group" style={{ gridColumn: '1 / -1' }}>
+            <div className="spr-form-grid spr-form-grid-main">
+              <div className="spr-form-group">
                 <div className="spr-label-row">
                   <label htmlFor="review">Review Text</label>
                   <button
@@ -106,25 +106,25 @@ const SentimentAnalysisProductReview = () => {
                   placeholder="Type or paste a product review (e.g., 'This product is excellent and arrived on time')"
                 />
               </div>
+
+              <div className="spr-form-actions-col">
+                <div className="spr-form-actions">
+                  <button type="submit" className="spr-submit-btn" disabled={loading}>
+                    {loading ? 'ANALYZING...' : 'ANALYZE TEXT'}
+                  </button>
+                  <button type="button" className="spr-reset-btn" onClick={handleReset}>
+                    RESET
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div className="spr-form-actions-layout">
-              <div className="spr-form-actions">
-                <button type="submit" className="spr-submit-btn" disabled={loading}>
-                  {loading ? 'ANALYZING...' : 'ANALYZE TEXT'}
-                </button>
-                <button type="button" className="spr-reset-btn" onClick={handleReset}>
-                  RESET
-                </button>
-              </div>
-
-              <div className="spr-log-console">
-                <h3>Execution Log</h3>
-                <div className="spr-log-lines">
-                  {logs.length === 0
-                    ? <p>No logs yet. Click Analyze Sentiment.</p>
-                    : logs.map((line, idx) => <div key={idx} className="spr-log-line">{line}</div>)}
-                </div>
+            <div className="spr-log-console spr-log-console-fullwidth">
+              <h3>Execution Log</h3>
+              <div className="spr-log-lines">
+                {logs.length === 0
+                  ? <p>No logs yet</p>
+                  : logs.map((line, idx) => <div key={idx} className="spr-log-line">{line}</div>)}
               </div>
             </div>
           </form>

@@ -53,6 +53,38 @@
   gap: 1.5rem;
 }
 
+.spr-form-grid-main {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.spr-form-actions-col {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.spr-form-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.spr-submit-btn,
+.spr-reset-btn {
+  min-height: 48px;
+  height: 48px;
+  width: 100%;
+}
+.spr-log-console-fullwidth {
+  width: 100%;
+  margin-top: 1rem;
+}
+
 .spr-form-group {
   display: flex;
   flex-direction: column;
@@ -309,6 +341,14 @@
   .spr-bottom-right-row {
     display: block;
   }
+  .spr-form-grid-main {
+    grid-template-columns: 1fr;
+  }
+
+  .spr-form-actions-col {
+    width: 100%;
+  }
+
   .spr-form-group {
     width: 100%;
   }
@@ -329,6 +369,48 @@
   }
   .spr-bottom-right-row > div {
     width: 100%;
+  }
+}
+
+@media (min-width: 961px) {
+  .spr-form-grid-main {
+    grid-template-columns: 2.3fr minmax(210px, 1fr);
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .spr-form-actions-col {
+    align-self: start;
+    justify-content: flex-end;
+    padding-top: 2.6rem;
+  }
+
+  .spr-form-actions {
+    justify-content: flex-start;
+    gap: 0.7rem;
+  }
+
+  .spr-label-row {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-start;
+  }
+
+  .spr-label-row label {
+    margin-right: 0.75rem;
+    font-weight: 600;
+  }
+
+  .spr-clipboard-btn {
+    margin-left: 0;
+    position: relative;
+    right: 0;
+  }
+
+  .spr-log-console-fullwidth {
+    width: 100%;
+    margin-top: 1rem;
   }
 }
 
