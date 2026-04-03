@@ -51,6 +51,11 @@ const Contact = () => {
   const [draft, setDraft]         = useState(null);
   const [saving, setSaving]       = useState(false);
   const [saveMsg, setSaveMsg]     = useState('');
+  const [messageForm, setMessageForm] = useState({ name: '', email: '', topic: '', message: '' });
+  const [messageSaving, setMessageSaving] = useState(false);
+  const [messageMsg, setMessageMsg] = useState('');
+  const [adminMessages, setAdminMessages] = useState([]);
+  const [loadingAdminMessages, setLoadingAdminMessages] = useState(false);
   const { isAdmin, token }        = useAuth();
   const titleVisible              = useScrollTitle();
 
@@ -59,6 +64,31 @@ const Contact = () => {
       .then(({ data }) => setSettings(data))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!isAdmin || !token) {
+      setAdminMessages([]);
+      return;
+    }
+
+    let active = true;
+    const loadMessages = async () => {
+      setLoadingAdminMessages(true);
+      try {
+        const { data } = await axios.get('/api/contact-messages', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (active) setAdminMessages(data || []);
+      } catch {
+        if (active) setAdminMessages([]);
+      } finally {
+        if (active) setLoadingAdminMessages(false);
+      }
+    };
+
+    loadMessages();
+    return () => { active = false; };
+  }, [isAdmin, token]);
 
   const startEdit = () => {
     setDraft({
@@ -83,6 +113,36 @@ const Contact = () => {
       setSaveMsg('Save failed.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleMessageSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: messageForm.name.trim(),
+      email: messageForm.email.trim(),
+      topic: messageForm.topic.trim(),
+      message: messageForm.message.trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.topic || !payload.message) {
+      setMessageMsg('Please fill in all fields.');
+      return;
+    }
+
+    setMessageSaving(true);
+    setMessageMsg('');
+    try {
+      const { data } = await axios.post('/api/contact-messages', payload);
+      setMessageForm({ name: '', email: '', topic: '', message: '' });
+      setMessageMsg('Message sent successfully.');
+      if (isAdmin && data) {
+        setAdminMessages(prev => [data, ...prev]);
+      }
+    } catch (err) {
+      setMessageMsg(err?.response?.data?.message || 'Could not send message.');
+    } finally {
+      setMessageSaving(false);
     }
   };
 
@@ -112,6 +172,67 @@ const Contact = () => {
               >
                 Send an email to Ibraheem
               </a>
+            )}
+          </div>
+
+          {/* Leave a Message Section */}
+          <div className="contact-section-label" style={{ marginTop: '2.5rem' }}>Leave a Message</div>
+          <div className="contact-section-box contact-message-box">
+            <form className="contact-message-form" onSubmit={handleMessageSubmit}>
+              <input
+                className="contact-message-input"
+                placeholder="Name"
+                value={messageForm.name}
+                onChange={e => setMessageForm(prev => ({ ...prev, name: e.target.value }))}
+              />
+              <input
+                className="contact-message-input"
+                placeholder="Email"
+                type="email"
+                value={messageForm.email}
+                onChange={e => setMessageForm(prev => ({ ...prev, email: e.target.value }))}
+              />
+              <input
+                className="contact-message-input"
+                placeholder="Subject"
+                value={messageForm.topic}
+                onChange={e => setMessageForm(prev => ({ ...prev, topic: e.target.value }))}
+              />
+              <textarea
+                className="contact-message-textarea"
+                placeholder="Message"
+                rows={5}
+                value={messageForm.message}
+                onChange={e => setMessageForm(prev => ({ ...prev, message: e.target.value }))}
+              />
+              <button className="contact-message-submit" type="submit" disabled={messageSaving}>
+                {messageSaving ? 'Sending…' : 'Send Message'}
+              </button>
+            </form>
+            {messageMsg && <div className="contact-message-status">{messageMsg}</div>}
+
+            {isAdmin && (
+              <div className="contact-admin-messages">
+                <div className="contact-admin-title">Received Messages</div>
+                {loadingAdminMessages ? (
+                  <div className="contact-admin-empty">Loading messages…</div>
+                ) : adminMessages.length === 0 ? (
+                  <div className="contact-admin-empty">No messages yet.</div>
+                ) : (
+                  <div className="contact-admin-list">
+                    {adminMessages.map(msg => (
+                      <div key={msg._id} className="contact-admin-item">
+                        <div className="contact-admin-head">
+                          <span className="contact-admin-name">{msg.name}</span>
+                          <span className="contact-admin-topic">Subject: {msg.topic}</span>
+                        </div>
+                        <div className="contact-admin-email">{msg.email}</div>
+                        <div className="contact-admin-body">{msg.message}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

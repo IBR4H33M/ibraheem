@@ -26,6 +26,10 @@ const Gaming = () => {
   const [rgSaving, setRgSaving]             = useState(false);
   const [rgMsg, setRgMsg]                   = useState('');
   const rgTrackRef                          = useRef(null);
+  const rgDraggingRef                       = useRef(false);
+  const rgDragStartXRef                     = useRef(0);
+  const rgStartScrollLeftRef                = useRef(0);
+  const [rgDragging, setRgDragging]         = useState(false);
   const [rgCanScrollLeft, setRgCanScrollLeft]   = useState(false);
   const [rgCanScrollRight, setRgCanScrollRight] = useState(false);
 
@@ -263,6 +267,32 @@ const Gaming = () => {
     el.scrollBy({ left: dir * 320, behavior: 'smooth' });
   };
 
+  const handleRgMouseDown = (e) => {
+    if (e.button !== 0) return;
+    if (e.target.closest('button, a, input, textarea, select')) return;
+    const el = rgTrackRef.current;
+    if (!el) return;
+    rgDraggingRef.current = true;
+    setRgDragging(true);
+    rgDragStartXRef.current = e.pageX - el.offsetLeft;
+    rgStartScrollLeftRef.current = el.scrollLeft;
+  };
+
+  const handleRgMouseMove = (e) => {
+    if (!rgDraggingRef.current) return;
+    const el = rgTrackRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - rgDragStartXRef.current) * 1.25;
+    el.scrollLeft = rgStartScrollLeftRef.current - walk;
+  };
+
+  const stopRgDrag = () => {
+    rgDraggingRef.current = false;
+    setRgDragging(false);
+  };
+
   return (
     <div className="gaming-page">
       <h1 className="gaming-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>GAMING</h1>
@@ -359,9 +389,14 @@ const Gaming = () => {
             </button>
           )}
           <div
-            className="rg-section"
+            className={`rg-section ${rgDragging ? 'is-dragging' : ''}`}
             ref={rgTrackRef}
             onScroll={updateRgScrollBtns}
+            onMouseDown={handleRgMouseDown}
+            onMouseMove={handleRgMouseMove}
+            onMouseUp={stopRgDrag}
+            onMouseLeave={stopRgDrag}
+            onDragStart={(e) => e.preventDefault()}
           >
             <div className="rg-track">
               {recentGames.map(game => (

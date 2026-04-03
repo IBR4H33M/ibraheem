@@ -669,6 +669,17 @@
   padding: 1.6rem 2rem 1.4rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  cursor: grab;
+}
+
+.rg-section.is-dragging {
+  cursor: grabbing;
+}
+
+.rg-section.is-dragging .rg-track,
+.rg-section.is-dragging .rg-track * {
+  user-select: none;
 }
 
 /* Hide scrollbar visually but keep functionality */

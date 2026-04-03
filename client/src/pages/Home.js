@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import axios from 'axios';
 import 'slick-carousel/slick/slick.css';
@@ -7,14 +7,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [sections] = useState([
     {
       id: 1,
       type: 'video',
-      src: '/assets/fh5_unb.mp4',
+      src: '/assets/cover1.mkv',
       poster: '/assets/hero-poster.jpg',
-      tooltipTitle: 'Forza Horizon 5',
-      tooltipContent: 'An open world racing game set in Mexico. One of the most visually stunning racing games ever made.'
+      tooltipContent: 'Cinematic in-game footage captured in Need For Speed Unbound'
     },
     {
       id: 3,
@@ -145,8 +145,10 @@ const Home = () => {
                 playsInline
                 preload="metadata"
                 autoPlay={!prefersReducedMotion && index === 0}
+                onClick={() => navigate('/gaming')}
+                style={{ cursor: 'pointer' }}
               >
-                <source src={section.src} type="video/mp4" />
+                <source src={section.src} />
               </video>
               <div className="video-overlay">
                 <div className="overlay-right">
@@ -160,7 +162,6 @@ const Home = () => {
                   </div>
                   {showTooltip.visible && showTooltip.slide === index && (
                     <div className="tooltip">
-                      <h4>{section.tooltipTitle}</h4>
                       <p>{section.tooltipContent}</p>
                     </div>
                   )}

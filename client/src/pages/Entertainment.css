@@ -2,12 +2,7 @@
 .fandom-page {
   width: 100%;
   min-height: 100vh;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-top: -200px;
-  padding-top: 0;
 }
 
 .fandom-page-title {
@@ -31,11 +26,12 @@
 
 /* Hero video — full width at top of fandom page */
 .fandom-hero-video-wrap {
+  position: relative;
   width: 100%;
-  align-self: stretch;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 18 / 9;
   overflow: hidden;
-  flex-shrink: 0;
+  background: #111;
+  line-height: 0;
 }
 
 .fandom-hero-video {
@@ -48,17 +44,16 @@
 /* Outer wrapper — full width, dark bg */
 .top10-outer {
   width: 100%;
-  padding: 3rem 1.5rem 4rem;
-  display: block;
+  background: #1a1a1a;
+  padding: 2.5rem 2.5rem 2.5rem 1.5rem;
 }
 
-/* Top 10 container — #4E6B71 */
+/* Top 10 container */
 .top10-movies-section {
   width: 100%;
-  background-color: #eef9ef;
-  border: 2px solid #8fb79a;
-  border-radius: 16px;
-  padding: 2.5rem 2rem 2rem;
+  background: #3a3a3a;
+  border-radius: 14px;
+  padding: 1.6rem 2rem 1.4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,37 +68,47 @@
 
 .top10-title {
   font-family: var(--font-vcr);
-  font-size: clamp(1.2rem, 2.5vw + 0.5rem, 2.2rem);
-  color: #1a2a6c;
-  text-align: left;
-  margin: 0 0 0.8rem 0;
-  font-weight: 700;
-  padding: 0 1.5rem;
+  font-weight: normal;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  letter-spacing: 0.14em;
+  color: #e4e4e4;
+  margin: 0 0 1.2rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .top10-title {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    white-space: normal;
+    word-break: break-word;
+  }
 }
 
 .admin-recommendations-section {
   width: 100%;
   max-width: 100%;
   margin: 0 0 1.2rem;
-  background: #e8f4ea;
-  border: 2px solid #8fb79a;
-  border-radius: 16px;
-  padding: 1.15rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 1.4rem 1.2rem;
   box-sizing: border-box;
 }
 
 .admin-recommendations-title {
-  margin: 0 0 0.7rem;
+  margin: 0 0 0.8rem 0;
   font-family: var(--font-vcr);
-  font-size: clamp(1rem, 1vw + 0.8rem, 1.5rem);
-  color: #1a2a6c;
+  font-size: 1rem;
+  color: #e4e4e4;
 }
 
 .admin-recommendations-state {
-  margin: 0.35rem 0;
+  margin: 0;
   font-family: var(--font-vcr);
   font-size: 0.82rem;
-  color: #16313f;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .admin-recommendations-list {
@@ -112,17 +117,16 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.45rem;
 }
 
 .admin-recommendation-item {
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
+  justify-content: space-between;
+  gap: 0.8rem;
   padding: 0.5rem;
   border-radius: 10px;
-  border: 1px solid rgba(26, 42, 108, 0.2);
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .admin-recommendation-poster-wrap {
@@ -130,8 +134,7 @@
   height: 70px;
   border-radius: 6px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 35, 48, 0.22);
+  background: rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -148,7 +151,7 @@
 .admin-recommendation-poster-fallback {
   font-family: var(--font-vcr);
   font-size: 0.56rem;
-  color: rgba(20, 34, 48, 0.65);
+  color: rgba(255, 255, 255, 0.75);
   text-align: center;
   line-height: 1.2;
 }
@@ -162,26 +165,28 @@
 
 .admin-recommendation-title {
   font-family: var(--font-vcr);
-  color: #142230;
-  font-size: 0.98rem;
-  white-space: nowrap;
+  font-size: 0.9rem;
+  color: #f4f4f4;
+  font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .admin-recommendation-by {
   font-family: var(--font-vcr);
-  color: rgba(20, 34, 48, 0.8);
-  font-size: 0.73rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
 }
 
 .recommend-movie-section {
   width: 100%;
   max-width: 50%;
   margin-top: 1.6rem;
-  background: #8fb79a;
-  border-radius: 16px;
-  padding: 1.4rem 1.3rem 1.2rem;
+  background: #2a2a2a;
+  border-radius: 14px;
+  padding: 1.6rem 2rem 1.4rem;
   box-sizing: border-box;
 }
 
@@ -195,7 +200,7 @@
   margin: 0 0 1rem 0;
   font-family: var(--font-vcr);
   font-size: clamp(1rem, 1.2vw + 0.75rem, 1.7rem);
-  color: #0f2330;
+  color: #e4e4e4;
   font-weight: 700;
 }
 
@@ -207,26 +212,26 @@
 .recommend-name-input,
 .recommend-search-input {
   width: 100%;
-  border: 1px solid rgba(15, 35, 48, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  padding: 0.72rem 0.85rem;
-  font-size: 0.95rem;
+  padding: 0.75rem 0.9rem;
   font-family: var(--font-vcr);
-  color: #142230;
-  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+  background: #d4d4d4;
+  color: #1a1a1a;
   outline: none;
   box-sizing: border-box;
 }
 
 .recommend-name-input::placeholder,
 .recommend-search-input::placeholder {
-  color: rgba(20, 34, 48, 0.55);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .recommend-name-input:focus,
 .recommend-search-input:focus {
-  border-color: #0f2330;
-  box-shadow: 0 0 0 2px rgba(15, 35, 48, 0.12);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 .recommend-results-wrap {
@@ -235,47 +240,59 @@
 }
 
 .recommend-search-state {
-  margin: 0.3rem 0;
+  margin: 0.4rem 0;
   font-family: var(--font-vcr);
   font-size: 0.8rem;
-  color: #102330;
+  color: #d4d4d4;
 }
 
 .recommend-results-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 220px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.recommend-results-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.recommend-results-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+}
+
+.recommend-results-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .recommend-result-btn {
   width: 100%;
-  border: 1px solid rgba(15, 35, 48, 0.3);
-  border-radius: 8px;
-  background: #bcd7c2;
-  color: #142230;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: #3a3a3a;
+  color: #e4e4e4;
   font-family: var(--font-vcr);
-  font-size: 0.84rem;
-  padding: 0.5rem 0.62rem;
+  font-size: 0.88rem;
+  padding: 0.55rem 0.7rem;
   text-align: left;
   cursor: pointer;
   display: flex;
   align-items: stretch;
-  gap: 0.65rem;
+  gap: 0.8rem;
 }
 
 .recommend-result-btn:hover {
-  background: #c8dfcd;
+  background: #454545;
 }
 
 .recommend-result-btn.selected {
-  border-color: #0a0f2e;
-  background: #0a0f2e;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .recommend-result-btn.selected .recommend-result-title,
@@ -285,25 +302,15 @@
   color: #ffffff;
 }
 
-.recommend-result-btn.selected .recommend-result-release {
-  color: rgba(255, 255, 255, 0.9);
-}
 
-.recommend-result-btn.selected .recommend-result-publisher {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.recommend-result-btn.selected .recommend-result-poster-wrap {
-  border-color: rgba(255, 255, 255, 0.4);
-}
 
 .recommend-result-poster-wrap {
-  width: 116px;
-  height: 156px;
-  border-radius: 6px;
+  width: 96px;
+  height: 128px;
+  border-radius: 8px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(15, 35, 48, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -318,10 +325,10 @@
 }
 
 .recommend-result-poster-fallback {
-  color: rgba(20, 34, 48, 0.7);
-  font-size: 0.62rem;
+  font-family: var(--font-vcr);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.75);
   text-align: center;
-  line-height: 1.2;
   padding: 0 0.2rem;
 }
 
@@ -352,13 +359,13 @@
 }
 
 .recommend-result-release {
-  font-size: 0.88rem;
-  color: rgba(20, 34, 48, 0.85);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .recommend-result-publisher {
-  font-size: 0.88rem;
-  color: rgba(20, 34, 48, 0.78);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .recommend-submit-row {
@@ -368,12 +375,12 @@
 .recommend-submit-btn {
   border: none;
   border-radius: 8px;
-  background: #0f2330;
-  color: #e9f8ea;
+  background: #111;
+  color: #ffffff;
   font-family: var(--font-vcr);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  padding: 0.68rem 1rem;
+  padding: 0.75rem 1.1rem;
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
@@ -388,10 +395,10 @@
 }
 
 .recommend-message {
-  margin: 0.65rem 0 0;
+  margin-top: 0.75rem;
   font-family: var(--font-vcr);
-  font-size: 0.8rem;
-  color: #102330;
+  font-size: 0.82rem;
+  color: #d4d4d4;
 }
 
 /* Slider */
@@ -406,7 +413,7 @@
 .slide-btn {
   background: transparent;
   border: none;
-  color: #606C7A;
+  color: #e4e4e4;
   font-size: 0;
   width: 44px;
   height: 44px;
@@ -423,7 +430,7 @@
   display: block;
   width: 28px;
   height: 28px;
-  stroke: #606C7A;
+  stroke: #e4e4e4;
   stroke-width: 2;
   fill: none;
   stroke-linecap: round;
@@ -484,7 +491,7 @@
 .slide-rank {
   font-family: var(--font-vcr);
   font-size: clamp(5rem, 10vw, 11rem);
-  color: #404852;
+  color: #e4e4e4;
   font-weight: 700;
   line-height: 1;
 }
@@ -492,7 +499,7 @@
 .slide-name {
   font-family: var(--font-fastelar);
   font-size: clamp(1.8rem, 3.5vw, 4rem);
-  color: #404852;
+  color: #e4e4e4;
   line-height: 1.3;
 }
 
@@ -521,13 +528,13 @@
 }
 
 .admin-edit-btn {
-  background: #0a0f2e;
-  color: #90ee90;
+  background: #111;
+  color: #fff;
 }
 
 .admin-save-btn {
-  background: #90ee90;
-  color: #0a0f2e;
+  background: #fff;
+  color: #111;
 }
 
 .admin-cancel-btn {
@@ -549,15 +556,15 @@
 .admin-save-msg {
   font-family: var(--font-vcr);
   font-size: 0.8rem;
-  color: #0a0f2e;
+  color: #e4e4e4;
 }
 
 .slide-edit-input {
   font-family: var(--font-fastelar);
   font-size: clamp(1.2rem, 2.5vw, 2.8rem);
-  color: #404852;
-  background: rgba(255,255,255,0.5);
-  border: 2px solid #0a0f2e;
+  color: #1a1a1a;
+  background: #d4d4d4;
+  border: 2px solid #e4e4e4;
   border-radius: 6px;
   padding: 0.3rem 0.6rem;
   outline: none;
@@ -572,11 +579,11 @@
 .slide-poster-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10,15,46,0.6);
+  background: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #90ee90;
+  color: #fff;
   font-family: var(--font-vcr);
   font-size: 0.8rem;
   text-align: center;
@@ -593,7 +600,7 @@
   }
 
   .top10-outer {
-    padding: 120px 0.8rem 2rem;
+    padding: 1.5rem;
   }
 
   .top10-movies-section {
