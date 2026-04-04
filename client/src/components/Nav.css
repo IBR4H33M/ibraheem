@@ -54,31 +54,49 @@
 .nav-toggle {
   background: transparent;
   border: none;
-  color: #fff;
-  font-size: 1.4rem;
-  font-weight: 700;
-  font-family: var(--font-vcr);
-  width: 38px;
-  height: 38px;
+  color: #22B14C;
+  width: 52px;
+  height: 52px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
   line-height: 1;
   z-index: 1002;
   position: relative;
-  text-shadow:
-    0 0 3px #000,
-    1px 1px 0 #000,
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000;
 }
 
 .nav-toggle:hover {
-  opacity: 0.75;
+  color: #2DEB65;
+}
+
+.nav-toggle:active,
+.nav-toggle.open {
+  color: #2DEB65;
+}
+
+.nav-toggle-line {
+  width: 30px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 999px;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.nav-toggle.open .nav-toggle-line:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.nav-toggle.open .nav-toggle-line:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.open .nav-toggle-line:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
 }
 
 /* ── Backdrop ─────────────────────────────── */

@@ -69,8 +69,10 @@ const Nav = () => {
         </Link>
 
         {/* Toggle button */}
-        <button className="nav-toggle" onClick={handleToggle} aria-label="Toggle menu">
-          {isOpen ? '✕' : '>'}
+        <button className={`nav-toggle${isOpen ? ' open' : ''}`} onClick={handleToggle} aria-label="Toggle menu">
+          <span className="nav-toggle-line" />
+          <span className="nav-toggle-line" />
+          <span className="nav-toggle-line" />
         </button>
       </div>
 
