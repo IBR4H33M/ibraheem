@@ -58,7 +58,7 @@ const Nav = () => {
         >
           <div className="logo-wrapper">
             <img
-              src={logoHovered ? '/logo2.png' : '/logo.png'}
+              src={logoHovered ? '/logo2.png' : '/logo.gif'}
               alt="Ibraheem"
               className="logo"
               onLoad={() => setLogoLoaded(true)}
