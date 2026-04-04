@@ -24,6 +24,7 @@ app.use('/api/game-captures', require('./routes/gameCaptures'));
 app.use('/api/recent-games', require('./routes/recentGames'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/movies', require('./routes/movies'));
+app.use('/api/tv-series', require('./routes/tvSeries'));
 app.use('/api/contact-settings', require('./routes/contactSettings'));
 app.use('/api/contact-messages', require('./routes/contactMessages'));
 app.use('/api/projects', require('./routes/projects'));

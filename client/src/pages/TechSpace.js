@@ -278,10 +278,16 @@ const TechSpace = () => {
     }
 
     if (normalizedMyRole) {
+      const roleItems = normalizedMyRole.split(',').map(item => item.trim()).filter(Boolean);
       rows.push(
-        <p key="myrole" className="ts-project-desc">
-          <span className="ts-desc-label">My Role:</span> {normalizedMyRole}
-        </p>
+        <div key="myrole" className="ts-project-desc">
+          <span className="ts-desc-label">My Role:</span>
+          <ul className="ts-role-list">
+            {roleItems.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
       );
     }
 
