@@ -4,13 +4,14 @@ const axios = require('axios');
 
 // Flask service URL - update this for production if needed
 const FLASK_URL = process.env.PRODUCT_REVIEW_FLASK_URL || 'http://localhost:5002';
+const PREDICTION_TIMEOUT_MS = 120000;
 
 // Predict sentiment by proxying to Flask service
 router.post('/predict', async (req, res) => {
   try {
     const response = await axios.post(`${FLASK_URL}/sentiment/predict`, req.body, {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 30000,
+      timeout: PREDICTION_TIMEOUT_MS,
     });
     res.json(response.data);
   } catch (error) {

@@ -3,12 +3,12 @@ const router = express.Router();
 const axios = require('axios');
 
 // Flask service URL - update this for production
-const FLASK_URL = process.env.FLASK_URL || 'http://localhost:5001';
+const GRADE_PREDICT_FLASK_URL = process.env.GRADE_PREDICT_FLASK_URL || 'http://localhost:5001';
 
 // Proxy prediction request to Flask ML service
 router.post('/predict', async (req, res) => {
     try {
-        const response = await axios.post(`${FLASK_URL}/predict`, req.body, {
+        const response = await axios.post(`${GRADE_PREDICT_FLASK_URL}/predict`, req.body, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -36,7 +36,7 @@ router.post('/predict', async (req, res) => {
 // Health check for ML service
 router.get('/health', async (req, res) => {
     try {
-        const response = await axios.get(`${FLASK_URL}/health`, {
+        const response = await axios.get(`${GRADE_PREDICT_FLASK_URL}/health`, {
             timeout: 5000
         });
         res.json(response.data);

@@ -5,6 +5,7 @@ import './SentimentAnalysisProductReview.css';
 
 const SentimentAnalysisProductReview = () => {
   const titleVisible = useScrollTitle();
+  const predictionTimeoutMs = 120000;
   const [reviewText, setReviewText] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
@@ -44,7 +45,7 @@ const SentimentAnalysisProductReview = () => {
     
     try {
       const response = await axios.post('/api/product-review/predict', { text: trimmed }, {
-        timeout: 90000 // 90 seconds for cold start
+        timeout: predictionTimeoutMs
       });
       
       clearInterval(spinnerInterval);
