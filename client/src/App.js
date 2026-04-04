@@ -29,6 +29,68 @@ function AppContent() {
   const isAdminPage = location.pathname === '/admin';
   const showFooter = !isAdminPage;
 
+  useEffect(() => {
+    const metaByPath = {
+      '/': {
+        title: "Ibraheem's Space",
+        description: "Welcome to Ibraheem's corner of the Internet! Explore the things that keep Ibraheem going and see what he's been upto!",
+      },
+      '/contact': {
+        title: "Contact Ibraheem | Ibraheem's Space",
+        description: 'Get in touch with Ibraheem through email or social links, or leave a message directly from the contact page.',
+      },
+      '/techspace': {
+        title: "Ibraheem's Techspace | Ibraheem's Space",
+        description: 'Explore Ibraheem\'s tech projects, machine learning work, and development experiments.',
+      },
+      '/techspace/Sentiment-Analysis-of-Product-Reviews': {
+        title: 'Predict Sentiment of Product Reviews | Ibraheem\'s Space',
+        description: 'Analyze product review text with machine learning models to predict sentiment and confidence.',
+      },
+      '/techspace/StudentPerformancePredictor': {
+        title: 'Predict Student Performance | Ibraheem\'s Space',
+        description: 'Predict student performance using machine learning based on educational and behavioral inputs.',
+      },
+      '/about': {
+        title: 'About Ibraheem | Ibraheem\'s Space',
+        description: 'Learn about Ibraheem, his interests, social profiles, and personal highlights.',
+      },
+      '/gaming': {
+        title: 'Gaming | Ibraheem\'s Space',
+        description: 'See recently played games, recommendations, and gaming captures from Ibraheem.',
+      },
+      '/fandom': {
+        title: 'Fandom | Ibraheem\'s Space',
+        description: 'Discover favorite movies, shows, and entertainment picks curated by Ibraheem.',
+      },
+    };
+
+    const fallback = {
+      title: "Ibraheem's Space",
+      description: "Welcome to Ibraheem's corner of the Internet! Explore the things that keep Ibraheem going and see what he's been upto!",
+    };
+
+    const meta = metaByPath[location.pathname] || fallback;
+    document.title = meta.title;
+
+    let descriptionTag = document.querySelector('meta[name="description"]');
+    if (!descriptionTag) {
+      descriptionTag = document.createElement('meta');
+      descriptionTag.setAttribute('name', 'description');
+      document.head.appendChild(descriptionTag);
+    }
+    descriptionTag.setAttribute('content', meta.description);
+
+    const canonicalUrl = `https://ibraheemibnanwar.me${location.pathname}`;
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      canonicalTag = document.createElement('link');
+      canonicalTag.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute('href', canonicalUrl);
+  }, [location.pathname]);
+
   return (
     <div className="app">
       {!isAdminPage && <Nav />}
