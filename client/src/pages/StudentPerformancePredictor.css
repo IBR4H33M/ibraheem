@@ -99,10 +99,10 @@
 .spp-form-group select:focus {
   outline: none;
   border-color: #1e90ff;
-  box-shadow: 0 0 16px rgba(30, 144, 255, 0.35);
 }
 
 .spp-form-group input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
@@ -150,21 +150,24 @@
   font-weight: 600;
   letter-spacing: 2px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   border: none;
 }
 
 .spp-submit-btn {
-  background: #0b5c23; /* much darker green */
-  color: #000000; /* black text */
+  background: #22B14C;
+  color: #08110a;
+  border: 2px solid #1b8f3d;
   box-shadow: none;
 }
 
 .spp-submit-btn:hover:not(:disabled) {
-  background: #16a34a; /* lighter on hover */
-  color: #000;
+  background: #2DEB65;
+  color: #08110a;
+  border-color: #2DEB65;
+  transform: translateY(-3px);
   opacity: 1;
-  box-shadow: none;
+  box-shadow: 0 0 0 3px rgba(45, 235, 101, 0.28);
 }
 
 .spp-submit-btn:disabled {

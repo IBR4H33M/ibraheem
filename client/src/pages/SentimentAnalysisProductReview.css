@@ -169,18 +169,23 @@
   font-weight: 600;
   letter-spacing: 2px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   border: none;
 }
 
 .spr-submit-btn {
-  background: #2d9d57;
-  color: #000;
+  background: #22B14C;
+  color: #08110a;
+  border: 2px solid #1b8f3d;
 }
 
 .spr-submit-btn:hover:not(:disabled) {
-  background: #4bcf80;
+  background: #2DEB65;
+  color: #08110a;
+  border-color: #2DEB65;
+  transform: translateY(-3px);
   opacity: 1;
+  box-shadow: 0 0 0 3px rgba(45, 235, 101, 0.28);
 }
 
 .spr-reset-btn:hover {
