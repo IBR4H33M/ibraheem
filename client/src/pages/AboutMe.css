@@ -476,13 +476,6 @@
   color: #b8e986;
   font-family: var(--font-vcr);
   font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.interest-tag:hover {
-  border-color: #76c442;
-  background: rgba(118, 196, 66, 0.25);
-  transform: translateY(-2px);
 }
 
 .about-interests-edit-box {

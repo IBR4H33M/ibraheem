@@ -144,7 +144,6 @@
 .spr-form-group textarea:focus {
   outline: none;
   border-color: #1e90ff;
-  box-shadow: 0 0 16px rgba(30,144,255,0.35);
 }
 
 .spr-form-actions-layout {
