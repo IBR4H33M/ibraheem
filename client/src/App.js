@@ -25,6 +25,7 @@ function ScrollToTop() {
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isAboutPage = location.pathname === '/about';
   const isAdminPage = location.pathname === '/admin';
   const showFooter = !isAdminPage;
 
@@ -32,7 +33,7 @@ function AppContent() {
     <div className="app">
       {!isAdminPage && <Nav />}
       <ScrollToTop />
-      <main className={`main-content ${isHomePage ? 'home-content' : ''} ${isAdminPage ? 'admin-content' : ''}`}>
+      <main className={`main-content ${isHomePage ? 'home-content' : ''} ${isAboutPage ? 'about-content' : ''} ${isAdminPage ? 'admin-content' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutMe />} />

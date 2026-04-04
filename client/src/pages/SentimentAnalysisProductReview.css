@@ -505,3 +505,15 @@
 .spr-details li {
   margin-bottom: 0.2rem;
 }
+
+
+.spr-spinner {
+  color: #59e5c5;
+  font-weight: bold;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -9,9 +9,12 @@
 
 .about-page {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh + 80px);
   background: #0d1f0d;
-  margin-top: -200px;
+  padding-top: 0;
+  padding-bottom: 2rem;
+  margin-top: -80px;
+  padding-top: 80px;
 }
 
 /* Title fixed top-left, same as gaming page */

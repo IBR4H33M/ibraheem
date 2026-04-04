@@ -207,7 +207,8 @@ const AboutMe = () => {
   };
 
   return (
-    <div className="about-page">
+    <div className="about-page" style={{ minHeight: '100vh' }}>
+      <h1 className="about-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>ABOUT IBRAHEEM</h1>
       <div className="about-profile-row">
         <div className="about-profile-pic-col">
           <div className="profile-image-container" style={{ cursor: isAdmin ? 'pointer' : 'default', outline: isAdmin && selectedFile ? '2px solid #90ee90' : isAdmin ? '2px dashed #90ee90' : 'none' }} onClick={() => isAdmin && fileInputRef.current.click()}>
@@ -235,7 +236,6 @@ const AboutMe = () => {
           )}
         </div>
         <div className="about-profile-info-col">
-          <h1 className="about-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>ABOUT IBRAHEEM</h1>
           {editingText ? (
             <div className="about-text-edit-box">
               <label className="about-edit-label">Title</label>

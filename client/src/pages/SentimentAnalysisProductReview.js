@@ -10,6 +10,8 @@ const SentimentAnalysisProductReview = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [spinnerFrame, setSpinnerFrame] = useState(0);
+  const spinnerChars = ['|', '/', '-', '\\'];
 
   const logMessage = (msg) => {
     setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
@@ -29,10 +31,23 @@ const SentimentAnalysisProductReview = () => {
 
     setLoading(true);
     logMessage('Starting sentiment analysis request...');
+    
+    // Start spinner animation
+    let frame = 0;
+    const spinnerInterval = setInterval(() => {
+      frame = (frame + 1) % spinnerChars.length;
+      setSpinnerFrame(frame);
+    }, 150);
+    
     const startTime = Date.now();
     logMessage('Calling /api/product-review/predict');
+    
     try {
-      const response = await axios.post('/api/product-review/predict', { text: trimmed });
+      const response = await axios.post('/api/product-review/predict', { text: trimmed }, {
+        timeout: 90000 // 90 seconds for cold start
+      });
+      
+      clearInterval(spinnerInterval);
       const timingMs = Date.now() - startTime;
 
       if (response.data.success) {
@@ -51,10 +66,19 @@ const SentimentAnalysisProductReview = () => {
         logMessage(`Prediction error: ${response.data.error || 'Unknown error'}`);
       }
     } catch (err) {
-      const errMsg = err.response?.data?.error || err.message || 'Failed to connect to product review service';
-      setError(errMsg);
-      logMessage(`Network error: ${errMsg}`);
+      clearInterval(spinnerInterval);
+      
+      if (err.code === 'ECONNABORTED' || err.response?.status === 504) {
+        logMessage('Flask server is starting (cold start)...');
+        logMessage('This may take 30-60 seconds on free tier. Please wait...');
+        setError('Server is waking up from sleep. Please try again in a moment.');
+      } else {
+        const errMsg = err.response?.data?.error || err.message || 'Failed to connect to product review service';
+        setError(errMsg);
+        logMessage(`Network error: ${errMsg}`);
+      }
     } finally {
+      clearInterval(spinnerInterval);
       setLoading(false);
     }
   };
@@ -125,6 +149,7 @@ const SentimentAnalysisProductReview = () => {
                 {logs.length === 0
                   ? <p>No logs yet</p>
                   : logs.map((line, idx) => <div key={idx} className="spr-log-line">{line}</div>)}
+                {loading && <div className="spr-log-line spr-spinner">{spinnerChars[spinnerFrame]} Processing...</div>}
               </div>
             </div>
           </form>
