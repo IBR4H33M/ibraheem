@@ -408,7 +408,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.1rem, 2vw + 0.8rem, 2.8rem);
+  font-size: clamp(2rem, 1.7vw + 1.1rem, 4.5rem);
   font-weight: 700;
   color: #444444;
   text-shadow: none;
@@ -484,7 +484,7 @@
 }
 
 .gaming-heading span {
-  font-size: clamp(1.1rem, 2vw + 0.8rem, 2.8rem);
+  font-size: clamp(2rem, 1.7vw + 1.1rem, 4.5rem);
   font-weight: 700;
   color: #ffffff;
   font-family: var(--font-vcr);
