@@ -306,15 +306,18 @@ const Entertainment = () => {
   };
 
   const handleTvDragStart = (index) => {
+    if (!isAdmin) return;
     setDraggedTvIndex(index);
   };
 
   const handleTvDragOver = (e, index) => {
+    if (!isAdmin) return;
     e.preventDefault();
     setDragOverTvIndex(index);
   };
 
   const handleTvDrop = async (e, dropIndex) => {
+    if (!isAdmin) return;
     e.preventDefault();
     if (draggedTvIndex === null || draggedTvIndex === dropIndex) {
       setDraggedTvIndex(null);
@@ -346,6 +349,7 @@ const Entertainment = () => {
   };
 
   const handleTvDragEnd = () => {
+    if (!isAdmin) return;
     setDraggedTvIndex(null);
     setDragOverTvIndex(null);
   };

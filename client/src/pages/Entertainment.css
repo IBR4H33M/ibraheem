@@ -1043,3 +1043,16 @@
 .tv-drag-handle:active {
   cursor: grabbing;
 }
+
+
+.tv-series-card[draggable="true"] {
+  cursor: grab;
+}
+
+.tv-series-card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.tv-series-card[draggable="false"] {
+  cursor: default;
+}

@@ -274,7 +274,7 @@ const AboutMe = () => {
           
           {/* Interests Section */}
           <div className="about-interests-section">
-            <h3 className="about-interests-title">Interests</h3>
+            <h3 className="about-interests-title">My Interests</h3>
             {editingInterests ? (
               <div className="about-interests-edit-box">
                 <input
