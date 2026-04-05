@@ -12,7 +12,9 @@ const SentimentAnalysisProductReview = () => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
+  const [showWakingNotice, setShowWakingNotice] = useState(false);
   const spinnerChars = ['|', '/', '-', '\\'];
+  const wakingDots = ['', '.', '..', '...', '..', '.'];
 
   const logMessage = (msg) => {
     setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
@@ -23,6 +25,7 @@ const SentimentAnalysisProductReview = () => {
     setError('');
     setResult(null);
     setLogs([]);
+    setShowWakingNotice(false);
 
     const trimmed = String(reviewText || '').trim();
     if (!trimmed) {
@@ -45,7 +48,7 @@ const SentimentAnalysisProductReview = () => {
 
     const coldStartNoticeTimer = setTimeout(() => {
       logMessage('Starting Flask server...');
-      logMessage('The Python service may be waking from sleep. Please wait...');
+      setShowWakingNotice(true);
     }, 6000);
     
     try {
@@ -55,6 +58,7 @@ const SentimentAnalysisProductReview = () => {
       
       clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
+      setShowWakingNotice(false);
       const timingMs = Date.now() - startTime;
 
       if (response.data.success) {
@@ -75,6 +79,7 @@ const SentimentAnalysisProductReview = () => {
     } catch (err) {
       clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
+      setShowWakingNotice(false);
       
       if (err.code === 'ECONNABORTED' || err.response?.status === 504) {
         logMessage('Flask server is starting (cold start)...');
@@ -88,6 +93,7 @@ const SentimentAnalysisProductReview = () => {
     } finally {
       clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
+      setShowWakingNotice(false);
       setLoading(false);
     }
   };
@@ -158,6 +164,11 @@ const SentimentAnalysisProductReview = () => {
                 {logs.length === 0
                   ? <p>No logs yet</p>
                   : logs.map((line, idx) => <div key={idx} className="spr-log-line">{line}</div>)}
+                {loading && showWakingNotice && (
+                  <div className="spr-log-line">
+                    The Python service may be waking from sleep. Please wait{wakingDots[spinnerFrame % wakingDots.length]}
+                  </div>
+                )}
                 {loading && <div className="spr-log-line spr-spinner">{spinnerChars[spinnerFrame]} Processing...</div>}
               </div>
             </div>

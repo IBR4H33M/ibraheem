@@ -4,6 +4,7 @@ const axios = require('axios');
 
 // Flask service URL - update this for production
 const GRADE_PREDICT_FLASK_URL = process.env.GRADE_PREDICT_FLASK_URL || 'http://localhost:5001';
+const PREDICTION_TIMEOUT_MS = 120000;
 
 // Proxy prediction request to Flask ML service
 router.post('/predict', async (req, res) => {
@@ -12,7 +13,7 @@ router.post('/predict', async (req, res) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            timeout: 30000 // 30 second timeout
+            timeout: PREDICTION_TIMEOUT_MS
         });
         
         res.json(response.data);

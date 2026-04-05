@@ -5,10 +5,14 @@ import './StudentPerformancePredictor.css';
 
 const StudentPerformancePredictor = () => {
     const titleVisible = useScrollTitle();
+    const predictionTimeoutMs = 120000;
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const [logs, setLogs] = useState([]);
+    const [showWakingNotice, setShowWakingNotice] = useState(false);
+    const [wakingFrame, setWakingFrame] = useState(0);
+    const wakingDots = ['', '.', '..', '...', '..', '.'];
 
     const defaultForm = {
         // Numeric fields
@@ -47,23 +51,33 @@ const StudentPerformancePredictor = () => {
         setError('');
         setResult(null);
         setLogs([]);
+        setShowWakingNotice(false);
+        setWakingFrame(0);
 
         let coldStartNoticeTimer;
+        let wakingDotsInterval;
 
         try {
             logMessage('Fetching Flask server endpoints...');
             coldStartNoticeTimer = setTimeout(() => {
                 logMessage('Starting Flask server...');
-                logMessage('The Python service may be waking from sleep. Please wait...');
+                setShowWakingNotice(true);
             }, 6000);
 
+            wakingDotsInterval = setInterval(() => {
+                setWakingFrame(prev => (prev + 1) % wakingDots.length);
+            }, 300);
+
             const response = await axios.post('/api/student-performance/predict', formData, {
+                timeout: predictionTimeoutMs,
                 onUploadProgress: () => {
                     logMessage('Sending prediction parameters to model endpoints...');
                 }
             });
 
             clearTimeout(coldStartNoticeTimer);
+            clearInterval(wakingDotsInterval);
+            setShowWakingNotice(false);
             logMessage('Received response from server');
 
 
@@ -86,6 +100,10 @@ const StudentPerformancePredictor = () => {
             if (coldStartNoticeTimer) {
                 clearTimeout(coldStartNoticeTimer);
             }
+            if (wakingDotsInterval) {
+                clearInterval(wakingDotsInterval);
+            }
+            setShowWakingNotice(false);
             const errMsg = err.response?.data?.error || err.message || 'Failed to connect to prediction service';
             setError(errMsg);
             logMessage(`Error: ${errMsg}`);
@@ -93,6 +111,10 @@ const StudentPerformancePredictor = () => {
             if (coldStartNoticeTimer) {
                 clearTimeout(coldStartNoticeTimer);
             }
+            if (wakingDotsInterval) {
+                clearInterval(wakingDotsInterval);
+            }
+            setShowWakingNotice(false);
             setLoading(false);
         }
     };
@@ -270,6 +292,11 @@ const StudentPerformancePredictor = () => {
                                     {logs.length === 0 ? <p>No logs yet. Click Predict Score.</p> : logs.map((line, idx) => (
                                         <div key={idx} className="spp-log-line">{line}</div>
                                     ))}
+                                    {loading && showWakingNotice && (
+                                        <div className="spp-log-line">
+                                            The Python service may be waking from sleep. Please wait{wakingDots[wakingFrame]}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
