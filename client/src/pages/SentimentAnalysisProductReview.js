@@ -42,12 +42,18 @@ const SentimentAnalysisProductReview = () => {
     
     const startTime = Date.now();
     logMessage('Calling /api/product-review/predict');
+
+    const coldStartNoticeTimer = setTimeout(() => {
+      logMessage('Starting Flask server...');
+      logMessage('The Python service may be waking from sleep. Please wait...');
+    }, 6000);
     
     try {
       const response = await axios.post('/api/product-review/predict', { text: trimmed }, {
         timeout: predictionTimeoutMs
       });
       
+      clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
       const timingMs = Date.now() - startTime;
 
@@ -67,6 +73,7 @@ const SentimentAnalysisProductReview = () => {
         logMessage(`Prediction error: ${response.data.error || 'Unknown error'}`);
       }
     } catch (err) {
+      clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
       
       if (err.code === 'ECONNABORTED' || err.response?.status === 504) {
@@ -79,6 +86,7 @@ const SentimentAnalysisProductReview = () => {
         logMessage(`Network error: ${errMsg}`);
       }
     } finally {
+      clearTimeout(coldStartNoticeTimer);
       clearInterval(spinnerInterval);
       setLoading(false);
     }

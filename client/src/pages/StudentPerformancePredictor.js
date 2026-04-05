@@ -48,15 +48,24 @@ const StudentPerformancePredictor = () => {
         setResult(null);
         setLogs([]);
 
+        let coldStartNoticeTimer;
+
         try {
             logMessage('Fetching Flask server endpoints...');
+            coldStartNoticeTimer = setTimeout(() => {
+                logMessage('Starting Flask server...');
+                logMessage('The Python service may be waking from sleep. Please wait...');
+            }, 6000);
+
             const response = await axios.post('/api/student-performance/predict', formData, {
                 onUploadProgress: () => {
                     logMessage('Sending prediction parameters to model endpoints...');
                 }
             });
 
+            clearTimeout(coldStartNoticeTimer);
             logMessage('Received response from server');
+
 
             if (response.data.success) {
                 setResult(response.data);
@@ -74,10 +83,16 @@ const StudentPerformancePredictor = () => {
                 logMessage('Prediction failed with non-success response');
             }
         } catch (err) {
+            if (coldStartNoticeTimer) {
+                clearTimeout(coldStartNoticeTimer);
+            }
             const errMsg = err.response?.data?.error || err.message || 'Failed to connect to prediction service';
             setError(errMsg);
             logMessage(`Error: ${errMsg}`);
         } finally {
+            if (coldStartNoticeTimer) {
+                clearTimeout(coldStartNoticeTimer);
+            }
             setLoading(false);
         }
     };
