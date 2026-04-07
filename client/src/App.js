@@ -32,7 +32,7 @@ function AppContent() {
   useEffect(() => {
     const metaByPath = {
       '/': {
-        title: "Ibraheem's Space",
+        title: "Ibraheem Ibn Anwar - Ibraheem's space",
         description: "Welcome to Ibraheem's corner of the Internet! Explore the things that keep Ibraheem going and see what he's been upto!",
       },
       '/contact': {
@@ -66,7 +66,7 @@ function AppContent() {
     };
 
     const fallback = {
-      title: "Ibraheem's Space",
+      title: "Ibraheem Ibn Anwar - Ibraheem's space",
       description: "Welcome to Ibraheem's corner of the Internet! Explore the things that keep Ibraheem going and see what he's been upto!",
     };
 
