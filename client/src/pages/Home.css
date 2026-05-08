@@ -580,6 +580,243 @@
   }
 }
 
+/* TechSpace Horizontal Section */
+.techspace-horizontal-section {
+  display: flex;
+  width: 100vw;
+  height: calc(100vw * 9 / 20);
+  background-color: #1a1a1e;
+}
+
+.techspace-left {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1e;
+  padding: 2rem;
+}
+
+.techspace-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  text-decoration: none;
+}
+
+.techspace-heading span {
+  font-size: clamp(2rem, 1.7vw + 1.1rem, 4.5rem);
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--font-vcr);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+  line-height: 1.2;
+}
+
+.techspace-heading:hover span {
+  color: #90ee90;
+}
+
+.techspace-right {
+  flex: 0 0 70%;
+  position: relative;
+  background-color: #1a1a1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ts-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ts-section {
+  flex: 1;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  align-items: center;
+}
+
+.ts-section::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ts-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ts-section::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.ts-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.ts-section.is-dragging {
+  scroll-behavior: auto;
+}
+
+.ts-track {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 1rem;
+  align-items: center;
+  min-width: min-content;
+}
+
+.ts-card {
+  flex: 0 0 240px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.ts-card:hover {
+  transform: scale(1.05);
+}
+
+.ts-img-wrap {
+  width: 100%;
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.ts-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.ts-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #2a2a2e;
+  border-radius: 12px;
+}
+
+.ts-title {
+  font-family: var(--font-vcr);
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  color: #e4e4e4;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.3;
+  max-width: 100%;
+  height: 2.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ts-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(144, 238, 144, 0.75);
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  color: #111;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.ts-arrow svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.ts-arrow:hover {
+  background: rgba(144, 238, 144, 1);
+}
+
+.ts-arrow-left {
+  left: 0.5rem;
+}
+
+.ts-arrow-right {
+  right: 0.5rem;
+}
+
+.ts-empty {
+  font-family: var(--font-vcr);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .techspace-horizontal-section {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .techspace-right {
+    flex: none;
+    width: 100%;
+    height: 50vh;
+    order: 1;
+  }
+
+  .techspace-left {
+    flex: none;
+    width: 100%;
+    order: 2;
+    padding: 1rem 1.5rem 1.5rem;
+  }
+
+  .techspace-heading span {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .ts-card {
+    flex: 0 0 calc(100vw - 3rem);
+    height: 280px;
+  }
+
+  .ts-track {
+    gap: 1rem;
+    padding: 0 1.5rem;
+  }
+
+  .ts-section::-webkit-scrollbar {
+    height: 0;
+  }
+}
+
 @keyframes slideUpOnScroll {
   from {
     transform: translateY(30px);

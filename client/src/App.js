@@ -100,6 +100,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutMe />} />
           <Route path="/techspace" element={<TechSpace />} />
+          <Route path="/techspace/:slug" element={<TechSpace />} />
           <Route path="/gaming" element={<Gaming />} />
           <Route path="/fandom" element={<Entertainment />} />
           <Route path="/admin" element={<AdminLogin />} />

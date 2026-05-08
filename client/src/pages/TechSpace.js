@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
 import './TechSpace.css';
 
 const TechSpace = () => {
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const [projects, setProjects]     = useState([]);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [adding, setAdding]         = useState(false);
   const [editingId, setEditingId]   = useState('');
   const [formTitle, setFormTitle]   = useState('');
@@ -41,9 +45,30 @@ const TechSpace = () => {
 
   useEffect(() => {
     axios.get('/api/projects')
-      .then(({ data }) => { if (data.length) setProjects(data); })
+      .then(({ data }) => { 
+        if (data.length) {
+          setProjects(data);
+          // If slug provided, find and set index to that project
+          if (slug) {
+            const index = data.findIndex(p => p.slug === slug);
+            if (index !== -1) {
+              setCurrentProjectIndex(index);
+            }
+          }
+        }
+      })
       .catch(() => {});
-  }, []);
+  }, [slug]);
+
+  // Update URL when currentProjectIndex changes
+  useEffect(() => {
+    if (projects.length > 0 && projects[currentProjectIndex]?.slug) {
+      const newSlug = projects[currentProjectIndex].slug;
+      if (newSlug !== slug) {
+        navigate(`/techspace/${newSlug}`, { replace: true });
+      }
+    }
+  }, [currentProjectIndex, projects, slug, navigate]);
 
   const resetForm = () => {
     setAdding(false);
@@ -84,9 +109,73 @@ const TechSpace = () => {
     setSaving(true); setSaveMsg('');
     try {
       await axios.delete(`/api/projects/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-      setProjects(prev => prev.filter(p => p._id !== id));
+      setProjects(prev => {
+        const filtered = prev.filter(p => p._id !== id);
+        if (currentProjectIndex >= filtered.length && filtered.length > 0) {
+          setCurrentProjectIndex(filtered.length - 1);
+        }
+        return filtered;
+      });
     } catch { setSaveMsg('Failed to remove.'); }
     finally { setSaving(false); }
+  };
+
+  const goNext = () => {
+    if (currentProjectIndex < projects.length - 1) {
+      setCurrentProjectIndex(currentProjectIndex + 1);
+    }
+  };
+
+  const goPrev = () => {
+    if (currentProjectIndex > 0) {
+      setCurrentProjectIndex(currentProjectIndex - 1);
+    }
+  };
+
+  const moveProjectForward = async () => {
+    if (currentProjectIndex < projects.length - 1) {
+      const currentProject = projects[currentProjectIndex];
+      const nextProject = projects[currentProjectIndex + 1];
+      
+      try {
+        await axios.put(`/api/projects/reorder/${currentProject._id}`, 
+          { targetId: nextProject._id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        // Update local state
+        const newProjects = [...projects];
+        [newProjects[currentProjectIndex], newProjects[currentProjectIndex + 1]] = 
+        [newProjects[currentProjectIndex + 1], newProjects[currentProjectIndex]];
+        setProjects(newProjects);
+        setCurrentProjectIndex(currentProjectIndex + 1);
+      } catch {
+        alert('Failed to reorder projects');
+      }
+    }
+  };
+
+  const moveProjectBackward = async () => {
+    if (currentProjectIndex > 0) {
+      const currentProject = projects[currentProjectIndex];
+      const prevProject = projects[currentProjectIndex - 1];
+      
+      try {
+        await axios.put(`/api/projects/reorder/${currentProject._id}`, 
+          { targetId: prevProject._id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        // Update local state
+        const newProjects = [...projects];
+        [newProjects[currentProjectIndex], newProjects[currentProjectIndex - 1]] = 
+        [newProjects[currentProjectIndex - 1], newProjects[currentProjectIndex]];
+        setProjects(newProjects);
+        setCurrentProjectIndex(currentProjectIndex - 1);
+      } catch {
+        alert('Failed to reorder projects');
+      }
+    }
   };
 
   const startEdit = (project) => {
@@ -303,21 +392,66 @@ const TechSpace = () => {
       <h1 className="ts-page-title" style={{ opacity: titleVisible ? 1 : 0 }}>TECH SPACE</h1>
 
       <section className="ts-projects-outer">
-        <h2 className="ts-projects-heading">PROJECTS</h2>
+        <div className="ts-projects-header">
+          {currentProjectIndex > 0 && (
+            <button className="ts-nav-btn ts-nav-prev" onClick={goPrev} title="Previous project">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ts-nav-arrow">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              PREVIOUS
+            </button>
+          )}
+          <h2 className="ts-projects-heading">PROJECTS</h2>
+          {currentProjectIndex < projects.length - 1 && (
+            <button className="ts-nav-btn ts-nav-next" onClick={goNext} title="Next project">
+              NEXT
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ts-nav-arrow">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          )}
+        </div>
+        {isAdmin && (
+          <div className="ts-admin-reorder-bar">
+            <button 
+              className="admin-edit-btn ts-add-btn" 
+              onClick={() => setAdding(!adding)} 
+              title="Add new project"
+            >
+              + ADD NEW PROJECT
+            </button>
+            {projects.length > 0 && currentProjectIndex > 0 && (
+              <button className="ts-reorder-btn" onClick={moveProjectBackward} title="Move project backward">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+                MOVE BACKWARD
+              </button>
+            )}
+            {projects.length > 0 && currentProjectIndex < projects.length - 1 && (
+              <button className="ts-reorder-btn ts-move-forward" onClick={moveProjectForward} title="Move project forward">
+                MOVE FORWARD
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            )}
+          </div>
+        )}
         <div className="ts-projects-list">
-          {projects.map(project => (
-            <div key={project._id} className="ts-project-card">
+          {projects.length > 0 && (
+            <div key={projects[currentProjectIndex]._id} className="ts-project-card">
               {isAdmin && (
                 <div className="ts-card-actions">
                   <button
                     className="admin-edit-btn"
-                    onClick={() => startEdit(project)}
+                    onClick={() => startEdit(projects[currentProjectIndex])}
                     disabled={saving}
                     title="Edit project"
                   >EDIT</button>
                   <button
                     className="ts-delete-btn"
-                    onClick={() => handleDelete(project._id)}
+                    onClick={() => handleDelete(projects[currentProjectIndex]._id)}
                     disabled={saving}
                     title="Remove project"
                   >✕</button>
@@ -325,42 +459,42 @@ const TechSpace = () => {
               )}
               <div className="ts-project-left">
                 <div className="ts-project-img-wrap">
-                  {project.image?.url
-                    ? <img src={project.image.url} alt={project.title} className="ts-project-img" />
+                  {projects[currentProjectIndex].image?.url
+                    ? <img src={projects[currentProjectIndex].image.url} alt={projects[currentProjectIndex].title} className="ts-project-img" />
                     : <div className="ts-project-img-placeholder" />}
                 </div>
-                {project.url && (
-                  <a href={project.url} target="_blank" rel="noopener noreferrer" className="ts-project-link">
+                {projects[currentProjectIndex].url && (
+                  <a href={projects[currentProjectIndex].url} target="_blank" rel="noopener noreferrer" className="ts-project-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-link-icon">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                       <polyline points="15 3 21 3 21 9"/>
                       <line x1="10" y1="14" x2="21" y2="3"/>
                     </svg>
-                    <span className="ts-link-text">{project.url}</span>
+                    <span className="ts-link-text">{projects[currentProjectIndex].url}</span>
                   </a>
                 )}
-                {project.githubUrl && (
-                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link">
+                {projects[currentProjectIndex].githubUrl && (
+                  <a href={projects[currentProjectIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="ts-link-icon">
                       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                     </svg>
-                    <span className="ts-link-text">{project.githubUrl}</span>
+                    <span className="ts-link-text">{projects[currentProjectIndex].githubUrl}</span>
                   </a>
                 )}
 
-                {project.customButtonText && project.customButtonUrl && (
-                  <a href={project.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link ts-custom-btn">
+                {projects[currentProjectIndex].customButtonText && projects[currentProjectIndex].customButtonUrl && (
+                  <a href={projects[currentProjectIndex].customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link ts-custom-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-link-icon">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                       <polyline points="15 3 21 3 21 9"/>
                       <line x1="10" y1="14" x2="21" y2="3"/>
                     </svg>
-                    <span className="ts-link-text">{project.customButtonText}</span>
+                    <span className="ts-link-text">{projects[currentProjectIndex].customButtonText}</span>
                   </a>
                 )}
               </div>
               <div className="ts-project-right">
-                {editingId === project._id ? (
+                {editingId === projects[currentProjectIndex]._id ? (
                   <div className="ts-edit-form">
                     <input
                       className="ts-add-input ts-edit-title"
@@ -443,7 +577,7 @@ const TechSpace = () => {
                         style={{ display: 'none' }}
                         onChange={e => setEditFile(e.target.files[0])}
                       />
-                      <button className="admin-save-btn" onClick={() => handleUpdate(project._id)} disabled={saving}>
+                      <button className="admin-save-btn" onClick={() => handleUpdate(projects[currentProjectIndex]._id)} disabled={saving}>
                         {saving ? 'Saving…' : 'SAVE'}
                       </button>
                       <button className="admin-cancel-btn" onClick={cancelEdit}>CANCEL</button>
@@ -451,46 +585,42 @@ const TechSpace = () => {
                   </div>
                 ) : (
                   <>
-                    <h3 className="ts-project-title">{project.title}</h3>
+                    <h3 className="ts-project-title">{projects[currentProjectIndex].title}</h3>
                     <div className="ts-project-desc-block">
-                      {renderProjectDescription(project)}
+                      {renderProjectDescription(projects[currentProjectIndex])}
                     </div>
                   </>
                 )}
               </div>
             </div>
-          ))}
+          )}
           {projects.length === 0 && !isAdmin && (
             <p className="ts-empty">No projects yet.</p>
           )}
         </div>
       </section>
 
-      {isAdmin && (
-        <div className="ts-admin-bar">
-          {!adding ? (
-            <button className="admin-edit-btn" onClick={() => setAdding(true)}>+ ADD PROJECT</button>
-          ) : (
-            <div className="ts-add-form">
-              <input className="ts-add-input" placeholder="Title" value={formTitle} onChange={e => setFormTitle(e.target.value)} />
-              <textarea className="ts-add-input ts-textarea" placeholder="Introduction" value={formIntroduction} onChange={e => setFormIntroduction(e.target.value)} rows={2} />
-              <textarea className="ts-add-input ts-textarea" placeholder="Background" value={formBackground} onChange={e => setFormBackground(e.target.value)} rows={2} />
-              <input className="ts-add-input" placeholder="Dataset Title" value={formDatasetTitle} onChange={e => setFormDatasetTitle(e.target.value)} />
-              <input className="ts-add-input" placeholder="Dataset URL" value={formDatasetUrl} onChange={e => setFormDatasetUrl(e.target.value)} />
-              <textarea className="ts-add-input ts-textarea" placeholder="Tech Stack" value={formTechStack} onChange={e => setFormTechStack(e.target.value)} rows={2} />
-              <textarea className="ts-add-input ts-textarea" placeholder="My Role" value={formMyRole} onChange={e => setFormMyRole(e.target.value)} rows={2} />
-              <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
-              <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />
-              <input className="ts-add-input" placeholder="Custom Button Text" value={formCustomBtnText} onChange={e => setFormCustomBtnText(e.target.value)} />
-              <input className="ts-add-input" placeholder="Custom Button URL" value={formCustomBtnUrl} onChange={e => setFormCustomBtnUrl(e.target.value)} />
-              <button className="admin-edit-btn" onClick={() => imgRef.current.click()}>
-                {formFile ? '✓ Image selected' : 'Choose Image'}
-              </button>
-              <input ref={imgRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => setFormFile(e.target.files[0])} />
-              <button className="admin-save-btn" onClick={handleAdd} disabled={saving}>{saving ? 'Saving…' : 'SAVE'}</button>
-              <button className="admin-cancel-btn" onClick={resetForm}>CANCEL</button>
-            </div>
-          )}
+      {isAdmin && adding && (
+        <div className="ts-admin-add-form-section">
+          <div className="ts-add-form">
+            <input className="ts-add-input" placeholder="Title" value={formTitle} onChange={e => setFormTitle(e.target.value)} />
+            <textarea className="ts-add-input ts-textarea" placeholder="Introduction" value={formIntroduction} onChange={e => setFormIntroduction(e.target.value)} rows={2} />
+            <textarea className="ts-add-input ts-textarea" placeholder="Background" value={formBackground} onChange={e => setFormBackground(e.target.value)} rows={2} />
+            <input className="ts-add-input" placeholder="Dataset Title" value={formDatasetTitle} onChange={e => setFormDatasetTitle(e.target.value)} />
+            <input className="ts-add-input" placeholder="Dataset URL" value={formDatasetUrl} onChange={e => setFormDatasetUrl(e.target.value)} />
+            <textarea className="ts-add-input ts-textarea" placeholder="Tech Stack" value={formTechStack} onChange={e => setFormTechStack(e.target.value)} rows={2} />
+            <textarea className="ts-add-input ts-textarea" placeholder="My Role" value={formMyRole} onChange={e => setFormMyRole(e.target.value)} rows={2} />
+            <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
+            <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />
+            <input className="ts-add-input" placeholder="Custom Button Text" value={formCustomBtnText} onChange={e => setFormCustomBtnText(e.target.value)} />
+            <input className="ts-add-input" placeholder="Custom Button URL" value={formCustomBtnUrl} onChange={e => setFormCustomBtnUrl(e.target.value)} />
+            <button className="admin-edit-btn" onClick={() => imgRef.current.click()}>
+              {formFile ? '✓ Image selected' : 'Choose Image'}
+            </button>
+            <input ref={imgRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => setFormFile(e.target.files[0])} />
+            <button className="admin-save-btn" onClick={handleAdd} disabled={saving}>{saving ? 'Saving…' : 'SAVE'}</button>
+            <button className="admin-cancel-btn" onClick={resetForm}>CANCEL</button>
+          </div>
           {saveMsg && <span className="admin-save-msg">{saveMsg}</span>}
         </div>
       )}

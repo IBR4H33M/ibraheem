@@ -6,6 +6,15 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 
+// Helper function to generate slug from title
+const generateSlug = (title) => {
+  return `project:${title
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]/g, '')}`;
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const [sections] = useState([
@@ -40,9 +49,18 @@ const Home = () => {
   const gamingRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
   const [recentGames, setRecentGames] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [manualRotation, setManualRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
+  const tsTrackRef = useRef(null);
+  const tsDraggingRef = useRef(false);
+  const tsDragStartXRef = useRef(0);
+  const tsStartScrollLeftRef = useRef(0);
+  const tsDragDistanceRef = useRef(0);
+  const [tsDragging, setTsDragging] = useState(false);
+  const [tsCanScrollLeft, setTsCanScrollLeft] = useState(false);
+  const [tsCanScrollRight, setTsCanScrollRight] = useState(false);
 
   const safePlay = (video) => {
     if (!video) return;
@@ -107,6 +125,9 @@ const Home = () => {
     axios.get('/api/recent-games')
       .then(({ data }) => { if (data.length) setRecentGames(data); })
       .catch(() => {});
+    axios.get('/api/projects')
+      .then(({ data }) => { if (data.length) setProjects(data); })
+      .catch(() => {});
   }, []);
 
   const handleDragStart = (e) => {
@@ -127,6 +148,57 @@ const Home = () => {
   const handleDragEnd = (e) => {
     e.preventDefault();
     setIsDragging(false);
+  };
+
+  const updateTsScrollBtns = () => {
+    const el = tsTrackRef.current;
+    if (!el) return;
+    setTsCanScrollLeft(el.scrollLeft > 0);
+    setTsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  };
+
+  useEffect(() => {
+    updateTsScrollBtns();
+  }, [projects]);
+
+  const tsScrollBy = (dir) => {
+    const el = tsTrackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  };
+
+  const handleTsMouseDown = (e) => {
+    if (e.button !== 0) return;
+    if (e.target.closest('button, a, input, textarea, select')) return;
+    const el = tsTrackRef.current;
+    if (!el) return;
+    tsDraggingRef.current = true;
+    setTsDragging(true);
+    tsDragStartXRef.current = e.pageX - el.offsetLeft;
+    tsStartScrollLeftRef.current = el.scrollLeft;
+    tsDragDistanceRef.current = 0; // Reset distance tracker
+  };
+
+  const handleTsMouseMove = (e) => {
+    if (!tsDraggingRef.current) return;
+    const el = tsTrackRef.current;
+    if (!el) return;
+    
+    const x = e.pageX - el.offsetLeft;
+    const distance = Math.abs(x - tsDragStartXRef.current);
+    tsDragDistanceRef.current = distance;
+    
+    // Only apply drag scroll if distance exceeds threshold (5px)
+    if (distance > 5) {
+      e.preventDefault();
+      const walk = (x - tsDragStartXRef.current) * 1.25;
+      el.scrollLeft = tsStartScrollLeftRef.current - walk;
+    }
+  };
+
+  const stopTsDrag = () => {
+    tsDraggingRef.current = false;
+    setTsDragging(false);
   };
 
   return (
@@ -170,6 +242,71 @@ const Home = () => {
             </div>
           ))}
         </Slider>
+      </div>
+
+      {/* TechSpace Section - Horizontal Slider */}
+      <div className="techspace-horizontal-section">
+        <div className="techspace-left">
+          <Link to="/techspace" className="techspace-heading">
+            <span>&lt;TECHSPACE&gt;</span>
+          </Link>
+        </div>
+        <div className="techspace-right">
+          <div className="ts-scroll-wrapper">
+            {tsCanScrollLeft && (
+              <button className="ts-arrow ts-arrow-left" onClick={() => tsScrollBy(-1)} aria-label="Scroll left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+            )}
+            <div
+              className={`ts-section ${tsDragging ? 'is-dragging' : ''}`}
+              ref={tsTrackRef}
+              onScroll={updateTsScrollBtns}
+              onMouseDown={handleTsMouseDown}
+              onMouseMove={handleTsMouseMove}
+              onMouseUp={stopTsDrag}
+              onMouseLeave={stopTsDrag}
+              onDragStart={(e) => e.preventDefault()}
+            >
+              <div className="ts-track">
+                {projects.map(project => (
+                  <div 
+                    key={project._id} 
+                    className="ts-card"
+                    onClick={() => {
+                      // Only navigate if it wasn't a drag (distance < 5px)
+                      if (tsDragDistanceRef.current < 5) {
+                        const slug = project.slug || generateSlug(project.title);
+                        navigate(`/techspace/${slug}`);
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="ts-img-wrap">
+                      {project.image?.url
+                        ? <img src={project.image.url} alt={project.title} className="ts-img" />
+                        : <div className="ts-img-placeholder" />}
+                    </div>
+                    <span className="ts-title">{project.title}</span>
+                  </div>
+                ))}
+
+                {projects.length === 0 && (
+                  <p className="ts-empty">No projects yet.</p>
+                )}
+              </div>
+            </div>
+            {tsCanScrollRight && (
+              <button className="ts-arrow ts-arrow-right" onClick={() => tsScrollBy(1)} aria-label="Scroll right">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Fandom Section - Full Width */}

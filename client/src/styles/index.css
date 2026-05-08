@@ -9,6 +9,11 @@
   src: url('../../public/fonts/Fastelar.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'AlexandriaFLF';
+  src: url('../../public/fonts/AlexandriaFLF-Bold.ttf') format('truetype');
+}
+
 /* Color Theme - Shades of #223C4F */
 :root {
   --color-darkest: #0f1c24;

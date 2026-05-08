@@ -31,6 +31,17 @@
   width: 100%;
   background: #b0b0b0;
   padding: 200px 0 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-projects-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 2.5rem;
+  gap: 1.5rem;
+  order: 0;
 }
 
 .ts-projects-heading {
@@ -38,14 +49,163 @@
   font-size: clamp(1.6rem, 3vw, 2.5rem);
   color: #1a1a2e;
   font-weight: normal;
-  margin: 0 0 1.5rem 2.5rem;
+  margin: 0;
+  order: 1;
+}
+
+.ts-nav-prev {
+  order: 2;
+}
+
+.ts-nav-next {
+  order: 3;
+}
+
+/* Admin Reorder Bar */
+.ts-admin-reorder-bar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2.5rem;
+  background: #b0b0b0;
+  order: 1;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ts-add-btn {
+  margin-right: 0;
+}
+
+.ts-move-forward {
+  margin-left: auto;
+}
+
+/* Admin Buttons */
+.admin-edit-btn,
+.admin-save-btn,
+.admin-cancel-btn {
+  font-family: var(--font-vcr);
+  font-size: 0.85rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.admin-edit-btn.ts-add-btn {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  padding: 0.6rem 1.2rem;
+}
+
+.admin-edit-btn {
+  background: #111;
+  color: #fff;
+}
+
+.admin-save-btn {
+  background: #fff;
+  color: #111;
+}
+
+.admin-cancel-btn {
+  background: #d32f2f;
+  color: #ffffff;
+}
+
+.admin-edit-btn:hover,
+.admin-save-btn:hover:not(:disabled),
+.admin-cancel-btn:hover {
+  opacity: 0.8;
+}
+
+.admin-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ts-reorder-btn {
+  font-family: var(--font-vcr);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-weight: 700;
+  color: #1a1a2e;
+  background: #ffd700;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ts-reorder-btn:hover {
+  background: #ffed4e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.ts-reorder-btn:active {
+  transform: translateY(0);
+}
+
+.ts-reorder-btn svg {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ts-nav-btn {
+  font-family: var(--font-vcr);
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  font-weight: 700;
+  color: #1a1a2e;
+  background: #90ee90;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ts-nav-btn:hover {
+  background: #7ed97e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(144, 238, 144, 0.3);
+}
+
+.ts-nav-btn:active {
+  transform: translateY(0);
+}
+
+.ts-nav-next {
+  margin-left: auto;
+}
+
+.ts-nav-arrow {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .ts-projects-list {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  padding: 0 1.5rem;
+  padding: 1.5rem 1.5rem;
+  order: 2;
 }
 
 /* ML Project Card */
@@ -254,7 +414,7 @@
 }
 
 .ts-project-title {
-  font-family: var(--font-vcr);
+  font-family: 'AlexandriaFLF', sans-serif;
   font-size: clamp(2rem, 4vw, 3.4rem);
   color: #1a1a2e;
   font-weight: 700;
@@ -262,7 +422,7 @@
 }
 
 .ts-project-desc {
-  font-family: var(--font-vcr);
+  font-family: 'AlexandriaFLF', sans-serif;
   font-size: 1rem;
   color: #444;
   line-height: 1.75;
@@ -276,12 +436,14 @@
 }
 
 .ts-desc-label {
+  font-family: 'AlexandriaFLF', sans-serif;
   font-weight: 700;
   font-size: 1.12em;
   color: #2f7a4f;
 }
 
 .ts-desc-label-normal {
+  font-family: 'AlexandriaFLF', sans-serif;
   font-weight: 700;
   color: #1f1f30;
 }
@@ -293,7 +455,7 @@
 }
 
 .ts-role-list li {
-  font-family: var(--font-vcr);
+  font-family: 'AlexandriaFLF', sans-serif;
   font-size: 1rem;
   color: #444;
   line-height: 1.75;
@@ -307,10 +469,10 @@
   padding: 1rem 2.5rem;
 }
 
-/* ── Admin bar ── */
-.ts-admin-bar {
+/* Admin Add Form Section */
+.ts-admin-add-form-section {
   padding: 1.5rem 2.5rem;
-  background: #d0d0d0;
+  background: #b0b0b0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
@@ -322,6 +484,7 @@
   flex-wrap: wrap;
   gap: 0.6rem;
   align-items: center;
+  width: 100%;
 }
 
 .ts-add-input {
@@ -349,6 +512,47 @@
     top: 20px;
     left: 90px;
     font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .ts-projects-header {
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .ts-projects-heading {
+    flex: none;
+    text-align: left;
+    margin: 0;
+  }
+
+  .ts-nav-btn {
+    font-size: 0;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .ts-nav-arrow {
+    display: inline-block;
+  }
+
+  .ts-nav-next {
+    margin-left: auto;
+  }
+
+  .ts-admin-reorder-bar {
+    padding: 1rem 1.5rem;
+    gap: 0.8rem;
+    justify-content: flex-start;
+  }
+
+  .admin-edit-btn.ts-add-btn,
+  .ts-reorder-btn {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    padding: 0.5rem 1rem;
+  }
+
+  .ts-move-forward {
+    margin-left: 0;
   }
 
   .ts-project-card {
