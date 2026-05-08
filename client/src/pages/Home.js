@@ -245,13 +245,15 @@ const Home = () => {
       </div>
 
       {/* TechSpace Section - Horizontal Slider */}
-      <div className="techspace-horizontal-section">
-        <div className="techspace-left">
-          <Link to="/techspace" className="techspace-heading">
-            <span>&lt;TECHSPACE&gt;</span>
-          </Link>
-        </div>
+      <div className="techspace-section-wrapper">
+        <div className="techspace-horizontal-section">
+          <div className="techspace-left">
+            <Link to="/techspace" className="techspace-heading">
+              <span>&lt;TECHSPACE&gt;</span>
+            </Link>
+          </div>
         <div className="techspace-right">
+          <h2 className="techspace-subtitle">RECENT PROJECTS</h2>
           <div className="ts-scroll-wrapper">
             {tsCanScrollLeft && (
               <button className="ts-arrow ts-arrow-left" onClick={() => tsScrollBy(-1)} aria-label="Scroll left">
@@ -307,6 +309,7 @@ const Home = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
 
       {/* Fandom Section - Full Width */}
