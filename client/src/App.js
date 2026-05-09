@@ -12,6 +12,7 @@ import StudentPerformancePredictor from './pages/StudentPerformancePredictor';
 import SentimentAnalysisProductReview from './pages/SentimentAnalysisProductReview';
 import Contact from './pages/Contact';
 import { AuthProvider } from './context/AuthContext';
+import axios from 'axios';
 import './styles/App.css';
 
 function ScrollToTop() {
@@ -70,25 +71,51 @@ function AppContent() {
       description: "Welcome to Ibraheem's corner of the Internet! Explore the things that keep Ibraheem going and see what he's been upto!",
     };
 
-    const meta = metaByPath[location.pathname] || fallback;
-    document.title = meta.title;
-
-    let descriptionTag = document.querySelector('meta[name="description"]');
-    if (!descriptionTag) {
-      descriptionTag = document.createElement('meta');
-      descriptionTag.setAttribute('name', 'description');
-      document.head.appendChild(descriptionTag);
+    // Check if it's a project URL
+    const projectMatch = location.pathname.match(/^\/techspace\/(project:[^/]+)$/);
+    
+    if (projectMatch) {
+      // Fetch project data for dynamic meta tags
+      const slug = projectMatch[1];
+      axios.get('/api/projects')
+        .then(({ data }) => {
+          const project = data.find(p => p.slug === slug);
+          if (project) {
+            const projectMeta = {
+              title: `${project.title} | Ibraheem's TechSpace`,
+              description: project.introduction || project.description || `Check out ${project.title} - a project by Ibraheem.`,
+            };
+            updateMetaTags(projectMeta);
+          } else {
+            updateMetaTags(fallback);
+          }
+        })
+        .catch(() => updateMetaTags(fallback));
+    } else {
+      const meta = metaByPath[location.pathname] || fallback;
+      updateMetaTags(meta);
     }
-    descriptionTag.setAttribute('content', meta.description);
 
-    const canonicalUrl = `https://ibraheemibnanwar.me${location.pathname}`;
-    let canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      canonicalTag = document.createElement('link');
-      canonicalTag.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonicalTag);
+    function updateMetaTags(meta) {
+      document.title = meta.title;
+
+      let descriptionTag = document.querySelector('meta[name="description"]');
+      if (!descriptionTag) {
+        descriptionTag = document.createElement('meta');
+        descriptionTag.setAttribute('name', 'description');
+        document.head.appendChild(descriptionTag);
+      }
+      descriptionTag.setAttribute('content', meta.description);
+
+      const canonicalUrl = `https://ibraheemibnanwar.me${location.pathname}`;
+      let canonicalTag = document.querySelector('link[rel="canonical"]');
+      if (!canonicalTag) {
+        canonicalTag = document.createElement('link');
+        canonicalTag.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalTag);
+      }
+      canonicalTag.setAttribute('href', canonicalUrl);
     }
-    canonicalTag.setAttribute('href', canonicalUrl);
   }, [location.pathname]);
 
   return (

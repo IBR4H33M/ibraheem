@@ -33,6 +33,9 @@ app.use('/api/student-performance', require('./routes/studentPerformance'));
 app.use('/api/product-review', require('./routes/productReview'));
 app.use('/api/profile', require('./routes/profile'));
 
+// Sitemap route (must be before static file serving)
+app.get('/sitemap.xml', require('./routes/sitemap'));
+
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
