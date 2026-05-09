@@ -414,7 +414,7 @@
 }
 
 .ts-project-title {
-  font-family: 'AlexandriaFLF', sans-serif;
+  font-family: 'Dimica-Light', sans-serif;
   font-size: clamp(2rem, 4vw, 3.4rem);
   color: #1a1a2e;
   font-weight: 700;
@@ -422,7 +422,7 @@
 }
 
 .ts-project-desc {
-  font-family: 'AlexandriaFLF', sans-serif;
+  font-family: 'Dimica-Light', sans-serif;
   font-size: 1rem;
   color: #444;
   line-height: 1.75;
@@ -436,14 +436,14 @@
 }
 
 .ts-desc-label {
-  font-family: 'AlexandriaFLF', sans-serif;
+  font-family: 'Dimica-Light', sans-serif;
   font-weight: 700;
   font-size: 1.12em;
   color: #2f7a4f;
 }
 
 .ts-desc-label-normal {
-  font-family: 'AlexandriaFLF', sans-serif;
+  font-family: 'Dimica-Light', sans-serif;
   font-weight: 700;
   color: #1f1f30;
 }
@@ -455,7 +455,7 @@
 }
 
 .ts-role-list li {
-  font-family: 'AlexandriaFLF', sans-serif;
+  font-family: 'Dimica-Light', sans-serif;
   font-size: 1rem;
   color: #444;
   line-height: 1.75;

@@ -14,6 +14,11 @@
   src: url('../../public/fonts/AlexandriaFLF-Bold.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Dimica-Light';
+  src: url('../../public/fonts/Dimica-Light.otf') format('opentype');
+}
+
 /* Color Theme - Shades of #223C4F */
 :root {
   --color-darkest: #0f1c24;
