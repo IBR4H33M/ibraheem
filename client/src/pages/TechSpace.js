@@ -10,6 +10,7 @@ const TechSpace = () => {
   const navigate = useNavigate();
   const [projects, setProjects]     = useState([]);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [showSlugInUrl, setShowSlugInUrl] = useState(!!slug); // Only show slug if user navigated to one
   const [adding, setAdding]         = useState(false);
   const [editingId, setEditingId]   = useState('');
   const [formTitle, setFormTitle]   = useState('');
@@ -60,15 +61,15 @@ const TechSpace = () => {
       .catch(() => {});
   }, [slug]);
 
-  // Update URL when currentProjectIndex changes
+  // Update URL when currentProjectIndex changes (only if slug is being shown)
   useEffect(() => {
-    if (projects.length > 0 && projects[currentProjectIndex]?.slug) {
+    if (projects.length > 0 && showSlugInUrl && projects[currentProjectIndex]?.slug) {
       const newSlug = projects[currentProjectIndex].slug;
       if (newSlug !== slug) {
         navigate(`/techspace/${newSlug}`, { replace: true });
       }
     }
-  }, [currentProjectIndex, projects, slug, navigate]);
+  }, [currentProjectIndex, projects, slug, navigate, showSlugInUrl]);
 
   const resetForm = () => {
     setAdding(false);
@@ -123,12 +124,22 @@ const TechSpace = () => {
   const goNext = () => {
     if (currentProjectIndex < projects.length - 1) {
       setCurrentProjectIndex(currentProjectIndex + 1);
+      // Keep slug in URL if we're already showing it
+      if (showSlugInUrl) {
+        const nextProject = projects[currentProjectIndex + 1];
+        navigate(`/techspace/${nextProject.slug}`, { replace: true });
+      }
     }
   };
 
   const goPrev = () => {
     if (currentProjectIndex > 0) {
       setCurrentProjectIndex(currentProjectIndex - 1);
+      // Keep slug in URL if we're already showing it
+      if (showSlugInUrl) {
+        const prevProject = projects[currentProjectIndex - 1];
+        navigate(`/techspace/${prevProject.slug}`, { replace: true });
+      }
     }
   };
 

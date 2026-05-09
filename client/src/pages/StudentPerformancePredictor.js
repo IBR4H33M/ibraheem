@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useScrollTitle from '../hooks/useScrollTitle';
 import './StudentPerformancePredictor.css';
@@ -32,6 +32,64 @@ const StudentPerformancePredictor = () => {
     };
 
     const [formData, setFormData] = useState(defaultForm);
+
+    // Add JSON-LD structured data for SEO
+    useEffect(() => {
+        const schemaData = {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Student Performance Predictor",
+            "description": "Advanced machine learning system for predicting student academic performance using regression and classification models. Trained on comprehensive educational dataset to analyze factors affecting student success including attendance, previous exam scores, study hours, sleep quality, internet access, and behavioral metrics. Implements multiple algorithms including K-Nearest Neighbors (KNN - 83% accuracy), Logistic Regression (98% accuracy), Naive Bayes (92% accuracy), and Linear Regression. Models saved as pickle files and deployed via Flask REST API backend, Express.js proxy server, and React frontend for interactive real-time predictions. Educational application demonstrating machine learning classification and regression techniques.",
+            "url": "https://ibraheemibnanwar.me/techspace/StudentPerformancePredictor",
+            "applicationCategory": "EducationalApplication",
+            "author": {
+                "@type": "Person",
+                "name": "Ibraheem Ibn Anwar",
+                "url": "https://ibraheemibnanwar.me"
+            },
+            "datePublished": "2024-01-15",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "keywords": "student performance prediction, grade prediction, machine learning, educational AI, regression model, classification, student success predictor, academic performance, KNN, Logistic Regression, Naive Bayes, predictive analytics, data science, educational data mining",
+            "programmingLanguage": ["Python", "JavaScript"],
+            "image": "https://ibraheemibnanwar.me/assets/student-performance-image.jpg",
+            "codeRepository": {
+                "@type": "Thing",
+                "name": "GitHub - Student Performance Predictor",
+                "url": "https://github.com/IBR4H33M/Student-Performance-Predictor"
+            },
+            "dataset": {
+                "@type": "Thing",
+                "name": "Exam Score Prediction Dataset",
+                "url": "https://www.kaggle.com/datasets/kundanbedmutha/exam-score-prediction-dataset",
+                "description": "Comprehensive dataset containing student attributes and exam scores"
+            }
+        };
+
+        // Remove old schema script if exists
+        const existingScript = document.querySelector('script[data-schema="student-perf-jsonld"]');
+        if (existingScript) {
+            existingScript.remove();
+        }
+
+        // Create and inject new script
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.setAttribute('data-schema', 'student-perf-jsonld');
+        script.textContent = JSON.stringify(schemaData);
+        document.head.appendChild(script);
+
+        // Cleanup on unmount
+        return () => {
+            const scriptToRemove = document.querySelector('script[data-schema="student-perf-jsonld"]');
+            if (scriptToRemove) {
+                scriptToRemove.remove();
+            }
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

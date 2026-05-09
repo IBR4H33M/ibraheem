@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useScrollTitle from '../hooks/useScrollTitle';
 import './SentimentAnalysisProductReview.css';
@@ -14,6 +14,64 @@ const SentimentAnalysisProductReview = () => {
   const [spinnerFrame, setSpinnerFrame] = useState(0);
   const [showWakingNotice, setShowWakingNotice] = useState(false);
   const spinnerChars = ['|', '/', '-', '\\'];
+
+  // Add JSON-LD structured data for SEO
+  useEffect(() => {
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sentiment Analysis of Product Reviews",
+      "description": "Advanced machine learning application for analyzing customer product reviews and predicting sentiment polarity. Trained on 40,000 Amazon customer reviews using multiple models including Logistic Regression, Support Vector Machine (SVM), Multinomial Naive Bayes, and Ridge Classifier. Uses TF-IDF text feature extraction and majority voting across four models to determine overall sentiment. Demonstrates natural language processing, text classification, and ensemble learning techniques. Built with Python scikit-learn backend (Flask REST API), Express.js proxy server, and React frontend for real-time interactive predictions.",
+      "url": "https://ibraheemibnanwar.me/techspace/Sentiment-Analysis-of-Product-Reviews",
+      "applicationCategory": "AnalyticsApplication",
+      "author": {
+        "@type": "Person",
+        "name": "Ibraheem Ibn Anwar",
+        "url": "https://ibraheemibnanwar.me"
+      },
+      "datePublished": "2024-01-15",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "keywords": "sentiment analysis, product reviews, Amazon reviews, machine learning, NLP, text classification, natural language processing, customer feedback analysis, sentiment prediction, Logistic Regression, SVM, Naive Bayes, Ridge Classifier, ensemble learning, TF-IDF, text mining, data science, deep learning alternative",
+      "programmingLanguage": ["Python", "JavaScript"],
+      "image": "https://ibraheemibnanwar.me/assets/sentiment-analysis-image.jpg",
+      "codeRepository": {
+        "@type": "Thing",
+        "name": "GitHub - Sentiment Analysis",
+        "url": "https://github.com/IBR4H33M/Sentiment-Analysis-of-product-reviews"
+      },
+      "dataset": {
+        "@type": "Thing",
+        "name": "Amazon Reviews for Sentiment Analysis",
+        "url": "https://www.kaggle.com/datasets/bittlingmayer/amazonreviews",
+        "description": "40,000 customer reviews from Amazon used for model training"
+      }
+    };
+
+    // Remove old schema script if exists
+    const existingScript = document.querySelector('script[data-schema="sentiment-jsonld"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // Create and inject new script
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.setAttribute('data-schema', 'sentiment-jsonld');
+    script.textContent = JSON.stringify(schemaData);
+    document.head.appendChild(script);
+
+    // Cleanup on unmount
+    return () => {
+      const scriptToRemove = document.querySelector('script[data-schema="sentiment-jsonld"]');
+      if (scriptToRemove) {
+        scriptToRemove.remove();
+      }
+    };
+  }, []);
 
   const logMessage = (msg) => {
     setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
