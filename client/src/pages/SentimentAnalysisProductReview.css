@@ -3,6 +3,7 @@
   width: 100%;
   min-height: 100vh;
   margin-top: -200px;
+  background: #d0d0d0;
 }
 
 .spr-page-title {
@@ -11,18 +12,17 @@
   left: 160px;
   font-family: var(--font-vcr);
   font-size: clamp(2rem, 4vw, 3.5rem);
-  color: #ffffff;
+  color: #4a4a4a;
   margin: 0;
   font-weight: 700;
   z-index: 1100;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  text-shadow: 1px 1px 0 #0a0f2e, -1px -1px 0 #0a0f2e, 1px -1px 0 #0a0f2e, -1px 1px 0 #0a0f2e;
 }
 
 .spr-container {
   width: 100%;
-  background: #0a0f2e;
+  background: #808080;
   padding: 200px 0 3rem;
 }
 
@@ -32,16 +32,25 @@
   padding: 0 1.5rem;
 }
 
+/* Description */
+.spr-description {
+  font-family: var(--font-vcr);
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.8;
+  margin: 0 0 2rem 0;
+}
+
 .spr-section-title {
   font-family: var(--font-vcr);
   font-size: clamp(1.6rem, 3vw, 2.5rem);
-  color: #ffffff;
+  color: #1a1a2e;
   font-weight: normal;
   margin: 0 0 1.5rem 0;
 }
 
 .spr-form-section {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.7);
   border-radius: 15px;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -94,7 +103,7 @@
 .spr-form-group label {
   font-family: var(--font-vcr);
   font-size: 0.9rem;
-  color: #a0a0a0;
+  color: #444;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -127,9 +136,9 @@
   box-sizing: border-box;
   padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.1);
-  color: #fff;
+  border: 1px solid rgba(0,0,0,0.2);
+  background: rgba(255,255,255,0.9);
+  color: #1a1a2e;
   font-family: var(--font-vcr);
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -194,7 +203,7 @@
 }
 
 .spr-log-console {
-  background: #000;
+  background: #2a2a2a;
   color: #cfd8ff;
   border-radius: 10px;
   padding: 1rem;
@@ -226,21 +235,21 @@
 }
 
 .spr-reset-btn {
-  background: #0a0f2e;
-  color: #fff;
+  background: #e4e4e4;
+  color: #1a1a2e;
 }
 
 .spr-reset-btn:hover {
-  background: #26345e;
+  background: #d0d0d0;
   opacity: 0.9;
 }
 
 .spr-error {
-  background: rgba(233, 69, 96, 0.2);
+  background: rgba(233, 69, 96, 0.15);
   border: 1px solid #e94560;
   border-radius: 10px;
   padding: 15px 20px;
-  color: #ff6b6b;
+  color: #c41e3a;
   margin-bottom: 2rem;
 }
 
@@ -452,7 +461,7 @@
 }
 
 .spr-score-card {
-  background: rgba(255,255,255,0.06);
+  background: rgba(50, 50, 50, 0.8);
   border: 1px solid rgba(144,238,144,0.3);
   border-radius: 14px;
   padding: 1rem;
@@ -462,11 +471,11 @@
   justify-content: center;
   align-items: center;
   gap: 0.45rem;
-  color: #e9f8ff;
+  color: #ffffff;
 }
 
 .spr-card-main {
-  background: rgba(10,15,46,0.9);
+  background: rgba(30, 30, 30, 0.95);
   border-color: rgba(144,238,144,0.8);
 }
 
@@ -474,24 +483,9 @@
   font-family: var(--font-vcr);
   font-size: 1.1rem;
   letter-spacing: 0.1em;
-  color: #57b85e;
+  color: #90ee90;
   text-transform: uppercase;
   font-weight: normal;
-}
-
-.spr-majority-panel.spr-majority-positive .spr-card-title {
-  color: #000000 !important;
-}
-
-.spr-majority-panel.spr-majority-negative .spr-card-title {
-  color: #000000 !important;
-}
-
-.spr-card-value {
-  font-family: var(--font-vcr);
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #ffffff;
 }
 
 .spr-card-value {
@@ -553,4 +547,75 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* Technical Details Section */
+.spr-technical-section {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.spr-tech-grid {
+  display: grid;
+  grid-template-columns: 25% 1fr;
+  gap: 2rem;
+}
+
+.spr-tech-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.spr-tech-block:first-child {
+  grid-row: 1 / 3;
+}
+
+.spr-tech-block-title {
+  font-family: var(--font-vcr);
+  font-size: 1.2rem;
+  color: #2f7a4f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.spr-tech-block-content {
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+.spr-tech-list {
+  list-style: disc;
+  margin: 0.5rem 0 0 1.5rem;
+  padding: 0;
+}
+
+.spr-tech-list li {
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 0.3rem 0;
+}
+
+.spr-tech-urls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.spr-tech-link {
+  color: #1a3a6c;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.spr-tech-link:hover {
+  color: #2a6aad;
+  text-decoration: underline;
 }

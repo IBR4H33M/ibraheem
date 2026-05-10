@@ -171,6 +171,14 @@ const SentimentAnalysisProductReview = () => {
 
       <div className="spr-container">
         <div className="spr-inner">
+          <h2 className="spr-section-title">
+            WHAT IS IT?
+          </h2>
+
+          <p className="spr-description">
+            Analyze customer product reviews to determine sentiment polarity (positive/negative). Uses ensemble learning with multiple models and TF-IDF text feature extraction for accurate real-time predictions on product reviews.
+          </p>
+
           <h2 className="spr-section-title">ENTER A PRODUCT REVIEW</h2>
 
           <form className="spr-form-section" onSubmit={handleSubmit}>
@@ -290,6 +298,43 @@ const SentimentAnalysisProductReview = () => {
               </div>
             </div>
           )}
+
+          <h2 className="spr-section-title">
+            TECHNICAL DETAILS
+          </h2>
+
+          <div className="spr-technical-section">
+            <div className="spr-tech-grid">
+              <div className="spr-tech-block">
+                <div className="spr-tech-block-title">Tech Stack</div>
+                <ul className="spr-tech-list">
+                  <li>Python</li>
+                  <li>scikit-learn</li>
+                  <li>Flask</li>
+                  <li>TF-IDF</li>
+                  <li>Pickle</li>
+                  <li>Pandas</li>
+                  <li>NumPy</li>
+                </ul>
+              </div>
+
+              <div className="spr-tech-urls">
+                <div className="spr-tech-block">
+                  <div className="spr-tech-block-title">GitHub</div>
+                  <div className="spr-tech-block-content">
+                    <a href="https://github.com/IBR4H33M/Sentiment-Analysis-of-product-reviews" target="_blank" rel="noopener noreferrer" className="spr-tech-link">https://github.com/IBR4H33M/Sentiment-Analysis-of-product-reviews</a>
+                  </div>
+                </div>
+
+                <div className="spr-tech-block">
+                  <div className="spr-tech-block-title">Dataset</div>
+                  <div className="spr-tech-block-content">
+                    <a href="https://www.kaggle.com/datasets/bittlingmayer/amazonreviews" target="_blank" rel="noopener noreferrer" className="spr-tech-link">https://www.kaggle.com/datasets/bittlingmayer/amazonreviews</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

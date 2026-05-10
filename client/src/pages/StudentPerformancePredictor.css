@@ -19,11 +19,6 @@
   z-index: 1100;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  text-shadow:
-     1px  1px 0 #ffffff,
-    -1px -1px 0 #ffffff,
-     1px -1px 0 #ffffff,
-    -1px  1px 0 #ffffff;
 }
 
 /* Main content container */
@@ -37,6 +32,15 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* Description */
+.spp-description {
+  font-family: var(--font-vcr);
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.8;
+  margin: 0 0 2rem 0;
 }
 
 /* Section title */

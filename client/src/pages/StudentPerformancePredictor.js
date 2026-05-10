@@ -197,6 +197,14 @@ const StudentPerformancePredictor = () => {
             <div className="spp-container">
                 <div className="spp-inner">
                     <h2 className="spp-section-title">
+                        WHAT IS IT?
+                    </h2>
+
+                    <p className="spp-description">
+                        Predict student exam scores using machine learning regression models trained on educational data. Analyzes factors like attendance, study hours, sleep quality, and course type to forecast academic performance.
+                    </p>
+
+                    <h2 className="spp-section-title">
                         ENTER STUDENT DATA
                     </h2>
 
