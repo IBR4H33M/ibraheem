@@ -29,7 +29,7 @@
 /* Main content container */
 .spp-container {
   width: 100%;
-  background: #b0b0b0;
+  background: #808080;
   padding: 200px 0 3rem;
 }
 
@@ -269,11 +269,12 @@
   justify-content: center;
   align-items: center;
   gap: 0.45rem;
-  color: #e9f8ff;
+  color: #ffffff;
+  background: rgba(50, 50, 50, 0.8);
 }
 
 .spp-card-main {
-  background: rgba(10, 15, 46, 0.9);
+  background: rgba(30, 30, 30, 0.95);
   border-color: rgba(144, 238, 144, 0.8);
 }
 
@@ -289,7 +290,7 @@
   font-family: var(--font-vcr);
   font-size: 4rem;
   font-weight: 800;
-  color: #90ee90;
+  color: #ffffff;
   line-height: 1;
 }
 
