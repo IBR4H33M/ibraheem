@@ -397,6 +397,42 @@ const StudentPerformancePredictor = () => {
                             </div>
                         </div>
                     )}
+
+                    <h2 className="spp-section-title">
+                        TECHNICAL DETAILS
+                    </h2>
+
+                    <div className="spp-technical-section">
+                        <div className="spp-tech-grid">
+                            <div className="spp-tech-block">
+                                <div className="spp-tech-block-title">Tech Stack</div>
+                                <ul className="spp-tech-list">
+                                    <li>Python</li>
+                                    <li>scikit-learn</li>
+                                    <li>Flask</li>
+                                    <li>Pickle</li>
+                                    <li>Pandas</li>
+                                    <li>NumPy</li>
+                                </ul>
+                            </div>
+
+                            <div className="spp-tech-urls">
+                                <div className="spp-tech-block">
+                                    <div className="spp-tech-block-title">GitHub</div>
+                                    <div className="spp-tech-block-content">
+                                        <a href="https://github.com/IBR4H33M/StudentPerformancePredictor" target="_blank" rel="noopener noreferrer" className="spp-tech-link">https://github.com/IBR4H33M/StudentPerformancePredictor</a>
+                                    </div>
+                                </div>
+
+                                <div className="spp-tech-block">
+                                    <div className="spp-tech-block-title">Dataset</div>
+                                    <div className="spp-tech-block-content">
+                                        <a href="https://www.kaggle.com/datasets/kundanbedmutha/exam-score-prediction-dataset" target="_blank" rel="noopener noreferrer" className="spp-tech-link">https://www.kaggle.com/datasets/kundanbedmutha/exam-score-prediction-dataset</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

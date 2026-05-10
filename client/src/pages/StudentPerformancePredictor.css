@@ -3,6 +3,7 @@
   width: 100%;
   min-height: 100vh;
   margin-top: -200px;
+  background: #d0d0d0;
 }
 
 /* Fixed title - matches Gaming page style */
@@ -12,23 +13,23 @@
   left: 160px;
   font-family: var(--font-vcr);
   font-size: clamp(2.8rem, 5vw, 5.5rem);
-  color: #ffffff;
+  color: #4a4a4a;
   margin: 0;
   font-weight: 700;
   z-index: 1100;
   pointer-events: none;
   transition: opacity 0.3s ease;
   text-shadow:
-     1px  1px 0 #0a0f2e,
-    -1px -1px 0 #0a0f2e,
-     1px -1px 0 #0a0f2e,
-    -1px  1px 0 #0a0f2e;
+     1px  1px 0 #ffffff,
+    -1px -1px 0 #ffffff,
+     1px -1px 0 #ffffff,
+    -1px  1px 0 #ffffff;
 }
 
 /* Main content container */
 .spp-container {
   width: 100%;
-  background: #0a0f2e;
+  background: #b0b0b0;
   padding: 200px 0 3rem;
 }
 
@@ -42,7 +43,7 @@
 .spp-section-title {
   font-family: var(--font-vcr);
   font-size: clamp(1.6rem, 3vw, 2.5rem);
-  color: #ffffff;
+  color: #1a1a2e;
   font-weight: normal;
   margin: 0 0 1.5rem 0;
   display: flex;
@@ -57,7 +58,7 @@
 
 /* Form section */
 .spp-form-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 15px;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -78,7 +79,7 @@
 .spp-form-group label {
   font-family: var(--font-vcr);
   font-size: 0.9rem;
-  color: #a0a0a0;
+  color: #444;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -87,9 +88,9 @@
 .spp-form-group select {
   padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a2e;
   font-family: var(--font-vcr);
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -122,8 +123,8 @@
 }
 
 .spp-form-group select option {
-  background: #1a1a2e;
-  color: #fff;
+  background: #ffffff;
+  color: #1a1a2e;
 }
 
 /* Form actions */
@@ -177,23 +178,23 @@
 }
 
 .spp-reset-btn {
-  background: #0a0f2e;
-  color: #fff;
+  background: #e4e4e4;
+  color: #1a1a2e;
 }
 
 .spp-reset-btn:hover {
-  background: #1f3b60;
+  background: #d0d0d0;
   opacity: 0.9;
 }
 
 
 /* Error message */
 .spp-error {
-  background: rgba(233, 69, 96, 0.2);
+  background: rgba(233, 69, 96, 0.15);
   border: 1px solid #e94560;
   border-radius: 10px;
   padding: 15px 20px;
-  color: #ff6b6b;
+  color: #c41e3a;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -316,7 +317,7 @@
 }
 
 .spp-log-console {
-  background: #000000;
+  background: #2a2a2a;
   border: none;
   border-radius: 10px;
   padding: 1rem;
@@ -436,4 +437,75 @@
   .spp-reset-btn {
     width: 100%;
   }
+}
+
+/* Technical Details Section */
+.spp-technical-section {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.spp-tech-grid {
+  display: grid;
+  grid-template-columns: 25% 1fr;
+  gap: 2rem;
+}
+
+.spp-tech-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.spp-tech-block:first-child {
+  grid-row: 1 / 3;
+}
+
+.spp-tech-block-title {
+  font-family: var(--font-vcr);
+  font-size: 1.2rem;
+  color: #2f7a4f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.spp-tech-block-content {
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+.spp-tech-list {
+  list-style: disc;
+  margin: 0.5rem 0 0 1.5rem;
+  padding: 0;
+}
+
+.spp-tech-list li {
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 0.3rem 0;
+}
+
+.spp-tech-urls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.spp-tech-link {
+  color: #1a3a6c;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.spp-tech-link:hover {
+  color: #2a6aad;
+  text-decoration: underline;
 }
