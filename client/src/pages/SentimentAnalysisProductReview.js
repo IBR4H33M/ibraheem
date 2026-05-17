@@ -320,7 +320,7 @@ const SentimentAnalysisProductReview = () => {
 
               <div className="spr-tech-urls">
                 <div className="spr-tech-block">
-                  <div className="spr-tech-block-title">GitHub</div>
+                  <div className="spr-tech-block-title">GITHUB REPOSITORY</div>
                   <div className="spr-tech-block-content">
                     <a href="https://github.com/IBR4H33M/Sentiment-Analysis-of-product-reviews" target="_blank" rel="noopener noreferrer" className="spr-tech-link">https://github.com/IBR4H33M/Sentiment-Analysis-of-product-reviews</a>
                   </div>

@@ -426,7 +426,7 @@ const StudentPerformancePredictor = () => {
 
                             <div className="spp-tech-urls">
                                 <div className="spp-tech-block">
-                                    <div className="spp-tech-block-title">GitHub</div>
+                                    <div className="spp-tech-block-title">GITHUB REPOSITORY</div>
                                     <div className="spp-tech-block-content">
                                         <a href="https://github.com/IBR4H33M/StudentPerformancePredictor" target="_blank" rel="noopener noreferrer" className="spp-tech-link">https://github.com/IBR4H33M/StudentPerformancePredictor</a>
                                     </div>
