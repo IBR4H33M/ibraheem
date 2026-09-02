@@ -23,7 +23,28 @@
       "dest": "server/index.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "client/static/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "client/assets/$1"
+    },
+    {
+      "src": "/favicon(.*)",
+      "dest": "client/favicon$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "client/manifest.json"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "client/robots.txt"
+    },
+    {
+      "src": "/logo(.*)",
+      "dest": "client/logo$1"
     },
     {
       "src": "/(.*)",
