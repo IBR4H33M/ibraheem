@@ -10,7 +10,7 @@ const TechSpace = () => {
   const navigate = useNavigate();
   const [projects, setProjects]     = useState([]);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [showSlugInUrl, setShowSlugInUrl] = useState(!!slug); // Only show slug if user navigated to one
+  const [showSlugInUrl]             = useState(!!slug); // Only show slug if user navigated to one
   const [adding, setAdding]         = useState(false);
   const [editingId, setEditingId]   = useState('');
   const [formTitle, setFormTitle]   = useState('');
