@@ -467,12 +467,10 @@
 }
 
 .gaming-left {
-  flex: 0 0 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #1e1e21;
-  padding: 2rem;
+  flex: 0 0 45%;
+  position: relative;
+  overflow: hidden;
+  background-color: #000;
 }
 
 .gaming-heading {
@@ -498,7 +496,7 @@
 }
 
 .gaming-right {
-  flex: 0 0 70%;
+  flex: 0 0 55%;
   position: relative;
   background-color: #1e1e21;
   display: flex;
@@ -556,17 +554,17 @@
     flex: none;
     width: 100%;
     height: 50vh;
-    order: 1;
+    order: 2;
   }
 
   .gaming-left {
     flex: none;
     width: 100%;
-    order: 2;
-    padding: 1rem 1.5rem 1.5rem;
+    height: 40vw;
+    order: 1;
   }
 
-  .gaming-heading span {
+  .gaming-video-label {
     font-size: clamp(2rem, 6vw, 3.5rem);
   }
 
@@ -933,4 +931,94 @@
     justify-content: center;
     flex-shrink: 0;
   }
+}
+
+/* ── Welcome Hero ─────────────────────────────────────────── */
+.welcome-hero {
+  width: 100vw;
+  min-height: 38vh;
+  background: #0a0f2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  box-sizing: border-box;
+}
+
+.welcome-hero-content {
+  text-align: center;
+}
+
+.welcome-sub {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  color: #90ee90;
+  letter-spacing: 0.15em;
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+}
+
+.welcome-title {
+  font-family: var(--font-vcr);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 0 40px rgba(144, 238, 144, 0.25),
+    0 4px 24px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+  .welcome-hero {
+    min-height: 30vh;
+    padding: 3rem 1.5rem;
+  }
+}
+
+/* ── Gaming Left — Video Panel ────────────────────────────── */
+.gaming-left-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gaming-video-label {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-family: var(--font-vcr);
+  font-size: clamp(2rem, 2.5vw + 0.5rem, 4rem);
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+  transition: color 0.3s ease;
+  z-index: 2;
+}
+
+.gaming-video-label:hover {
+  color: #90ee90;
+}
+
+.gaming-left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 60%,
+    #1e1e21 100%
+  ), linear-gradient(
+    to top,
+    rgba(0,0,0,0.55) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+  z-index: 1;
 }

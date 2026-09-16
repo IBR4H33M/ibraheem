@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Slider from 'react-slick';
 import axios from 'axios';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import './Home.css';
 
 // Helper function to generate slug from title
@@ -17,37 +14,9 @@ const generateSlug = (title) => {
 
 const Home = () => {
   const navigate = useNavigate();
-  const [sections] = useState([
-    {
-      id: 1,
-      type: 'video',
-      src: '/assets/cover1.mkv',
-      poster: '/assets/hero-poster.jpg',
-      tooltipContent: 'Cinematic in-game footage captured in Need For Speed Unbound'
-    },
-    {
-      id: 3,
-      type: 'image',
-      src: '/assets/gaming-bg.jpg',
-      title: 'Gaming World',
-      subtitle: 'My favorite games and gaming experiences',
-      link: '/gaming',
-      linkText: 'Enter Gaming'
-    },
-    {
-      id: 4,
-      type: 'image',
-      src: '/assets/tech-bg.jpg',
-      title: 'Tech Space',
-      subtitle: 'Code, projects, and technological adventures',
-      link: '/techspace',
-      linkText: 'Explore Tech'
-    }
-  ]);
 
-  const videoRefs = useRef([]);
   const gamingRef = useRef(null);
-  const [showTooltip, setShowTooltip] = useState({ slide: -1, visible: false });
+  const gamingVideoRef = useRef(null);
   const [recentGames, setRecentGames] = useState([]);
   const [projects, setProjects] = useState([]);
   const [manualRotation, setManualRotation] = useState(0);
@@ -80,46 +49,6 @@ const Home = () => {
       // ignore pause errors
     }
   };
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: false,
-    arrows: true,
-    customPaging: i => (
-      <div className="slick-dot"></div>
-    ),
-    beforeChange: () => {
-      // Pause the currently active slide's video (works with cloned slides)
-      try {
-        const activeVid = document.querySelector('.slick-slide.slick-active video');
-        if (activeVid) safePause(activeVid);
-      } catch (e) {}
-    },
-    afterChange: () => {
-      // Play the newly active slide's video
-      try {
-        const activeVid = document.querySelector('.slick-slide.slick-active video');
-        if (activeVid && !prefersReducedMotion) safePlay(activeVid);
-      } catch (e) {}
-    }
-  };
-
-  // Only include videos in the slider; images go to the side-by-side area
-  const videoSlides = sections.filter(s => s.type === 'video');
-
-  // On mount, play the active slide's video (handles slick clones)
-  useEffect(() => {
-    try {
-      const activeVid = document.querySelector('.slick-slide.slick-active video');
-      if (activeVid && !prefersReducedMotion) safePlay(activeVid);
-    } catch (e) {}
-  }, [prefersReducedMotion]);
 
   useEffect(() => {
     axios.get('/api/recent-games')
@@ -203,45 +132,12 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {/* Video Slider */}
-      <div className="video-slider">
-        <Slider {...sliderSettings}>
-          {videoSlides.map((section, index) => (
-            <div key={section.id} className="slider-slide">
-              <video
-                ref={el => videoRefs.current[index] = el}
-                className="section-bg-video"
-                poster={section.poster}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                autoPlay={!prefersReducedMotion && index === 0}
-                onClick={() => navigate('/gaming')}
-                style={{ cursor: 'pointer' }}
-              >
-                <source src={section.src} />
-              </video>
-              <div className="video-overlay">
-                <div className="overlay-right">
-                  <div
-                    className="info-icon"
-                    onMouseEnter={() => setShowTooltip({ slide: index, visible: true })}
-                    onMouseLeave={() => setShowTooltip({ slide: index, visible: false })}
-                    onClick={() => setShowTooltip(prev => ({ slide: index, visible: !prev.visible }))}
-                  >
-                    !
-                  </div>
-                  {showTooltip.visible && showTooltip.slide === index && (
-                    <div className="tooltip">
-                      <p>{section.tooltipContent}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
+      {/* Welcome Hero Section */}
+      <div className="welcome-hero">
+        <div className="welcome-hero-content">
+          <p className="welcome-sub">Welcome to</p>
+          <h1 className="welcome-title">IBRAHEEM's Space!</h1>
+        </div>
       </div>
 
       {/* TechSpace Section - Horizontal Slider */}
@@ -327,8 +223,19 @@ const Home = () => {
       {/* Gaming Section */}
       <div className="gaming-horizontal-section" ref={gamingRef}>
         <div className="gaming-left">
-          <Link to="/gaming" className="gaming-heading">
-            <span>&lt;GAMING&gt;</span>
+          <video
+            ref={gamingVideoRef}
+            className="gaming-left-video"
+            muted
+            loop
+            autoPlay
+            playsInline
+            preload="metadata"
+          >
+            <source src="/assets/cover1.mkv" />
+          </video>
+          <Link to="/gaming" className="gaming-video-label">
+            &lt;GAMING&gt;
           </Link>
         </div>
         <div className="gaming-right">
