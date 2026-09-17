@@ -78,6 +78,12 @@
   background: #1a1a1a;
 }
 
+.gc-placeholder--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Delete button — top-right corner of image, admin only */
 .gc-delete-btn {
   position: absolute;

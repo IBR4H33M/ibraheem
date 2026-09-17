@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
+import TerminalSpinner from '../components/TerminalSpinner';
 import './Entertainment.css';
 
 const DEFAULT_MOVIES = Array.from({ length: 10 }, (_, i) => ({
@@ -27,6 +28,7 @@ const Entertainment = () => {
   const [recommendationMsg, setRecommendationMsg] = useState('');
   const [adminRecommendations, setAdminRecommendations] = useState([]);
   const [loadingAdminRecommendations, setLoadingAdminRecommendations] = useState(false);
+  const [moviesLoading, setMoviesLoading] = useState(true);
   
   // TV Series states
   const [tvSeries, setTvSeries] = useState(Array.from({ length: 10 }, (_, i) => ({ rank: i + 1, title: 'Coming Soon', image: { url: null } })));
@@ -54,7 +56,8 @@ const Entertainment = () => {
   useEffect(() => {
     axios.get('/api/movies')
       .then(({ data }) => { if (data.length) setMovies(data); })
-      .catch(() => {/* use defaults */});
+      .catch(() => {/* use defaults */})
+      .finally(() => setMoviesLoading(false));
     axios.get('/api/tv-series')
       .then(({ data }) => { if (data.length) setTvSeries(data); })
       .catch(() => {});
@@ -417,7 +420,7 @@ const Entertainment = () => {
                    style={isAdmin && editing ? { cursor: 'pointer', outline: '2px dashed #90ee90' } : {}}>
                 {movie.image?.url
                   ? <img src={movie.image.url} alt={movie.title} className="slide-poster-img" />
-                  : <div className="slide-poster-placeholder" />}
+                  : <div className="slide-poster-placeholder">{moviesLoading && <TerminalSpinner />}</div>}
                 {isAdmin && editing && (
                   <div className="slide-poster-overlay">Click to change image</div>
                 )}

@@ -22,6 +22,7 @@ const Home = () => {
   const [projects, setProjects] = useState([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
   const [gamesLoading, setGamesLoading] = useState(true);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [manualRotation, setManualRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
@@ -135,6 +136,13 @@ const Home = () => {
     setTsDragging(false);
   };
 
+  const handleArrowClick = (e, projectId) => {
+    e.stopPropagation(); // don't navigate to TechSpace
+    setSelectedProjectId(prev => (prev === projectId ? null : projectId));
+  };
+
+  const selectedProject = projects.find(p => p._id === selectedProjectId) || null;
+
   return (
     <div className="home-page">
       {/* Welcome Hero Section */}
@@ -180,7 +188,7 @@ const Home = () => {
                 {projects.map(project => (
                   <div 
                     key={project._id} 
-                    className="ts-card"
+                    className={`ts-card ${selectedProjectId === project._id ? 'ts-card--selected' : ''}`}
                     onClick={() => {
                       // Only navigate if it wasn't a drag (distance < 5px)
                       if (tsDragDistanceRef.current < 5) {
@@ -193,9 +201,20 @@ const Home = () => {
                     <div className="ts-img-wrap">
                       {project.image?.url
                         ? <img src={project.image.url} alt={project.title} className="ts-img" />
-                        : <div className="ts-img-placeholder" />}
+                        : <div className="ts-img-placeholder"><TerminalSpinner /></div>}
                     </div>
                     <span className="ts-title">{project.title}</span>
+                    {/* Expand arrow */}
+                    <button
+                      className={`ts-expand-arrow ${selectedProjectId === project._id ? 'ts-expand-arrow--active' : ''}`}
+                      onClick={(e) => handleArrowClick(e, project._id)}
+                      aria-label={selectedProjectId === project._id ? 'Collapse project details' : 'Expand project details'}
+                      title="Show project details"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
                   </div>
                 ))}
 
@@ -213,7 +232,66 @@ const Home = () => {
             )}
           </div>
         </div>
-      </div>
+        </div>
+
+        {/* Project Details Expand Panel */}
+        {selectedProject && (
+          <div className="ts-detail-panel">
+            <div className="ts-detail-inner">
+              <h3 className="ts-detail-title">{selectedProject.title}</h3>
+              {selectedProject.introduction && (
+                <p className="ts-detail-section">{selectedProject.introduction}</p>
+              )}
+              {selectedProject.background && (
+                <p className="ts-detail-section">{selectedProject.background}</p>
+              )}
+              <div className="ts-detail-meta">
+                {selectedProject.techStack && (
+                  <div className="ts-detail-meta-row">
+                    <span className="ts-detail-label">Tech Stack</span>
+                    <span className="ts-detail-value">{selectedProject.techStack}</span>
+                  </div>
+                )}
+                {selectedProject.myRole && (
+                  <div className="ts-detail-meta-row">
+                    <span className="ts-detail-label">My Role</span>
+                    <span className="ts-detail-value">{selectedProject.myRole}</span>
+                  </div>
+                )}
+                {selectedProject.datasetTitle && (
+                  <div className="ts-detail-meta-row">
+                    <span className="ts-detail-label">Dataset</span>
+                    <span className="ts-detail-value">
+                      {selectedProject.datasetUrl
+                        ? <a href={selectedProject.datasetUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-link">{selectedProject.datasetTitle}</a>
+                        : selectedProject.datasetTitle}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="ts-detail-actions">
+                {selectedProject.url && (
+                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--live">
+                    Live Demo
+                  </a>
+                )}
+                {selectedProject.githubUrl && (
+                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--github">
+                    GitHub
+                  </a>
+                )}
+                {selectedProject.customButtonText && selectedProject.customButtonUrl && (
+                  <a href={selectedProject.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--custom">
+                    {selectedProject.customButtonText}
+                  </a>
+                )}
+                <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn ts-detail-btn--more">
+                  Full Details →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Fandom Section - Full Width */}

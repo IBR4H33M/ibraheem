@@ -45,11 +45,13 @@ const Gaming = () => {
   const [recommendationMsg, setRecommendationMsg] = useState('');
   const [adminRecommendations, setAdminRecommendations] = useState([]);
   const [loadingAdminRecommendations, setLoadingAdminRecommendations] = useState(false);
+  const [capturesLoading, setCapturesLoading] = useState(true);
 
   useEffect(() => {
     axios.get('/api/game-captures')
       .then(({ data }) => { if (data.length) setCaptures(data); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setCapturesLoading(false));
     axios.get('/api/recent-games')
       .then(({ data }) => { if (data.length) setRecentGames(data); })
       .catch(() => {})
@@ -312,7 +314,11 @@ const Gaming = () => {
           )}
 
           <div className="gaming-captures-image-wrap">
-            {capture?.image?.url
+            {capturesLoading ? (
+              <div className="gc-placeholder gc-placeholder--loading">
+                <TerminalSpinner label="loading..." />
+              </div>
+            ) : capture?.image?.url
               ? <img key={current} src={capture.image.url} alt={capture.gameName} className="gc-img" />
               : <div className="gc-placeholder" />}
             {capture?.gameName && (
