@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
+import TerminalSpinner from '../components/TerminalSpinner';
 import './TechSpace.css';
 
 const TechSpace = () => {
@@ -39,6 +40,7 @@ const TechSpace = () => {
   const [editFile, setEditFile]     = useState(null);
   const [saving, setSaving]         = useState(false);
   const [saveMsg, setSaveMsg]       = useState('');
+  const [projectsLoading, setProjectsLoading] = useState(true);
   const imgRef                      = useRef(null);
   const editImgRef                  = useRef(null);
   const { isAdmin, token }          = useAuth();
@@ -58,7 +60,8 @@ const TechSpace = () => {
           }
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setProjectsLoading(false));
   }, [slug]);
 
   // Update URL when currentProjectIndex changes (only if slug is being shown)
@@ -605,7 +608,10 @@ const TechSpace = () => {
               </div>
             </div>
           )}
-          {projects.length === 0 && !isAdmin && (
+          {projectsLoading && (
+            <p className="ts-empty"><TerminalSpinner label="loading..." /></p>
+          )}
+          {!projectsLoading && projects.length === 0 && !isAdmin && (
             <p className="ts-empty">No projects yet.</p>
           )}
         </div>

@@ -525,6 +525,17 @@
   cursor: grabbing;
 }
 
+.gaming-carousel-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 .gaming-card {
   position: absolute;
   width: 200px;
@@ -969,6 +980,38 @@
   text-shadow:
     0 0 40px rgba(144, 238, 144, 0.25),
     0 4px 24px rgba(0,0,0,0.5);
+}
+
+.who-am-i-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.8rem;
+  padding: 0.75rem 2.2rem;
+  background: rgba(144, 238, 144, 0.05);
+  border: 2px solid #90ee90;
+  color: #90ee90;
+  font-family: var(--font-vcr);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(144, 238, 144, 0.15), inset 0 0 8px rgba(144, 238, 144, 0.05);
+  transition: all 0.25s ease;
+}
+
+.who-am-i-btn:hover {
+  background: #90ee90;
+  color: #0a0f2e;
+  box-shadow: 0 0 25px rgba(144, 238, 144, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.who-am-i-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 12px rgba(144, 238, 144, 0.3);
 }
 
 @media (max-width: 768px) {

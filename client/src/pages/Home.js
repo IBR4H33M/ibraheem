@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import TerminalSpinner from '../components/TerminalSpinner';
 import './Home.css';
 
 // Helper function to generate slug from title
@@ -19,6 +20,8 @@ const Home = () => {
   const gamingVideoRef = useRef(null);
   const [recentGames, setRecentGames] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [gamesLoading, setGamesLoading] = useState(true);
   const [manualRotation, setManualRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
@@ -53,10 +56,12 @@ const Home = () => {
   useEffect(() => {
     axios.get('/api/recent-games')
       .then(({ data }) => { if (data.length) setRecentGames(data); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setGamesLoading(false));
     axios.get('/api/projects')
       .then(({ data }) => { if (data.length) setProjects(data); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setProjectsLoading(false));
   }, []);
 
   const handleDragStart = (e) => {
@@ -137,6 +142,9 @@ const Home = () => {
         <div className="welcome-hero-content">
           <p className="welcome-sub">Welcome to</p>
           <h1 className="welcome-title">IBRAHEEM's Space!</h1>
+          <Link to="/about" className="who-am-i-btn">
+            Who am I?
+          </Link>
         </div>
       </div>
 
@@ -191,8 +199,8 @@ const Home = () => {
                   </div>
                 ))}
 
-                {projects.length === 0 && (
-                  <p className="ts-empty">No projects yet.</p>
+                {projectsLoading && (
+                  <p className="ts-empty"><TerminalSpinner label="loading..." /></p>
                 )}
               </div>
             </div>
@@ -249,7 +257,11 @@ const Home = () => {
             onTouchMove={handleDragMove}
             onTouchEnd={handleDragEnd}
           >
-            {recentGames.map((game, index) => {
+            {gamesLoading ? (
+              <div className="gaming-carousel-loading">
+                <TerminalSpinner label="loading games..." />
+              </div>
+            ) : recentGames.map((game, index) => {
               const totalGames = recentGames.length;
               const angle = (index / totalGames) * Math.PI * 2 + manualRotation;
               const radius = 280;

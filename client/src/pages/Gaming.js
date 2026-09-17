@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
+import TerminalSpinner from '../components/TerminalSpinner';
 import './Gaming.css';
 
 const Gaming = () => {
@@ -25,6 +26,7 @@ const Gaming = () => {
   const [rgSelectedGame, setRgSelectedGame] = useState(null);
   const [rgSaving, setRgSaving]             = useState(false);
   const [rgMsg, setRgMsg]                   = useState('');
+  const [gamesLoading, setGamesLoading]     = useState(true);
   const rgTrackRef                          = useRef(null);
   const rgDraggingRef                       = useRef(false);
   const rgDragStartXRef                     = useRef(0);
@@ -50,7 +52,8 @@ const Gaming = () => {
       .catch(() => {});
     axios.get('/api/recent-games')
       .then(({ data }) => { if (data.length) setRecentGames(data); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setGamesLoading(false));
   }, []);
 
   useEffect(() => {
@@ -418,7 +421,10 @@ const Gaming = () => {
                 </div>
               ))}
 
-              {recentGames.length === 0 && !isAdmin && (
+              {gamesLoading && (
+                <p className="rg-empty"><TerminalSpinner label="loading..." /></p>
+              )}
+              {!gamesLoading && recentGames.length === 0 && !isAdmin && (
                 <p className="rg-empty">No games yet.</p>
               )}
             </div>

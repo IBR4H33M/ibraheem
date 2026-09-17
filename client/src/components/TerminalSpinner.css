@@ -1,0 +1,27 @@
+.terminal-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  color: #90ee90;
+  font-family: var(--font-vcr);
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+.terminal-spinner-char {
+  display: inline-block;
+  width: 1.1em;
+  text-align: center;
+  animation: spin-flicker 0.12s step-end infinite;
+}
+
+.terminal-spinner-label {
+  opacity: 0.85;
+}
+
+@keyframes spin-flicker {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 1; }
+}
