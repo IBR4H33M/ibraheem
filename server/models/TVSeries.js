@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const tvSeriesSchema = new mongoose.Schema({
-  rank: { type: Number, required: true, unique: true, min: 1, max: 10 },
+  rank: { type: Number, required: true },
   title: { type: String, required: true },
   image: {
     url: String,

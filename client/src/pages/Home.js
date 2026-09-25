@@ -13,6 +13,35 @@ const generateSlug = (title) => {
     .replace(/[^\w-]/g, '')}`;
 };
 
+// Helper function to parse tech stack into categories and keyword lists
+const parseTechStack = (raw) => {
+  if (!raw) return [];
+  const text = String(raw).trim();
+  const knownCats = [
+    'Build and release', 'Build & release', 'Auth/Security', 'Storage/Uploads',
+    'Language', 'Languages', 'Frontend', 'Backend', 'Database', 'Tools',
+    'Navigation', 'Deployment', 'Framework', 'Frameworks', 'Styling', 'Testing',
+    'Machine Learning', 'Deep Learning', 'DevOps', 'Cloud', 'Libraries', 'API'
+  ];
+  const catPattern = '(?:' + knownCats.join('|') + '|[A-Z][a-zA-Z0-9/&_-]*)';
+  const categoryHeaderRegex = new RegExp('(?:^|\\s+)(' + catPattern + ':)', 'g');
+
+  const marked = text.replace(categoryHeaderRegex, (match, p1) => '\n' + p1);
+  const lines = marked.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+  return lines.map(line => {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx !== -1) {
+      const category = line.substring(0, colonIdx).trim();
+      const rest = line.substring(colonIdx + 1).trim();
+      const keywords = rest.split(',').map(k => k.trim()).filter(Boolean);
+      return { category, keywords: keywords.length ? keywords : [rest] };
+    }
+    const keywords = line.split(',').map(k => k.trim()).filter(Boolean);
+    return { category: '', keywords: keywords.length ? keywords : [line] };
+  });
+};
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -27,6 +56,7 @@ const Home = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const tsTrackRef = useRef(null);
+  const tsArrowsTrackRef = useRef(null);
   const tsDraggingRef = useRef(false);
   const tsDragStartXRef = useRef(0);
   const tsStartScrollLeftRef = useRef(0);
@@ -35,24 +65,6 @@ const Home = () => {
   const [tsCanScrollLeft, setTsCanScrollLeft] = useState(false);
   const [tsCanScrollRight, setTsCanScrollRight] = useState(false);
 
-  const safePlay = (video) => {
-    if (!video) return;
-    try {
-      const p = video.play();
-      if (p && typeof p.then === 'function') p.catch(() => {});
-    } catch (e) {
-      // ignore play errors
-    }
-  };
-
-  const safePause = (video) => {
-    if (!video) return;
-    try {
-      video.pause();
-    } catch (e) {
-      // ignore pause errors
-    }
-  };
 
   useEffect(() => {
     axios.get('/api/recent-games')
@@ -90,11 +102,28 @@ const Home = () => {
     if (!el) return;
     setTsCanScrollLeft(el.scrollLeft > 0);
     setTsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    if (tsArrowsTrackRef.current) {
+      tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
+    }
   };
 
   useEffect(() => {
     updateTsScrollBtns();
   }, [projects]);
+
+  useEffect(() => {
+    const el = tsTrackRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      if (tsArrowsTrackRef.current) {
+        tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
+      }
+      setTsCanScrollLeft(el.scrollLeft > 0);
+      setTsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    };
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const tsScrollBy = (dir) => {
     const el = tsTrackRef.current;
@@ -128,6 +157,9 @@ const Home = () => {
       e.preventDefault();
       const walk = (x - tsDragStartXRef.current) * 1.25;
       el.scrollLeft = tsStartScrollLeftRef.current - walk;
+      if (tsArrowsTrackRef.current) {
+        tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
+      }
     }
   };
 
@@ -151,21 +183,22 @@ const Home = () => {
           <p className="welcome-sub">Welcome to</p>
           <h1 className="welcome-title">IBRAHEEM's Space!</h1>
           <Link to="/about" className="who-am-i-btn">
-            Who am I?
+            More about Ibraheem
           </Link>
         </div>
       </div>
 
-      {/* TechSpace Section - Horizontal Slider */}
+      {/* TechSpace Section */}
       <div className="techspace-section-wrapper">
-        <div className="techspace-horizontal-section">
-          <div className="techspace-left">
-            <Link to="/techspace" className="techspace-heading">
-              <span>&lt;TECHSPACE&gt;</span>
-            </Link>
-          </div>
-        <div className="techspace-right">
+        <div className="techspace-header">
+          <Link to="/techspace" className="techspace-heading">
+            <span>&lt;TECHSPACE&gt;</span>
+          </Link>
+          <span className="techspace-header-divider">|</span>
           <h2 className="techspace-subtitle">RECENT PROJECTS</h2>
+        </div>
+
+        <div className="ts-slider-outer">
           <div className="ts-scroll-wrapper">
             {tsCanScrollLeft && (
               <button className="ts-arrow ts-arrow-left" onClick={() => tsScrollBy(-1)} aria-label="Scroll left">
@@ -174,55 +207,70 @@ const Home = () => {
                 </svg>
               </button>
             )}
-            <div
-              className={`ts-section ${tsDragging ? 'is-dragging' : ''}`}
-              ref={tsTrackRef}
-              onScroll={updateTsScrollBtns}
-              onMouseDown={handleTsMouseDown}
-              onMouseMove={handleTsMouseMove}
-              onMouseUp={stopTsDrag}
-              onMouseLeave={stopTsDrag}
-              onDragStart={(e) => e.preventDefault()}
-            >
-              <div className="ts-track">
-                {projects.map(project => (
-                  <div 
-                    key={project._id} 
-                    className={`ts-card ${selectedProjectId === project._id ? 'ts-card--selected' : ''}`}
-                    onClick={() => {
-                      // Only navigate if it wasn't a drag (distance < 5px)
-                      if (tsDragDistanceRef.current < 5) {
-                        const slug = project.slug || generateSlug(project.title);
-                        navigate(`/techspace/${slug}`);
-                      }
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="ts-img-wrap">
-                      {project.image?.url
-                        ? <img src={project.image.url} alt={project.title} className="ts-img" />
-                        : <div className="ts-img-placeholder"><TerminalSpinner /></div>}
-                    </div>
-                    <span className="ts-title">{project.title}</span>
-                    {/* Expand arrow */}
-                    <button
-                      className={`ts-expand-arrow ${selectedProjectId === project._id ? 'ts-expand-arrow--active' : ''}`}
-                      onClick={(e) => handleArrowClick(e, project._id)}
-                      aria-label={selectedProjectId === project._id ? 'Collapse project details' : 'Expand project details'}
-                      title="Show project details"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
 
-                {projectsLoading && (
-                  <p className="ts-empty"><TerminalSpinner label="loading..." /></p>
-                )}
+            <div className="ts-slider-column">
+              {/* Thick-bordered frame around project icons and titles only */}
+              <div className="ts-bordered-frame">
+                <div
+                  className={`ts-section ${tsDragging ? 'is-dragging' : ''}`}
+                  ref={tsTrackRef}
+                  onMouseDown={handleTsMouseDown}
+                  onMouseMove={handleTsMouseMove}
+                  onMouseUp={stopTsDrag}
+                  onMouseLeave={stopTsDrag}
+                  onDragStart={(e) => e.preventDefault()}
+                >
+                  <div className="ts-track">
+                    {projects.map(project => (
+                      <div 
+                        key={project._id} 
+                        className={`ts-card ${selectedProjectId === project._id ? 'ts-card--selected' : ''}`}
+                        onClick={() => {
+                          // Only navigate if it wasn't a drag (distance < 5px)
+                          if (tsDragDistanceRef.current < 5) {
+                            const slug = project.slug || generateSlug(project.title);
+                            navigate(`/techspace/${slug}`);
+                          }
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="ts-img-wrap">
+                          {project.image?.url
+                            ? <img src={project.image.url} alt={project.title} className="ts-img" />
+                            : <div className="ts-img-placeholder"><TerminalSpinner /></div>}
+                        </div>
+                        <span className="ts-title">{project.title}</span>
+                      </div>
+                    ))}
+
+                    {projectsLoading && (
+                      <p className="ts-empty"><TerminalSpinner label="loading..." /></p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Arrow icons underneath each project, NOT covered by border */}
+              <div className="ts-arrows-row-wrapper" ref={tsArrowsTrackRef}>
+                <div className="ts-arrows-track">
+                  {projects.map(project => (
+                    <div key={project._id} className="ts-arrow-slot">
+                      <button
+                        className={`ts-expand-arrow ${selectedProjectId === project._id ? 'ts-expand-arrow--active' : ''}`}
+                        onClick={(e) => handleArrowClick(e, project._id)}
+                        aria-label={selectedProjectId === project._id ? 'Collapse project details' : 'Expand project details'}
+                        title="Show project details"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+
             {tsCanScrollRight && (
               <button className="ts-arrow ts-arrow-right" onClick={() => tsScrollBy(1)} aria-label="Scroll right">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -232,12 +280,11 @@ const Home = () => {
             )}
           </div>
         </div>
-        </div>
 
-        {/* Project Details Expand Panel */}
+        {/* Project Details Expand Bubble */}
         {selectedProject && (
           <div className="ts-detail-panel">
-            <div className="ts-detail-inner">
+            <div className="ts-detail-bubble">
               <h3 className="ts-detail-title">{selectedProject.title}</h3>
               {selectedProject.introduction && (
                 <p className="ts-detail-section">{selectedProject.introduction}</p>
@@ -247,15 +294,22 @@ const Home = () => {
               )}
               <div className="ts-detail-meta">
                 {selectedProject.techStack && (
-                  <div className="ts-detail-meta-row">
+                  <div className="ts-detail-meta-row ts-detail-meta-row--tech">
                     <span className="ts-detail-label">Tech Stack</span>
-                    <span className="ts-detail-value">{selectedProject.techStack}</span>
-                  </div>
-                )}
-                {selectedProject.myRole && (
-                  <div className="ts-detail-meta-row">
-                    <span className="ts-detail-label">My Role</span>
-                    <span className="ts-detail-value">{selectedProject.myRole}</span>
+                    <div className="ts-tech-stack-container">
+                      {parseTechStack(selectedProject.techStack).map((item, idx) => (
+                        <div className="ts-tech-row" key={idx}>
+                          {item.category && (
+                            <span className="ts-tech-cat">{item.category}:</span>
+                          )}
+                          <div className="ts-tech-tags">
+                            {item.keywords.map((kw, kwIdx) => (
+                              <span className="ts-tech-tag" key={kwIdx}>{kw}</span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
                 {selectedProject.datasetTitle && (
@@ -270,22 +324,22 @@ const Home = () => {
                 )}
               </div>
               <div className="ts-detail-actions">
-                {selectedProject.url && (
-                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--live">
-                    Live Demo
+                {selectedProject.url && selectedProject.url.trim() !== '' && (
+                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
+                    Try it out
                   </a>
                 )}
-                {selectedProject.githubUrl && (
-                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--github">
+                {selectedProject.githubUrl && selectedProject.githubUrl.trim() !== '' && (
+                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
                     GitHub
                   </a>
                 )}
-                {selectedProject.customButtonText && selectedProject.customButtonUrl && (
-                  <a href={selectedProject.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn ts-detail-btn--custom">
+                {selectedProject.customButtonText && selectedProject.customButtonUrl && selectedProject.customButtonUrl.trim() !== '' && (
+                  <a href={selectedProject.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
                     {selectedProject.customButtonText}
                   </a>
                 )}
-                <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn ts-detail-btn--more">
+                <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn">
                   Full Details →
                 </Link>
               </div>

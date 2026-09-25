@@ -589,33 +589,28 @@
   }
 }
 
-/* TechSpace Horizontal Section */
+/* TechSpace Section */
 .techspace-section-wrapper {
   width: 100vw;
-  background-color: #1a1a1e;
+  background-color: #19191D;
+  display: flex;
+  flex-direction: column;
 }
 
-.techspace-horizontal-section {
+/* Header on top left corner: <TECHSPACE> | RECENT PROJECTS */
+.techspace-header {
   display: flex;
-  width: 100vw;
-  height: calc(100vw * 9 / 20);
-  background-color: #1a1a1e;
-}
-
-.techspace-left {
-  flex: 0 0 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #1a1a1e;
-  padding: 2rem;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 2.5rem clamp(1.5rem, 4vw, 4rem) 1.25rem clamp(1.5rem, 4vw, 4rem);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .techspace-heading {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
+  align-items: center;
   text-decoration: none;
 }
 
@@ -633,21 +628,16 @@
   color: #90ee90;
 }
 
-.techspace-right {
-  flex: 0 0 70%;
-  position: relative;
-  background-color: #1a1a1e;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+.techspace-header-divider {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.6rem, 2vw, 2.5rem);
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 300;
+  user-select: none;
+  line-height: 1;
 }
 
 .techspace-subtitle {
-  position: absolute;
-  top: 2.5rem;
-  left: 1rem;
   font-family: var(--font-vcr);
   font-size: clamp(1.4rem, 2vw, 2.2rem);
   color: #e4e4e4;
@@ -655,45 +645,63 @@
   margin: 0;
   padding: 0;
   letter-spacing: 0.05em;
-  z-index: 5;
+  line-height: 1.2;
+}
+
+/* Slider outer container */
+.ts-slider-outer {
+  width: 100%;
+  padding: 0 clamp(1rem, 3.5vw, 3.5rem);
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 1.25rem;
 }
 
 .ts-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
 }
 
-.ts-section {
+.ts-slider-column {
   flex: 1;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Thick border around project icons and titles only */
+.ts-bordered-frame {
+  width: 100%;
+  border: 4px solid #4a4a58;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #141417;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.ts-section {
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   display: flex;
   align-items: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .ts-section::-webkit-scrollbar {
-  height: 6px;
-}
-
-.ts-section::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.ts-section::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-
-.ts-section::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .ts-section.is-dragging {
@@ -703,24 +711,25 @@
 .ts-track {
   display: flex;
   gap: 1.5rem;
-  padding: 0 1rem;
+  padding: 1.25rem 1.25rem;
   align-items: center;
   min-width: min-content;
+  box-sizing: border-box;
 }
 
 .ts-card {
   flex: 0 0 240px;
-  height: 280px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.75rem;
   cursor: pointer;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .ts-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .ts-img-wrap {
@@ -769,10 +778,44 @@
   overflow: hidden;
 }
 
+/* Arrows track underneath each project card, outside the thick border */
+.ts-arrows-row-wrapper {
+  width: 100%;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-top: 0.4rem;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ts-arrows-row-wrapper::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.ts-arrows-track {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+  align-items: center;
+  min-width: min-content;
+  box-sizing: border-box;
+}
+
+.ts-arrow-slot {
+  flex: 0 0 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 52px;
+}
+
+/* Carousel scroll buttons outside the thick border */
 .ts-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  flex-shrink: 0;
   z-index: 10;
   background: rgba(144, 238, 144, 0.75);
   border: none;
@@ -783,25 +826,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s;
 }
 
 .ts-arrow svg {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 
 .ts-arrow:hover {
   background: rgba(144, 238, 144, 1);
-}
-
-.ts-arrow-left {
-  left: 0.5rem;
-}
-
-.ts-arrow-right {
-  right: 0.5rem;
+  transform: scale(1.08);
 }
 
 .ts-empty {
@@ -812,7 +848,7 @@
 
 /* Selected card state */
 .ts-card--selected {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 /* Expand arrow button under each card */
@@ -820,20 +856,20 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.15rem 0.5rem;
+  padding: 0.25rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(144, 238, 144, 0.55);
+  color: rgba(144, 238, 144, 0.85);
   transition: color 0.2s ease, transform 0.25s ease;
   flex-shrink: 0;
 }
 
 .ts-expand-arrow svg {
   display: block;
-  width: 20px;
-  height: 20px;
-  transition: width 0.25s ease, height 0.25s ease, transform 0.25s ease;
+  width: 32px;
+  height: 32px;
+  transition: width 0.25s ease, height 0.25s ease, transform 0.25s ease, filter 0.25s ease;
 }
 
 .ts-expand-arrow:hover {
@@ -845,20 +881,19 @@
 }
 
 .ts-expand-arrow--active svg {
-  width: 28px;
-  height: 28px;
+  width: 48px;
+  height: 48px;
   transform: rotate(180deg);
-  filter: drop-shadow(0 0 6px rgba(144, 238, 144, 0.6));
+  filter: drop-shadow(0 0 8px rgba(144, 238, 144, 0.75));
 }
 
-/* Project detail expand panel */
+/* Project detail expand bubble inside #19191D TechSpace */
 .ts-detail-panel {
   width: 100%;
-  background: #0f1a2e;
-  border-top: 1px solid rgba(144, 238, 144, 0.15);
-  padding: 0;
+  background: transparent;
+  padding: 0.25rem clamp(1.5rem, 4vw, 4rem) 2rem clamp(1.5rem, 4vw, 4rem);
+  box-sizing: border-box;
   animation: ts-panel-in 0.28s ease;
-  overflow: hidden;
 }
 
 @keyframes ts-panel-in {
@@ -866,27 +901,32 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.ts-detail-inner {
-  max-width: 900px;
+.ts-detail-bubble {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 2.5rem;
+  background: #e8eaf0;
+  border-radius: 20px;
+  padding: clamp(1.5rem, 2.5vw, 2.2rem) clamp(1.5rem, 3vw, 2.5rem);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  border-radius: 14px;
+  gap: 1.1rem;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .ts-detail-title {
   font-family: var(--font-vcr);
-  font-size: clamp(1.2rem, 2.5vw, 1.9rem);
-  color: #90ee90;
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  color: #0f172a;
   margin: 0;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
+  font-weight: 700;
 }
 
 .ts-detail-section {
-  font-size: clamp(0.88rem, 1.4vw, 1rem);
-  color: rgba(228, 228, 228, 0.85);
+  font-size: clamp(0.88rem, 1.4vw, 0.98rem);
+  color: #27272e;
   line-height: 1.65;
   margin: 0;
 }
@@ -894,9 +934,9 @@
 .ts-detail-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  border-left: 2px solid rgba(144, 238, 144, 0.3);
-  padding-left: 1rem;
+  gap: 0.85rem;
+  border-left: none;
+  padding-left: 0;
   margin-top: 0.25rem;
 }
 
@@ -907,138 +947,148 @@
   flex-wrap: wrap;
 }
 
+.ts-detail-meta-row--tech {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .ts-detail-label {
   font-family: var(--font-vcr);
-  font-size: 0.78rem;
-  color: #90ee90;
+  font-size: 0.8rem;
+  color: #0f172a;
   letter-spacing: 0.06em;
   min-width: 90px;
   padding-top: 0.1rem;
   text-transform: uppercase;
+  font-weight: 700;
+}
+
+.ts-tech-stack-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.ts-tech-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.ts-tech-cat {
+  font-family: var(--font-vcr);
+  font-size: 0.84rem;
+  color: #374151;
+  letter-spacing: 0.03em;
+  min-width: 110px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.ts-tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+/* Keyword inside grey colored box on light grey bg */
+.ts-tech-tag {
+  background: #cfd4dc;
+  color: #0f172a;
+  font-size: 0.82rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 0.28rem 0.7rem;
+  border-radius: 6px;
+  line-height: 1.35;
+  display: inline-block;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .ts-detail-value {
-  font-size: 0.9rem;
-  color: rgba(228, 228, 228, 0.8);
+  font-size: 0.92rem;
+  color: #1f2937;
   flex: 1;
   line-height: 1.5;
 }
 
 .ts-detail-link {
-  color: #90ee90;
-  text-decoration: none;
+  color: #059669;
+  text-decoration: underline;
+  font-weight: 600;
 }
 
 .ts-detail-link:hover {
-  text-decoration: underline;
+  color: #047857;
 }
 
 .ts-detail-actions {
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
+/* Uniform buttons: dark grey + white text unhovered, green + #0F1A2E text hovered, NO borders */
 .ts-detail-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 1.2rem;
+  justify-content: center;
+  padding: 0.6rem 1.4rem;
   font-family: var(--font-vcr);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   letter-spacing: 0.05em;
   text-decoration: none;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #1e1e24;
+  color: #ffffff;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
   cursor: pointer;
 }
 
-.ts-detail-btn--live {
-  background: rgba(144, 238, 144, 0.12);
-  border-color: rgba(144, 238, 144, 0.5);
-  color: #90ee90;
+.ts-detail-btn:hover {
+  background: #10b981;
+  color: #0F1A2E;
+  border: none;
+  transform: translateY(-2px);
 }
 
-.ts-detail-btn--live:hover {
-  background: #90ee90;
-  color: #0a0f2e;
-}
-
-.ts-detail-btn--github {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #e4e4e4;
-}
-
-.ts-detail-btn--github:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.ts-detail-btn--custom {
-  background: rgba(90, 145, 179, 0.12);
-  border-color: rgba(90, 145, 179, 0.45);
-  color: #7ab0d1;
-}
-
-.ts-detail-btn--custom:hover {
-  background: rgba(90, 145, 179, 0.28);
-}
-
-.ts-detail-btn--more {
-  background: transparent;
-  border-color: rgba(144, 238, 144, 0.3);
-  color: rgba(144, 238, 144, 0.75);
-}
-
-.ts-detail-btn--more:hover {
-  border-color: #90ee90;
-  color: #90ee90;
-}
 
 @media (max-width: 768px) {
-  .techspace-subtitle {
-    top: 1rem;
-    left: 1.5rem;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-  }
-
-  .techspace-horizontal-section {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .techspace-right {
-    flex: none;
-    width: 100%;
-    height: 50vh;
-    order: 1;
-  }
-
-  .techspace-left {
-    flex: none;
-    width: 100%;
-    order: 2;
-    padding: 1rem 1.5rem 1.5rem;
+  .techspace-header {
+    padding: 1.5rem 1rem 1rem 1rem;
+    gap: 0.75rem;
   }
 
   .techspace-heading span {
-    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
   }
 
-  .ts-card {
-    flex: 0 0 calc(100vw - 3rem);
-    height: 280px;
+  .techspace-subtitle {
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
   }
 
-  .ts-track {
-    gap: 1rem;
-    padding: 0 1.5rem;
+  .ts-slider-outer {
+    padding: 0 0.5rem;
   }
 
-  .ts-section::-webkit-scrollbar {
-    height: 0;
+  .ts-scroll-wrapper {
+    gap: 0.5rem;
+  }
+
+  .ts-arrow {
+    padding: 0.25rem;
+  }
+
+  .ts-arrow svg {
+    width: 28px;
+    height: 28px;
   }
 }
 

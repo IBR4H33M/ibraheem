@@ -6,14 +6,31 @@ const adminAuth = require('../middleware/adminAuth');
 
 // Seed default 10 TV series if empty
 async function seedIfEmpty() {
-  const count = await TVSeries.countDocuments();
-  if (count === 0) {
-    const defaults = Array.from({ length: 10 }, (_, i) => ({
-      rank: i + 1,
-      title: 'Coming Soon',
-      image: { url: null, publicId: null },
-    }));
-    await TVSeries.insertMany(defaults);
+  try {
+    const count = await TVSeries.countDocuments();
+    if (count === 0) {
+      const defaults = Array.from({ length: 10 }, (_, i) => ({
+        rank: i + 1,
+        title: 'Coming Soon',
+        image: { url: null, publicId: null },
+      }));
+      await TVSeries.insertMany(defaults);
+    }
+  } catch (err) {
+    console.error('TVSeries seed error:', err.message);
+  }
+
+  // Ensure rank_1 unique index is dropped if it exists
+  try {
+    const indexes = await TVSeries.collection.indexes();
+    const rankIdx = indexes.find(i => i.name === 'rank_1');
+    if (rankIdx && rankIdx.unique) {
+      await TVSeries.collection.dropIndex('rank_1');
+      await TVSeries.collection.createIndex({ rank: 1 });
+      console.log('TVSeries rank unique index dropped and replaced with standard index');
+    }
+  } catch (err) {
+    // Collection might not exist yet or index already dropped
   }
 }
 seedIfEmpty();
@@ -168,17 +185,29 @@ router.post('/reorder', adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'Series array is required' });
     }
 
-    const bulkOps = series.map(item => ({
+    // Two-phase reorder:
+    // Phase 1: Assign temporary non-overlapping ranks to avoid any unique constraint collision
+    const tempOps = series.map((item, idx) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { rank: 1000 + idx } },
+      },
+    }));
+    await TVSeries.bulkWrite(tempOps);
+
+    // Phase 2: Assign final desired ranks (1..10)
+    const finalOps = series.map(item => ({
       updateOne: {
         filter: { _id: item._id },
         update: { $set: { rank: item.rank } },
       },
     }));
+    await TVSeries.bulkWrite(finalOps);
 
-    await TVSeries.bulkWrite(bulkOps);
     const updated = await TVSeries.find().sort({ rank: 1 });
     res.json(updated);
   } catch (err) {
+    console.error('TVSeries reorder error:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
