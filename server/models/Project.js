@@ -8,7 +8,8 @@ const ProjectSchema = new mongoose.Schema({
   background:      { type: String, default: '' },
   datasetTitle:    { type: String, default: '' },
   datasetUrl:      { type: String, default: '' },
-  techStack:       { type: String, default: '' },
+  techStack:       { type: String, default: '' }, // Legacy plain text tech stack
+  tools:           [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tool' }], // Universal tools
   myRole:          { type: String, default: '' },
   url:             { type: String, default: '' },
   githubUrl:       { type: String, default: '' },

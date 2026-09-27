@@ -28,6 +28,7 @@ app.use('/api/tv-series', require('./routes/tvSeries'));
 app.use('/api/contact-settings', require('./routes/contactSettings'));
 app.use('/api/contact-messages', require('./routes/contactMessages'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/tools', require('./routes/tools'));
 app.use('/api/games', require('./routes/games'));
 app.use('/api/student-performance', require('./routes/studentPerformance'));
 app.use('/api/product-review', require('./routes/productReview'));

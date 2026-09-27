@@ -34,7 +34,7 @@ const generateSlug = (title) => {
 // GET — public
 router.get('/', async (req, res) => {
   try {
-    const projects = await Project.find().sort({ order: 1, createdAt: 1 });
+    const projects = await Project.find().populate('tools').sort({ order: 1, createdAt: 1 });
     res.json(projects);
   } catch {
     res.status(500).json({ message: 'Server error' });
@@ -55,6 +55,7 @@ router.post('/', adminAuth, upload.single('image'), async (req, res) => {
       datasetTitle: req.body.datasetTitle || '',
       datasetUrl:   req.body.datasetUrl || '',
       techStack:    req.body.techStack || '',
+      tools:        req.body.tools ? JSON.parse(req.body.tools) : [],
       myRole:       req.body.myRole || '',
       url:          req.body.url || '',
       githubUrl:    req.body.githubUrl || '',
@@ -65,7 +66,8 @@ router.post('/', adminAuth, upload.single('image'), async (req, res) => {
         : { url: null, publicId: null },
       order: count,
     });
-    res.status(201).json(project);
+    const populatedProject = await project.populate('tools');
+    res.status(201).json(populatedProject);
   } catch {
     res.status(500).json({ message: 'Server error' });
   }
@@ -87,6 +89,9 @@ router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
     if (typeof req.body.datasetTitle === 'string') project.datasetTitle = req.body.datasetTitle;
     if (typeof req.body.datasetUrl === 'string') project.datasetUrl = req.body.datasetUrl;
     if (typeof req.body.techStack === 'string') project.techStack = req.body.techStack;
+    if (req.body.tools) {
+      project.tools = JSON.parse(req.body.tools);
+    }
     if (typeof req.body.myRole === 'string') project.myRole = req.body.myRole;
     if (typeof req.body.url === 'string') project.url = req.body.url;
     if (typeof req.body.githubUrl === 'string') project.githubUrl = req.body.githubUrl;
@@ -101,7 +106,8 @@ router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
     }
 
     await project.save();
-    res.json(project);
+    const populatedProject = await project.populate('tools');
+    res.json(populatedProject);
   } catch {
     res.status(500).json({ message: 'Server error' });
   }

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
 import TerminalSpinner from '../components/TerminalSpinner';
+import ToolsSelector from '../components/ToolsSelector';
 import './TechSpace.css';
 
 const TechSpace = () => {
@@ -26,6 +27,7 @@ const TechSpace = () => {
   const [formCustomBtnText, setFormCustomBtnText] = useState('');
   const [formCustomBtnUrl, setFormCustomBtnUrl] = useState('');
   const [formFile, setFormFile]     = useState(null);
+  const [formTools, setFormTools]   = useState([]);
   const [editTitle, setEditTitle]   = useState('');
   const [editIntroduction, setEditIntroduction] = useState('');
   const [editBackground, setEditBackground] = useState('');
@@ -38,6 +40,7 @@ const TechSpace = () => {
   const [editCustomBtnText, setEditCustomBtnText] = useState('');
   const [editCustomBtnUrl, setEditCustomBtnUrl] = useState('');
   const [editFile, setEditFile]     = useState(null);
+  const [editTools, setEditTools]   = useState([]);
   const [saving, setSaving]         = useState(false);
   const [saveMsg, setSaveMsg]       = useState('');
   const [projectsLoading, setProjectsLoading] = useState(true);
@@ -78,7 +81,7 @@ const TechSpace = () => {
     setAdding(false);
     setFormTitle(''); setFormIntroduction(''); setFormBackground(''); setFormDatasetTitle(''); setFormDatasetUrl(''); setFormTechStack(''); setFormMyRole('');
     setFormUrl(''); setFormGithub('');
-    setFormCustomBtnText(''); setFormCustomBtnUrl(''); setFormFile(null);
+    setFormCustomBtnText(''); setFormCustomBtnUrl(''); setFormFile(null); setFormTools([]);
     setSaveMsg('');
   };
 
@@ -93,6 +96,7 @@ const TechSpace = () => {
       form.append('datasetTitle', formDatasetTitle.trim());
       form.append('datasetUrl', formDatasetUrl.trim());
       form.append('techStack', formTechStack.trim());
+      form.append('tools', JSON.stringify(formTools));
       form.append('myRole', formMyRole.trim());
       form.append('url', formUrl.trim());
       form.append('githubUrl', formGithub.trim());
@@ -200,6 +204,7 @@ const TechSpace = () => {
     setEditDatasetTitle(project.datasetTitle || '');
     setEditDatasetUrl(project.datasetUrl || '');
     setEditTechStack(project.techStack || '');
+    setEditTools(project.tools?.map(t => t._id || t) || []);
     setEditMyRole(project.myRole || '');
     setEditUrl(project.url || '');
     setEditGithub(project.githubUrl || '');
@@ -217,6 +222,7 @@ const TechSpace = () => {
     setEditDatasetTitle('');
     setEditDatasetUrl('');
     setEditTechStack('');
+    setEditTools([]);
     setEditMyRole('');
     setEditUrl('');
     setEditGithub('');
@@ -236,6 +242,7 @@ const TechSpace = () => {
       form.append('datasetTitle', editDatasetTitle.trim());
       form.append('datasetUrl', editDatasetUrl.trim());
       form.append('techStack', editTechStack.trim());
+      form.append('tools', JSON.stringify(editTools));
       form.append('myRole', editMyRole.trim());
       form.append('url', editUrl.trim());
       form.append('githubUrl', editGithub.trim());
@@ -264,6 +271,7 @@ const TechSpace = () => {
       datasetUrl,
       techStack,
       myRole,
+      tools,
       description,
     } = project || {};
 
@@ -274,7 +282,7 @@ const TechSpace = () => {
     const normalizedTechStack = String(techStack || '').trim();
     const normalizedMyRole = String(myRole || '').trim();
 
-    const hasStructuredData = normalizedIntroduction || normalizedBackground || normalizedDatasetTitle || normalizedDatasetUrl || normalizedTechStack || normalizedMyRole;
+    const hasStructuredData = normalizedIntroduction || normalizedBackground || normalizedDatasetTitle || normalizedDatasetUrl || normalizedTechStack || normalizedMyRole || (tools && tools.length > 0);
 
     if (!hasStructuredData) {
       const plainText = String(description || '').trim();
@@ -376,6 +384,26 @@ const TechSpace = () => {
               </p>
             );
           })}
+        </div>
+      );
+    }
+
+    if (tools && tools.length > 0) {
+      rows.push(
+        <div key="tools" className="ts-project-tools">
+          <span className="ts-desc-label">Tools & Services:</span>
+          <div className="ts-tools-grid">
+            {tools.map((tool) => (
+              <div key={tool._id} className="ts-tool-card">
+                {tool.logo?.url ? (
+                  <img src={tool.logo.url} alt={tool.name} className="ts-tool-logo" title={tool.name} />
+                ) : (
+                  <div className="ts-tool-logo-placeholder" title={tool.name}>{tool.name.charAt(0)}</div>
+                )}
+                <span className="ts-tool-name">{tool.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       );
     }
@@ -549,6 +577,7 @@ const TechSpace = () => {
                       placeholder="Tech Stack"
                       rows={2}
                     />
+                    <ToolsSelector selectedToolIds={editTools} onToolsChange={setEditTools} />
                     <textarea
                       className="ts-add-input ts-textarea"
                       value={editMyRole}
@@ -626,6 +655,7 @@ const TechSpace = () => {
             <input className="ts-add-input" placeholder="Dataset Title" value={formDatasetTitle} onChange={e => setFormDatasetTitle(e.target.value)} />
             <input className="ts-add-input" placeholder="Dataset URL" value={formDatasetUrl} onChange={e => setFormDatasetUrl(e.target.value)} />
             <textarea className="ts-add-input ts-textarea" placeholder="Tech Stack" value={formTechStack} onChange={e => setFormTechStack(e.target.value)} rows={2} />
+            <ToolsSelector selectedToolIds={formTools} onToolsChange={setFormTools} />
             <textarea className="ts-add-input ts-textarea" placeholder="My Role" value={formMyRole} onChange={e => setFormMyRole(e.target.value)} rows={2} />
             <input className="ts-add-input" placeholder="Live URL" value={formUrl} onChange={e => setFormUrl(e.target.value)} />
             <input className="ts-add-input" placeholder="GitHub URL" value={formGithub} onChange={e => setFormGithub(e.target.value)} />

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TerminalSpinner from '../components/TerminalSpinner';
+import { useAuth } from '../context/AuthContext';
 import './Home.css';
 
 // Helper function to generate slug from title
@@ -44,6 +45,7 @@ const parseTechStack = (raw) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
 
   const gamingRef = useRef(null);
   const gamingVideoRef = useRef(null);
@@ -64,6 +66,12 @@ const Home = () => {
   const [tsDragging, setTsDragging] = useState(false);
   const [tsCanScrollLeft, setTsCanScrollLeft] = useState(false);
   const [tsCanScrollRight, setTsCanScrollRight] = useState(false);
+  
+  // Admin panel state
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [editingProjects, setEditingProjects] = useState([]);
+  const [draggedProjectId, setDraggedProjectId] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
 
 
   useEffect(() => {
@@ -72,10 +80,42 @@ const Home = () => {
       .catch(() => {})
       .finally(() => setGamesLoading(false));
     axios.get('/api/projects')
-      .then(({ data }) => { if (data.length) setProjects(data); })
+      .then(({ data }) => { if (data.length) setProjects(data); setEditingProjects(data); })
       .catch(() => {})
       .finally(() => setProjectsLoading(false));
   }, []);
+
+  // Admin handlers
+  const handleRemoveProject = (projectId) => {
+    setEditingProjects(prev => prev.filter(p => p._id !== projectId));
+  };
+
+  const handleReorderProjects = (projectId, newIndex) => {
+    const currentIndex = editingProjects.findIndex(p => p._id === projectId);
+    if (currentIndex === newIndex || newIndex < 0 || newIndex >= editingProjects.length) return;
+    
+    const newProjects = [...editingProjects];
+    const [movedProject] = newProjects.splice(currentIndex, 1);
+    newProjects.splice(newIndex, 0, movedProject);
+    setEditingProjects(newProjects);
+  };
+
+  const handleSaveProjectOrder = async () => {
+    try {
+      const projectIds = editingProjects.map(p => p._id);
+      await axios.post('/api/projects/reorder', { projectIds });
+      setProjects(editingProjects);
+      setShowAdminPanel(false);
+    } catch (err) {
+      console.error('Failed to save project order:', err);
+      alert('Failed to save project order');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProjects(projects);
+    setShowAdminPanel(false);
+  };
 
   const handleDragStart = (e) => {
     e.preventDefault();
@@ -195,10 +235,74 @@ const Home = () => {
             <span>&lt;TECHSPACE&gt;</span>
           </Link>
           <span className="techspace-header-divider">|</span>
-          <h2 className="techspace-subtitle">RECENT PROJECTS</h2>
+          <h2 className="techspace-subtitle">FEATURED PROJECTS</h2>
+          {isAdmin && (
+            <button 
+              className="admin-edit-btn" 
+              onClick={() => setShowAdminPanel(!showAdminPanel)}
+              title="Manage featured projects"
+            >
+              {showAdminPanel ? '✕ Close' : '⚙ Manage'}
+            </button>
+          )}
         </div>
 
         <div className="ts-slider-outer">
+          {showAdminPanel && isAdmin ? (
+            // Admin Management Panel
+            <div className="admin-management-panel">
+              <div className="admin-panel-title">Manage Featured Projects</div>
+              <div className="admin-projects-list">
+                {editingProjects.map((project, index) => (
+                  <div 
+                    key={project._id}
+                    className={`admin-project-item ${draggedProjectId === project._id ? 'dragging' : ''} ${dragOverIndex === index ? 'drag-over' : ''}`}
+                    draggable
+                    onDragStart={() => setDraggedProjectId(project._id)}
+                    onDragEnd={() => setDraggedProjectId(null)}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragOverIndex(index);
+                    }}
+                    onDragLeave={() => setDragOverIndex(null)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (draggedProjectId && draggedProjectId !== project._id) {
+                        handleReorderProjects(draggedProjectId, index);
+                      }
+                      setDragOverIndex(null);
+                    }}
+                  >
+                    <div className="admin-project-handle">⋮⋮</div>
+                    <div className="admin-project-info">
+                      {project.image?.url && <img src={project.image.url} alt={project.title} className="admin-project-thumb" />}
+                      <div className="admin-project-details">
+                        <div className="admin-project-title">{project.title}</div>
+                        <div className="admin-project-index">Position {index + 1}</div>
+                      </div>
+                    </div>
+                    <button
+                      className="admin-remove-btn"
+                      onClick={() => handleRemoveProject(project._id)}
+                      title="Remove from featured"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="admin-panel-actions">
+                <button className="admin-save-btn" onClick={handleSaveProjectOrder}>
+                  Save Changes
+                </button>
+                <button className="admin-cancel-btn" onClick={handleCancelEdit}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            // Normal Project Slider
+            <>
           <div className="ts-scroll-wrapper">
             {tsCanScrollLeft && (
               <button className="ts-arrow ts-arrow-left" onClick={() => tsScrollBy(-1)} aria-label="Scroll left">
@@ -279,6 +383,8 @@ const Home = () => {
               </button>
             )}
           </div>
+            </>
+          )}
         </div>
 
         {/* Project Details Expand Bubble */}
