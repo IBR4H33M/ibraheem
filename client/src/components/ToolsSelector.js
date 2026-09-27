@@ -5,7 +5,6 @@ import './ToolsSelector.css';
 const ToolsSelector = ({ selectedToolIds = [], onToolsChange }) => {
   const [tools, setTools] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
@@ -108,44 +107,36 @@ const ToolsSelector = ({ selectedToolIds = [], onToolsChange }) => {
       <div className="tools-categories">
         {filteredCategories.map(category => {
           const categoryTools = getToolsByCategory(category);
-          const isExpanded = expandedCategory === category;
 
           return (
             <div key={category} className="category-group">
-              <button
-                type="button"
-                className={`category-header ${isExpanded ? 'expanded' : ''}`}
-                onClick={() => setExpandedCategory(isExpanded ? null : category)}
-              >
+              <div className="category-header">
                 <span className="category-name">{category}</span>
                 <span className="category-count">{categoryTools.length}</span>
-                <span className="category-arrow">{'▼'}</span>
-              </button>
+              </div>
 
-              {isExpanded && (
-                <div className="category-tools">
-                  {categoryTools.map(tool => (
-                    <label key={tool._id} className="tool-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={selectedToolIds.includes(tool._id)}
-                        onChange={() => handleToolToggle(tool._id)}
-                      />
-                      <div className="tool-checkbox-content">
-                        {tool.logo?.url && (
-                          <img src={tool.logo.url} alt={tool.name} className="tool-mini-logo" />
+              <div className="category-tools">
+                {categoryTools.map(tool => (
+                  <label key={tool._id} className="tool-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedToolIds.includes(tool._id)}
+                      onChange={() => handleToolToggle(tool._id)}
+                    />
+                    <div className="tool-checkbox-content">
+                      {tool.logo?.url && (
+                        <img src={tool.logo.url} alt={tool.name} className="tool-mini-logo" />
+                      )}
+                      <div className="tool-checkbox-text">
+                        <span className="tool-name">{tool.name}</span>
+                        {tool.description && (
+                          <span className="tool-description">{tool.description}</span>
                         )}
-                        <div className="tool-checkbox-text">
-                          <span className="tool-name">{tool.name}</span>
-                          {tool.description && (
-                            <span className="tool-description">{tool.description}</span>
-                          )}
-                        </div>
                       </div>
-                    </label>
-                  ))}
-                </div>
-              )}
+                    </div>
+                  </label>
+                ))}
+              </div>
             </div>
           );
         })}

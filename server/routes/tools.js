@@ -17,7 +17,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'ibraheem-tools',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'svg'],
-    transformation: [{ width: 200, height: 200, crop: 'fill' }],
+    transformation: [{ width: 700, height: 100, crop: 'fit' }],
   },
 });
 const upload = multer({ storage });

@@ -396,11 +396,13 @@ const TechSpace = () => {
           <div className="ts-tools-grid">
             {tools.map((tool) => (
               <div key={tool._id} className="ts-tool-card">
-                {tool.logo?.url ? (
-                  <img src={tool.logo.url} alt={tool.name} className="ts-tool-logo" title={tool.name} />
-                ) : (
-                  <div className="ts-tool-logo-placeholder" title={tool.name}>{tool.name.charAt(0)}</div>
-                )}
+                <div className="ts-tool-logo-canvas">
+                  {tool.logo?.url ? (
+                    <img src={tool.logo.url} alt={tool.name} className="ts-tool-logo" title={tool.name} />
+                  ) : (
+                    <div className="ts-tool-logo-placeholder" title={tool.name}>{tool.name.charAt(0)}</div>
+                  )}
+                </div>
                 <span className="ts-tool-name">{tool.name}</span>
               </div>
             ))}

@@ -1,9 +1,9 @@
 .tools-manager {
   width: 100%;
   min-height: 100vh;
-  background: #d0d0d0;
-  color: #27272e;
-  padding: 2rem;
+  background: #b0b0b0;
+  color: #1a1a2e;
+  padding: 3rem 2.5rem;
   box-sizing: border-box;
 }
 
@@ -23,16 +23,16 @@
 .tools-header h1 {
   font-family: var(--font-vcr);
   font-size: clamp(1.8rem, 4vw, 2.8rem);
-  color: #4a4a4a;
+  color: #1a1a2e;
   margin: 0;
   text-shadow: none;
 }
 
 .add-tool-btn {
   padding: 0.7rem 1.5rem;
-  background: rgba(90, 145, 179, 0.15);
-  border: 2px solid #5a91b3;
-  color: #5a91b3;
+  background: #90ee90;
+  border: 1px solid #248a45;
+  color: #111;
   font-family: var(--font-vcr);
   font-size: 1rem;
   letter-spacing: 0.05em;
@@ -43,10 +43,10 @@
 }
 
 .add-tool-btn:hover {
-  background: #5a91b3;
-  color: white;
+  background: #7fdd7f;
+  color: #111;
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(90, 145, 179, 0.4);
+  box-shadow: 0 0 15px rgba(36, 138, 69, 0.25);
 }
 
 .success-message,
@@ -60,13 +60,13 @@
 }
 
 .success-message {
-  background: rgba(90, 145, 179, 0.15);
-  border: 1px solid #5a91b3;
-  color: #5a91b3;
+  background: rgba(144, 238, 144, 0.25);
+  border: 1px solid #248a45;
+  color: #1f5f37;
 }
 
 .error-message {
-  background: rgba(255, 100, 100, 0.15);
+  background: rgba(255, 100, 100, 0.2);
   border: 1px solid #ff6464;
   color: #ff9090;
 }
@@ -84,12 +84,12 @@
 
 /* Tool Form */
 .tool-form-container {
-  background: rgba(255, 255, 255, 0.5);
-  border: 2px solid #5a91b3;
-  border-radius: 12px;
+  background: #e4e4e4;
+  border: 1px solid #999;
+  border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(90, 145, 179, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .tool-form {
@@ -106,7 +106,7 @@
 .form-group label {
   font-family: var(--font-vcr);
   font-size: 0.9rem;
-  color: #5a91b3;
+  color: #2f7a4f;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 600;
@@ -116,9 +116,9 @@
 .form-group select {
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(90, 145, 179, 0.3);
+  border: 1px solid #aaa;
   border-radius: 6px;
-  color: #27272e;
+  color: #1a1a2e;
   font-family: var(--font-body);
   font-size: 0.95rem;
   transition: all 0.2s ease;
@@ -128,8 +128,8 @@
 .form-group select:focus {
   outline: none;
   background: white;
-  border-color: #5a91b3;
-  box-shadow: 0 0 10px rgba(90, 145, 179, 0.2);
+  border-color: #2f7a4f;
+  box-shadow: 0 0 10px rgba(47, 122, 79, 0.2);
 }
 
 .form-group select {
@@ -268,7 +268,7 @@
 .tools-list h2 {
   font-family: var(--font-vcr);
   font-size: 1.6rem;
-  color: #90ee90;
+  color: #1a1a2e;
   margin: 0 0 1.5rem 0;
   letter-spacing: 0.05em;
 }
@@ -283,14 +283,14 @@
 .empty-state {
   padding: 2rem;
   text-align: center;
-  background: rgba(58, 58, 68, 0.3);
+  background: #e4e4e4;
   border-radius: 8px;
-  border: 1px dashed rgba(144, 238, 144, 0.2);
+  border: 1px dashed #999;
 }
 
 .empty-state p {
   font-size: 1rem;
-  color: rgba(144, 238, 144, 0.7);
+  color: #555;
   margin: 0;
 }
 
@@ -302,9 +302,9 @@
 }
 
 .tool-card {
-  background: rgba(58, 58, 68, 0.5);
-  border: 1px solid rgba(144, 238, 144, 0.2);
-  border-radius: 12px;
+  background: #e4e4e4;
+  border: 1px solid #999;
+  border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   display: flex;
@@ -313,16 +313,16 @@
 }
 
 .tool-card:hover {
-  background: rgba(58, 58, 68, 0.8);
-  border-color: #90ee90;
-  box-shadow: 0 8px 24px rgba(144, 238, 144, 0.15);
+  background: #f0f0f0;
+  border-color: #2f7a4f;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
   transform: translateY(-4px);
 }
 
 .tool-logo-wrapper {
   width: 100%;
   height: 120px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #c4c4c4;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -350,14 +350,14 @@
 .tool-info h3 {
   font-family: var(--font-vcr);
   font-size: 1.1rem;
-  color: #90ee90;
+  color: #1a1a2e;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.02em;
 }
 
 .tool-info p {
   font-size: 0.85rem;
-  color: rgba(228, 228, 228, 0.8);
+  color: #555;
   margin: 0 0 0.75rem 0;
   line-height: 1.4;
 }
@@ -365,8 +365,8 @@
 .tool-category {
   display: inline-block;
   padding: 0.35rem 0.75rem;
-  background: rgba(144, 238, 144, 0.15);
-  color: #90ee90;
+  background: rgba(47, 122, 79, 0.14);
+  color: #2f7a4f;
   border-radius: 4px;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
@@ -385,19 +385,19 @@
 .delete-btn {
   flex: 1;
   padding: 0.6rem;
-  border: 1px solid rgba(144, 238, 144, 0.3);
+  border: 1px solid #aaa;
   border-radius: 6px;
-  background: rgba(144, 238, 144, 0.1);
-  color: #90ee90;
+  background: #d4ead8;
+  color: #1f5f37;
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .edit-btn:hover {
-  background: rgba(144, 238, 144, 0.25);
-  border-color: #90ee90;
-  box-shadow: 0 0 8px rgba(144, 238, 144, 0.2);
+  background: #bde1c4;
+  border-color: #248a45;
+  box-shadow: 0 0 8px rgba(36, 138, 69, 0.2);
 }
 
 .delete-btn {
