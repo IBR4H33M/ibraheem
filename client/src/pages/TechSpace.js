@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import useScrollTitle from '../hooks/useScrollTitle';
 import TerminalSpinner from '../components/TerminalSpinner';
 import ToolsSelector from '../components/ToolsSelector';
+import ToolsManager from './ToolsManager';
 import './TechSpace.css';
 
 const TechSpace = () => {
@@ -671,6 +672,9 @@ const TechSpace = () => {
           {saveMsg && <span className="admin-save-msg">{saveMsg}</span>}
         </div>
       )}
+
+      {/* Admin Tools Manager - Below Projects */}
+      {isAdmin && <ToolsManager />}
     </div>
   );
 };

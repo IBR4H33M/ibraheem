@@ -669,3 +669,45 @@
     font-size: 0.7rem;
   }
 }
+
+
+/* ── Admin Tools Manager Section in TechSpace ── */
+.ts-tools-manager-section {
+  width: 100%;
+  background: #19191d;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: 2rem;
+  box-sizing: border-box;
+}
+
+.ts-tools-manager-header {
+  margin-bottom: 1.5rem;
+}
+
+.ts-tools-manager-header h2 {
+  font-family: var(--font-vcr);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: #90ee90;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(144, 238, 144, 0.2);
+}
+
+.ts-tools-manager-header p {
+  font-family: var(--font-vcr);
+  font-size: 0.85rem;
+  color: rgba(144, 238, 144, 0.7);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .ts-tools-manager-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ts-tools-manager-header h2 {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+  }
+}

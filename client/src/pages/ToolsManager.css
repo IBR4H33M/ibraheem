@@ -1,8 +1,8 @@
 .tools-manager {
   width: 100%;
   min-height: 100vh;
-  background: #0a0f2e;
-  color: #e4e4e4;
+  background: #d0d0d0;
+  color: #27272e;
   padding: 2rem;
   box-sizing: border-box;
 }
@@ -23,16 +23,16 @@
 .tools-header h1 {
   font-family: var(--font-vcr);
   font-size: clamp(1.8rem, 4vw, 2.8rem);
-  color: #90ee90;
+  color: #4a4a4a;
   margin: 0;
-  text-shadow: 0 0 10px rgba(144, 238, 144, 0.3);
+  text-shadow: none;
 }
 
 .add-tool-btn {
   padding: 0.7rem 1.5rem;
-  background: rgba(144, 238, 144, 0.15);
-  border: 2px solid #90ee90;
-  color: #90ee90;
+  background: rgba(90, 145, 179, 0.15);
+  border: 2px solid #5a91b3;
+  color: #5a91b3;
   font-family: var(--font-vcr);
   font-size: 1rem;
   letter-spacing: 0.05em;
@@ -43,10 +43,10 @@
 }
 
 .add-tool-btn:hover {
-  background: #90ee90;
-  color: #0a0f2e;
+  background: #5a91b3;
+  color: white;
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(144, 238, 144, 0.4);
+  box-shadow: 0 0 15px rgba(90, 145, 179, 0.4);
 }
 
 .success-message,
@@ -60,9 +60,9 @@
 }
 
 .success-message {
-  background: rgba(144, 238, 144, 0.15);
-  border: 1px solid #90ee90;
-  color: #90ee90;
+  background: rgba(90, 145, 179, 0.15);
+  border: 1px solid #5a91b3;
+  color: #5a91b3;
 }
 
 .error-message {
@@ -84,12 +84,12 @@
 
 /* Tool Form */
 .tool-form-container {
-  background: rgba(58, 58, 68, 0.5);
-  border: 2px solid #90ee90;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #5a91b3;
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(144, 238, 144, 0.1);
+  box-shadow: 0 8px 32px rgba(90, 145, 179, 0.1);
 }
 
 .tool-form {
@@ -106,7 +106,7 @@
 .form-group label {
   font-family: var(--font-vcr);
   font-size: 0.9rem;
-  color: #90ee90;
+  color: #5a91b3;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 600;
@@ -115,10 +115,10 @@
 .form-group input[type="text"],
 .form-group select {
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(144, 238, 144, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(90, 145, 179, 0.3);
   border-radius: 6px;
-  color: #e4e4e4;
+  color: #27272e;
   font-family: var(--font-body);
   font-size: 0.95rem;
   transition: all 0.2s ease;
@@ -127,9 +127,9 @@
 .form-group input[type="text"]:focus,
 .form-group select:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.12);
-  border-color: #90ee90;
-  box-shadow: 0 0 10px rgba(144, 238, 144, 0.2);
+  background: white;
+  border-color: #5a91b3;
+  box-shadow: 0 0 10px rgba(90, 145, 179, 0.2);
 }
 
 .form-group select {
@@ -137,8 +137,8 @@
 }
 
 .form-group select option {
-  background: #1a1f35;
-  color: #e4e4e4;
+  background: white;
+  color: #27272e;
 }
 
 /* Logo Upload */
