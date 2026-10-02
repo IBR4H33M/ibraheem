@@ -20,6 +20,7 @@ const ProjectSchema = new mongoose.Schema({
     publicId: String,
   },
   order:     { type: Number, default: 0 },
+  featured:  { type: Boolean, default: true }, // Show on homepage slider
   createdAt: { type: Date,   default: Date.now },
 });
 

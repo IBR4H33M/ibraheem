@@ -31,6 +31,39 @@ const generateSlug = (title) => {
     .replace(/[^\w\-]/g, '')}`;
 };
 
+// GET — featured projects only (for homepage)
+router.get('/featured', async (req, res) => {
+  try {
+    const projects = await Project.find({ featured: { $ne: false } }).populate('tools').sort({ order: 1, createdAt: 1 });
+    res.json(projects);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST — update featured projects list (admin)
+router.post('/featured/update', adminAuth, async (req, res) => {
+  try {
+    const { projectIds } = req.body; // array of project IDs that should be featured
+    if (!Array.isArray(projectIds)) {
+      return res.status(400).json({ message: 'projectIds must be an array' });
+    }
+
+    // Unfeatured all projects first
+    await Project.updateMany({}, { featured: false });
+
+    // Feature the selected ones and set their order
+    for (let i = 0; i < projectIds.length; i++) {
+      await Project.findByIdAndUpdate(projectIds[i], { featured: true, order: i });
+    }
+
+    const featured = await Project.find({ featured: true }).populate('tools').sort({ order: 1 });
+    res.json(featured);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // GET — public
 router.get('/', async (req, res) => {
   try {

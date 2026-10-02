@@ -51,6 +51,7 @@ const Home = () => {
   const gamingVideoRef = useRef(null);
   const [recentGames, setRecentGames] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
   const [gamesLoading, setGamesLoading] = useState(true);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -79,10 +80,13 @@ const Home = () => {
       .then(({ data }) => { if (data.length) setRecentGames(data); })
       .catch(() => {})
       .finally(() => setGamesLoading(false));
-    axios.get('/api/projects')
+    axios.get('/api/projects/featured')
       .then(({ data }) => { if (data.length) setProjects(data); setEditingProjects(data); })
       .catch(() => {})
       .finally(() => setProjectsLoading(false));
+    axios.get('/api/projects')
+      .then(({ data }) => { if (data.length) setAllProjects(data); })
+      .catch(() => {});
   }, []);
 
   // Admin handlers
@@ -102,13 +106,16 @@ const Home = () => {
 
   const handleSaveProjectOrder = async () => {
     try {
+      const token = localStorage.getItem('token');
       const projectIds = editingProjects.map(p => p._id);
-      await axios.post('/api/projects/reorder', { projectIds });
-      setProjects(editingProjects);
+      const { data } = await axios.post('/api/projects/featured/update', { projectIds }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProjects(data);
       setShowAdminPanel(false);
     } catch (err) {
-      console.error('Failed to save project order:', err);
-      alert('Failed to save project order');
+      console.error('Failed to save featured projects:', err);
+      alert('Failed to save featured projects');
     }
   };
 
@@ -291,6 +298,31 @@ const Home = () => {
                   </div>
                 ))}
               </div>
+              {/* Option to re-add unfeatured projects to featured */}
+              {allProjects.filter(p => !editingProjects.some(ep => ep._id === p._id)).length > 0 && (
+                <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <select 
+                    defaultValue="" 
+                    style={{ padding: '0.45rem 0.8rem', borderRadius: '6px', background: '#1e1e24', color: '#e0e0e0', border: '1px solid #444', fontSize: '0.85rem' }}
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      if (!id) return;
+                      const projToAdd = allProjects.find(p => p._id === id);
+                      if (projToAdd) {
+                        setEditingProjects(prev => [...prev, projToAdd]);
+                      }
+                      e.target.value = '';
+                    }}
+                  >
+                    <option value="" disabled>+ Add project to featured...</option>
+                    {allProjects
+                      .filter(p => !editingProjects.some(ep => ep._id === p._id))
+                      .map(p => (
+                        <option key={p._id} value={p._id}>{p.title}</option>
+                      ))}
+                  </select>
+                </div>
+              )}
               <div className="admin-panel-actions">
                 <button className="admin-save-btn" onClick={handleSaveProjectOrder}>
                   Save Changes

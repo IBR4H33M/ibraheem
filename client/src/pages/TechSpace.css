@@ -39,9 +39,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 2.5rem;
+  padding: 0 2.5rem 1.5rem;
   gap: 1.5rem;
-  order: 0;
 }
 
 .ts-projects-heading {
@@ -50,35 +49,6 @@
   color: #1a1a2e;
   font-weight: normal;
   margin: 0;
-  order: 1;
-}
-
-.ts-nav-prev {
-  order: 2;
-}
-
-.ts-nav-next {
-  order: 3;
-}
-
-/* Admin Reorder Bar */
-.ts-admin-reorder-bar {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem 2.5rem;
-  background: #b0b0b0;
-  order: 1;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.ts-add-btn {
-  margin-right: 0;
-}
-
-.ts-move-forward {
-  margin-left: auto;
 }
 
 /* Admin Buttons */
@@ -126,349 +96,6 @@
   cursor: not-allowed;
 }
 
-.ts-reorder-btn {
-  font-family: var(--font-vcr);
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  font-weight: 700;
-  color: #1a1a2e;
-  background: #ffd700;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.ts-reorder-btn:hover {
-  background: #ffed4e;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-}
-
-.ts-reorder-btn:active {
-  transform: translateY(0);
-}
-
-.ts-reorder-btn svg {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.ts-nav-btn {
-  font-family: var(--font-vcr);
-  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
-  font-weight: 700;
-  color: #1a1a2e;
-  background: #90ee90;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.ts-nav-btn:hover {
-  background: #7ed97e;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(144, 238, 144, 0.3);
-}
-
-.ts-nav-btn:active {
-  transform: translateY(0);
-}
-
-.ts-nav-next {
-  margin-left: auto;
-}
-
-.ts-nav-arrow {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.ts-projects-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  padding: 1.5rem 1.5rem;
-  order: 2;
-}
-
-/* ML Project Card */
-.ts-ml-project-card {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  border-radius: 15px;
-  padding: 1.5rem 2rem;
-  margin: 0 1.5rem 2rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.ts-ml-project-card:hover {
-  transform: translateY(-5px);
-  border-color: #e94560;
-  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
-}
-
-.ts-ml-card-icon {
-  font-size: 3rem;
-  line-height: 1;
-}
-
-.ts-ml-card-content {
-  flex: 1;
-}
-
-.ts-ml-card-title {
-  font-family: var(--font-vcr);
-  font-size: 1.5rem;
-  color: #e94560;
-  margin: 0 0 0.5rem;
-}
-
-.ts-ml-card-desc {
-  font-size: 1rem;
-  color: #a0a0a0;
-  margin: 0;
-}
-
-.ts-ml-card-arrow {
-  font-size: 2rem;
-  color: #e94560;
-  transition: transform 0.3s ease;
-}
-
-.ts-ml-project-card:hover .ts-ml-card-arrow {
-  transform: translateX(10px);
-}
-
-/* ── Project card ── */
-.ts-project-card {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 2rem;
-  background: #e4e4e4;
-  border-radius: 12px;
-  padding: 1.5rem;
-  overflow: hidden;
-  width: 100%;
-}
-
-.ts-project-right {
-  min-width: 0;
-}
-
-.ts-project-link,
-.ts-project-desc,
-.ts-project-desc-block {
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-.ts-card-actions {
-  position: absolute;
-  top: 0.7rem;
-  right: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ts-delete-btn {
-  position: static;
-  background: rgba(0, 0, 0, 0.12);
-  border: none;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-.ts-delete-btn:hover { background: rgba(200, 0, 0, 0.2); }
-
-/* Left column — image + links */
-.ts-project-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  flex-shrink: 0;
-  width: 200px;
-}
-
-.ts-project-img-wrap {
-  width: 200px;
-  height: 150px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #c4c4c4;
-}
-
-.ts-project-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.ts-project-img-placeholder {
-  width: 100%;
-  height: 100%;
-  background: #bbb;
-}
-
-.ts-project-link {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-vcr);
-  font-size: 0.9rem;
-  color: #1a3a6c;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.ts-project-link:hover { color: #2a6aad; }
-
-.ts-custom-btn {
-  background: #2d9d57; /* lighter green */
-  color: #000000; /* black text */
-  font-weight: 600;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  width: fit-content;
-  border: 1px solid #248a45;
-  box-shadow: none;
-}
-
-.ts-custom-btn:hover {
-  background: #248a45;
-  color: #000000;
-  box-shadow: none;
-}
-
-.ts-link-icon {
-  width: 1.05rem;
-  height: 1.05rem;
-  flex-shrink: 0;
-}
-
-.ts-link-text {
-  white-space: normal;
-  word-break: break-word;
-  max-width: 100%;
-}
-
-/* Right column — title + description */
-.ts-project-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  padding-right: 2rem;
-}
-
-.ts-edit-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.ts-edit-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.ts-edit-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.ts-project-title {
-  font-family: 'Dimica-Light', sans-serif;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  color: #1a1a2e;
-  font-weight: 700;
-  margin: 0;
-}
-
-.ts-project-desc {
-  font-family: 'Dimica-Light', sans-serif;
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.75;
-  margin: 0;
-}
-
-.ts-project-desc-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.ts-desc-label {
-  font-family: 'Dimica-Light', sans-serif;
-  font-weight: 700;
-  font-size: 1.12em;
-  color: #2f7a4f;
-}
-
-.ts-desc-label-normal {
-  font-family: 'Dimica-Light', sans-serif;
-  font-weight: 700;
-  color: #1f1f30;
-}
-
-.ts-role-list {
-  list-style: disc;
-  margin: 0.4rem 0 0 1.5rem;
-  padding: 0;
-}
-
-.ts-role-list li {
-  font-family: 'Dimica-Light', sans-serif;
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.75;
-  margin: 0.2rem 0;
-}
-
-.ts-empty {
-  font-family: var(--font-vcr);
-  color: #555;
-  font-size: 0.9rem;
-  padding: 1rem 2.5rem;
-}
-
 /* Admin Add Form Section */
 .ts-admin-add-form-section {
   padding: 1.5rem 2.5rem;
@@ -506,87 +133,344 @@
   width: 340px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .ts-page-title {
-    top: 20px;
-    left: 90px;
-    font-size: clamp(1.6rem, 5vw, 2.4rem);
-  }
-
-  .ts-projects-header {
-    flex-wrap: wrap;
-    padding: 1rem 1.5rem;
-    gap: 1rem;
-  }
-
-  .ts-projects-heading {
-    flex: none;
-    text-align: left;
-    margin: 0;
-  }
-
-  .ts-nav-btn {
-    font-size: 0;
-    padding: 0.6rem 0.8rem;
-  }
-
-  .ts-nav-arrow {
-    display: inline-block;
-  }
-
-  .ts-nav-next {
-    margin-left: auto;
-  }
-
-  .ts-admin-reorder-bar {
-    padding: 1rem 1.5rem;
-    gap: 0.8rem;
-    justify-content: flex-start;
-  }
-
-  .admin-edit-btn.ts-add-btn,
-  .ts-reorder-btn {
-    font-size: clamp(0.75rem, 2vw, 0.9rem);
-    padding: 0.5rem 1rem;
-  }
-
-  .ts-move-forward {
-    margin-left: 0;
-  }
-
-  .ts-project-card {
-    flex-direction: column;
-  }
-
-  .ts-project-left {
-    width: 100%;
-  }
-
-  .ts-project-img-wrap {
-    width: 100%;
-    height: 200px;
-  }
-
-  .ts-project-right {
-    padding-right: 0;
-  }
-
-  .ts-textarea {
-    width: 100%;
-  }
-}
-
-
-
-/* ── Tools Display in Project Description ── */
-.ts-project-tools {
-  margin-top: 1rem;
+.ts-edit-form {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.55rem;
 }
 
+.ts-edit-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.ts-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ts-empty {
+  font-family: var(--font-vcr);
+  color: #555;
+  font-size: 0.9rem;
+  padding: 1rem 2.5rem;
+}
+
+
+/* ═══════════════════════════════════════════════
+   VERTICAL LIST LAYOUT
+   ═══════════════════════════════════════════════ */
+
+.ts-vl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 2.5rem 2rem;
+}
+
+/* ── Project Card ── */
+.ts-vl-card {
+  background: #e4e4e4;
+  border-bottom: 1px solid #c8c8c8;
+  transition: background 0.2s ease;
+}
+
+.ts-vl-card:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.ts-vl-card:last-child {
+  border-radius: 0 0 12px 12px;
+  border-bottom: none;
+}
+
+.ts-vl-card:only-child {
+  border-radius: 12px;
+}
+
+.ts-vl-card--expanded {
+  background: #eaeaef;
+}
+
+/* ── Card Header (always visible row) ── */
+.ts-vl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ts-vl-card-header:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Thumbnail */
+.ts-vl-card-thumb {
+  width: 72px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #c4c4c4;
+  flex-shrink: 0;
+}
+
+.ts-vl-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ts-vl-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #bbb;
+}
+
+/* Info column */
+.ts-vl-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ts-vl-card-title {
+  font-family: 'Dimica-Light', sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: #1a1a2e;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ts-vl-card-intro {
+  font-family: 'Dimica-Light', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.25rem 0 0;
+  line-height: 1.4;
+}
+
+/* Quick-access link buttons on the header row */
+.ts-vl-card-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ts-vl-link-btn {
+  font-family: var(--font-vcr);
+  font-size: 0.75rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  background: #3a3a44;
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ts-vl-link-btn:hover {
+  background: #90ee90;
+  color: #0F1A2E;
+}
+
+.ts-vl-gh-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Expand/collapse arrow */
+.ts-vl-expand-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  color: #555;
+}
+
+.ts-vl-expand-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ts-vl-expand-btn--open {
+  transform: rotate(180deg);
+  color: #1a1a2e;
+}
+
+/* ── Card Body (expanded details) ── */
+.ts-vl-card-body {
+  padding: 0 1.5rem 1.5rem;
+  animation: tsVlSlideDown 0.25s ease-out;
+}
+
+@keyframes tsVlSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ts-vl-detail-content {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding-top: 0.5rem;
+}
+
+/* Detail left column — image + links */
+.ts-vl-detail-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  width: 220px;
+}
+
+.ts-vl-detail-img-wrap {
+  width: 220px;
+  height: 165px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #c4c4c4;
+}
+
+.ts-vl-detail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ts-vl-detail-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #bbb;
+}
+
+.ts-vl-detail-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ts-vl-detail-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-vcr);
+  font-size: 0.85rem;
+  color: #1a3a6c;
+  text-decoration: none;
+  transition: color 0.2s;
+  word-break: break-all;
+}
+
+.ts-vl-detail-link:hover {
+  color: #2a6aad;
+}
+
+.ts-link-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+}
+
+/* Detail right column */
+.ts-vl-detail-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.ts-vl-desc {
+  font-family: 'Dimica-Light', sans-serif;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.75;
+  margin: 0;
+  word-break: break-word;
+}
+
+.ts-vl-desc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ts-desc-label {
+  font-family: 'Dimica-Light', sans-serif;
+  font-weight: 700;
+  font-size: 1.12em;
+  color: #2f7a4f;
+}
+
+/* Tech stack in expanded view */
+.ts-vl-tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.ts-vl-tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ts-vl-tech-cat {
+  font-family: 'Dimica-Light', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #333;
+  margin-right: 0.25rem;
+}
+
+.ts-vl-tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ts-vl-tech-tag {
+  font-family: var(--font-vcr);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: #9a9aa4;
+  color: #fff;
+}
+
+.ts-vl-tech-line {
+  font-family: 'Dimica-Light', sans-serif;
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0;
+}
+
+/* Tools grid */
 .ts-tools-grid {
   display: flex;
   align-items: flex-start;
@@ -660,18 +544,77 @@
   -webkit-box-orient: vertical;
 }
 
-@media (max-width: 768px) {
-  .ts-tools-grid {
-    gap: 1rem;
-  }
+/* Role list */
+.ts-role-list {
+  list-style: disc;
+  margin: 0.4rem 0 0 1.5rem;
+  padding: 0;
+}
 
-  .ts-tool-card {
-    flex-basis: 170px;
-  }
+.ts-role-list li {
+  font-family: 'Dimica-Light', sans-serif;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.75;
+  margin: 0.2rem 0;
+}
 
-  .ts-tool-name {
-    font-size: 0.7rem;
-  }
+/* Project link styles */
+.ts-project-link {
+  color: #1a3a6c;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.ts-project-link:hover {
+  color: #2a6aad;
+}
+
+.ts-custom-btn {
+  background: #2d9d57;
+  color: #000000;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: fit-content;
+  border: 1px solid #248a45;
+  box-shadow: none;
+}
+
+.ts-custom-btn:hover {
+  background: #248a45;
+  color: #000000;
+  box-shadow: none;
+}
+
+/* Admin actions inside expanded card */
+.ts-vl-admin-actions {
+  display: flex;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid #d0d0d0;
+  margin-top: 1rem;
+}
+
+.ts-delete-btn {
+  font-family: var(--font-vcr);
+  font-size: 0.8rem;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background: #d32f2f;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.ts-delete-btn:hover {
+  opacity: 0.85;
 }
 
 
@@ -705,7 +648,69 @@
   letter-spacing: 0.02em;
 }
 
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
+  .ts-page-title {
+    top: 20px;
+    left: 90px;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .ts-projects-header {
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .ts-vl-list {
+    padding: 0 1rem 1.5rem;
+  }
+
+  .ts-vl-card-header {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .ts-vl-card-links {
+    display: none;
+  }
+
+  .ts-vl-card-thumb {
+    width: 56px;
+    height: 42px;
+  }
+
+  .ts-vl-detail-content {
+    flex-direction: column;
+  }
+
+  .ts-vl-detail-left {
+    width: 100%;
+  }
+
+  .ts-vl-detail-img-wrap {
+    width: 100%;
+    height: 200px;
+  }
+
+  .ts-textarea {
+    width: 100%;
+  }
+
+  .ts-tools-grid {
+    gap: 1rem;
+  }
+
+  .ts-tool-card {
+    flex-basis: 170px;
+  }
+
+  .ts-tool-name {
+    font-size: 0.7rem;
+  }
+
   .ts-tools-manager-section {
     padding: 1rem;
     margin-bottom: 1.5rem;
