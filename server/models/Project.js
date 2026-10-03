@@ -13,8 +13,6 @@ const ProjectSchema = new mongoose.Schema({
   myRole:          { type: String, default: '' },
   url:             { type: String, default: '' },
   githubUrl:       { type: String, default: '' },
-  customButtonText: { type: String, default: '' },
-  customButtonUrl: { type: String, default: '' },
   image: {
     url:      String,
     publicId: String,

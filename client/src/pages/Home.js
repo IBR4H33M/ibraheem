@@ -463,18 +463,17 @@ const Home = () => {
               </div>
               <div className="ts-detail-actions">
                 {selectedProject.url && selectedProject.url.trim() !== '' && (
-                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
-                    Try it out
+                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn" style={{ gap: '0.4rem' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    URL
                   </a>
                 )}
                 {selectedProject.githubUrl && selectedProject.githubUrl.trim() !== '' && (
                   <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
                     GitHub
-                  </a>
-                )}
-                {selectedProject.customButtonText && selectedProject.customButtonUrl && selectedProject.customButtonUrl.trim() !== '' && (
-                  <a href={selectedProject.customButtonUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
-                    {selectedProject.customButtonText}
                   </a>
                 )}
                 <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn">

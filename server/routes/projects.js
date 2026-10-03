@@ -92,8 +92,6 @@ router.post('/', adminAuth, upload.single('image'), async (req, res) => {
       myRole:       req.body.myRole || '',
       url:          req.body.url || '',
       githubUrl:    req.body.githubUrl || '',
-      customButtonText: req.body.customButtonText || '',
-      customButtonUrl: req.body.customButtonUrl || '',
       image: req.file
         ? { url: req.file.path, publicId: req.file.filename }
         : { url: null, publicId: null },
@@ -128,8 +126,6 @@ router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
     if (typeof req.body.myRole === 'string') project.myRole = req.body.myRole;
     if (typeof req.body.url === 'string') project.url = req.body.url;
     if (typeof req.body.githubUrl === 'string') project.githubUrl = req.body.githubUrl;
-    if (typeof req.body.customButtonText === 'string') project.customButtonText = req.body.customButtonText;
-    if (typeof req.body.customButtonUrl === 'string') project.customButtonUrl = req.body.customButtonUrl;
 
     if (req.file) {
       if (project.image?.publicId) {

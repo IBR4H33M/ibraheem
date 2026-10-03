@@ -68,10 +68,10 @@ const ToolsSelector = ({ selectedToolIds = [], onToolsChange }) => {
   return (
     <div className="tools-selector">
       <div className="tools-selector-header">
-        <h3>Select Tools & Services</h3>
+        <h3>Select Technologies</h3>
         <input
           type="text"
-          placeholder="Search tools..."
+          placeholder="Search technologies (e.g. React, Python, MongoDB)..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="tools-search"
@@ -93,7 +93,7 @@ const ToolsSelector = ({ selectedToolIds = [], onToolsChange }) => {
                     type="button"
                     className="remove-tool"
                     onClick={() => handleToolToggle(tool._id)}
-                    title="Remove tool"
+                    title="Remove technology"
                   >
                     ✕
                   </button>
@@ -144,7 +144,7 @@ const ToolsSelector = ({ selectedToolIds = [], onToolsChange }) => {
 
       {filteredCategories.length === 0 && searchQuery && (
         <div className="no-tools-found">
-          <p>No tools found matching "{searchQuery}"</p>
+          <p>No technologies found matching "{searchQuery}"</p>
         </div>
       )}
     </div>

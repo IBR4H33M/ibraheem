@@ -65,9 +65,44 @@
   transition: opacity 0.2s;
 }
 
-.admin-edit-btn.ts-add-btn {
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  padding: 0.6rem 1.2rem;
+/* Main Admin Add Project Button */
+.ts-add-btn {
+  padding: 0.65rem 1.4rem;
+  background: #90ee90;
+  border: 3.5px solid #111111;
+  color: #0c1810;
+  font-family: var(--font-vcr);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.ts-add-btn:hover {
+  background: #a3f7a3;
+  color: #000000;
+  border-color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.ts-add-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ts-add-btn.is-active {
+  background: #ff5252;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.ts-add-btn.is-active:hover {
+  background: #ff3838;
 }
 
 .admin-edit-btn {
@@ -98,58 +133,182 @@
 
 /* Admin Add Form Section */
 .ts-admin-add-form-section {
-  padding: 1.5rem 2.5rem;
-  background: #b0b0b0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  align-items: flex-start;
+  padding: 1.5rem clamp(1rem, 2.5vw, 2.5rem);
+  background: #c8c8c8;
+  border: 3.5px solid #111111;
+  border-radius: 14px;
+  margin: 0 2.5rem 2rem 2.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
 }
 
-.ts-add-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-  width: 100%;
-}
-
-.ts-add-input {
+.ts-form-section-title {
   font-family: var(--font-vcr);
-  font-size: 0.8rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: 6px;
-  border: 1px solid #aaa;
-  background: #fff;
-  color: #1a1a2e;
-  outline: none;
-  min-width: 180px;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: #111827;
+  margin: 0 0 1.25rem 0;
+  letter-spacing: 0.04em;
 }
 
-.ts-textarea {
-  resize: vertical;
-  min-height: 60px;
-  align-self: flex-start;
-  width: 340px;
-}
-
+.ts-add-form,
 .ts-edit-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.ts-form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ts-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ts-form-label {
+  display: block;
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.04em;
+}
+
+.ts-form-input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.8rem 1rem;
+  border: 2.5px solid #111111;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ts-form-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+.ts-form-textarea {
+  width: 100% !important;
+  min-height: 120px;
+  line-height: 1.6;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.ts-form-textarea--large {
+  min-height: 160px;
 }
 
 .ts-edit-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
 }
 
+/* Edit & Add Form Action Buttons */
 .ts-edit-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
   align-items: center;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 2.5px solid rgba(0, 0, 0, 0.15);
+}
+
+.ts-btn-change-image {
+  font-family: var(--font-vcr);
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border: 3.5px solid #111111;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #082f49;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ts-btn-change-image:hover {
+  background: #0ea5e9;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.ts-btn-change-image.is-selected {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.ts-btn-save {
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.65rem 1.6rem;
+  border: 3.5px solid #111111;
+  border-radius: 8px;
+  background: #90ee90;
+  color: #0c1810;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.ts-btn-save:hover:not(:disabled) {
+  background: #a3f7a3;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+}
+
+.ts-btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ts-btn-cancel {
+  font-family: var(--font-vcr);
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.65rem 1.4rem;
+  border: none;
+  border-radius: 8px;
+  background: #991b1b;
+  color: #ffffff;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.ts-btn-cancel:hover {
+  background: #7f1d1d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+}
+
+.ts-btn-change-image:active,
+.ts-btn-save:active,
+.ts-btn-cancel:active {
+  transform: translateY(1px);
 }
 
 .ts-empty {
@@ -198,25 +357,35 @@
 /* ── Card Header (always visible row) ── */
 .ts-vl-card-header {
   display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  padding: 1rem 1.5rem;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem clamp(1.2rem, 2.5vw, 2rem);
   cursor: pointer;
   transition: background 0.15s ease;
 }
 
 .ts-vl-card-header:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Top row: thumb + title headline + links + expand arrow */
+.ts-vl-card-top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 /* Thumbnail */
 .ts-vl-card-thumb {
-  width: 72px;
-  height: 54px;
-  border-radius: 8px;
+  width: 140px;
+  height: 98px;
+  border-radius: 10px;
   overflow: hidden;
   background: #c4c4c4;
   flex-shrink: 0;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .ts-vl-thumb-img {
@@ -231,48 +400,57 @@
   background: #bbb;
 }
 
-/* Info column */
-.ts-vl-card-info {
+/* Headline column */
+.ts-vl-card-headline {
   flex: 1;
   min-width: 0;
 }
 
 .ts-vl-card-title {
   font-family: 'Dimica-Light', sans-serif;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  color: #1a1a2e;
+  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+  color: #111827;
   font-weight: 700;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.2;
+}
+
+/* Overview section below the image */
+.ts-vl-card-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
 }
 
 .ts-vl-card-intro {
   font-family: 'Dimica-Light', sans-serif;
-  font-size: 0.85rem;
-  color: #666;
-  margin: 0.25rem 0 0;
-  line-height: 1.4;
+  font-size: 1rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.75;
+  word-break: break-word;
 }
 
 /* Quick-access link buttons on the header row */
 .ts-vl-card-links {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   flex-shrink: 0;
 }
 
 .ts-vl-link-btn {
   font-family: var(--font-vcr);
-  font-size: 0.75rem;
-  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+  padding: 0.45rem 1rem;
   border-radius: 6px;
   background: #3a3a44;
   color: #fff;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
@@ -282,6 +460,7 @@
   color: #0F1A2E;
 }
 
+.ts-vl-btn-icon,
 .ts-vl-gh-icon {
   width: 14px;
   height: 14px;
@@ -315,7 +494,8 @@
 
 /* ── Card Body (expanded details) ── */
 .ts-vl-card-body {
-  padding: 0 1.5rem 1.5rem;
+  padding: 1.25rem clamp(1.2rem, 2.5vw, 2rem) 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   animation: tsVlSlideDown 0.25s ease-out;
 }
 
@@ -332,75 +512,10 @@
 
 .ts-vl-detail-content {
   display: flex;
-  flex-direction: row;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1.25rem;
   padding-top: 0.5rem;
-}
-
-/* Detail left column — image + links */
-.ts-vl-detail-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  flex-shrink: 0;
-  width: 220px;
-}
-
-.ts-vl-detail-img-wrap {
-  width: 220px;
-  height: 165px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #c4c4c4;
-}
-
-.ts-vl-detail-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.ts-vl-detail-img-placeholder {
-  width: 100%;
-  height: 100%;
-  background: #bbb;
-}
-
-.ts-vl-detail-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.ts-vl-detail-link {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-vcr);
-  font-size: 0.85rem;
-  color: #1a3a6c;
-  text-decoration: none;
-  transition: color 0.2s;
-  word-break: break-all;
-}
-
-.ts-vl-detail-link:hover {
-  color: #2a6aad;
-}
-
-.ts-link-icon {
-  width: 1.05rem;
-  height: 1.05rem;
-  flex-shrink: 0;
-}
-
-/* Detail right column */
-.ts-vl-detail-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  min-width: 0;
 }
 
 .ts-vl-desc {
@@ -433,115 +548,52 @@
   margin-top: 0.25rem;
 }
 
-.ts-vl-tech-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.ts-vl-tech-cat {
-  font-family: 'Dimica-Light', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #333;
-  margin-right: 0.25rem;
-}
-
-.ts-vl-tech-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.ts-vl-tech-tag {
-  font-family: var(--font-vcr);
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  background: #9a9aa4;
-  color: #fff;
-}
-
-.ts-vl-tech-line {
-  font-family: 'Dimica-Light', sans-serif;
-  font-size: 0.95rem;
-  color: #444;
-  margin: 0;
-}
-
-/* Tools grid */
-.ts-tools-grid {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  margin-top: 0.5rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.25rem 0 0.75rem;
-  scrollbar-width: thin;
-}
-
-.ts-tool-card {
-  flex: 0 0 210px;
-  align-self: flex-start;
+/* ── Categorized Technologies in Expanded Project Detail ── */
+.ts-tech-categorized-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
 }
 
-.ts-tool-card:hover {
-  transform: translateY(-2px);
-}
-
-.ts-tool-logo-canvas {
-  width: 100%;
-  height: 30px;
-  aspect-ratio: 7 / 1;
+.ts-tech-cat-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
 }
 
-.ts-tool-logo {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-}
-
-.ts-tool-logo-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a1a2e;
+.ts-tech-cat-label {
   font-family: var(--font-vcr);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #111827;
+  letter-spacing: 0.03em;
+  min-width: 140px;
 }
 
-.ts-tool-name {
-  width: 100%;
-  height: 2.4em;
+.ts-tech-pills-wrap {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: #27272e;
-  text-align: center;
-  font-weight: 500;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.ts-tech-pill {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background: #ffffff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2937;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: default;
+  user-select: none;
 }
 
 /* Role list */
@@ -570,51 +622,64 @@
   color: #2a6aad;
 }
 
-.ts-custom-btn {
-  background: #2d9d57;
-  color: #000000;
-  font-weight: 600;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  width: fit-content;
-  border: 1px solid #248a45;
-  box-shadow: none;
-}
-
-.ts-custom-btn:hover {
-  background: #248a45;
-  color: #000000;
-  box-shadow: none;
-}
-
 /* Admin actions inside expanded card */
 .ts-vl-admin-actions {
   display: flex;
-  gap: 0.6rem;
-  padding-top: 1rem;
-  border-top: 1px solid #d0d0d0;
-  margin-top: 1rem;
+  gap: 0.85rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid #d0d0d0;
+  margin-top: 1.25rem;
+  align-items: center;
 }
 
-.ts-delete-btn {
+.ts-btn-edit {
   font-family: var(--font-vcr);
-  font-size: 0.8rem;
-  padding: 0.45rem 1rem;
-  border-radius: 6px;
+  font-size: 0.92rem;
+  padding: 0.55rem 1.5rem;
+  border-radius: 8px;
   border: none;
-  background: #d32f2f;
-  color: #fff;
+  background: #fde047;
+  color: #111111;
   cursor: pointer;
   font-weight: 700;
-  transition: opacity 0.2s;
+  letter-spacing: 0.05em;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  transition: all 0.2s ease;
 }
 
-.ts-delete-btn:hover {
-  opacity: 0.85;
+.ts-btn-edit:hover:not(:disabled) {
+  background: #fef08a;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+}
+
+.ts-btn-edit:active {
+  transform: translateY(1px);
+}
+
+.ts-btn-delete {
+  font-family: var(--font-vcr);
+  font-size: 0.92rem;
+  padding: 0.55rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  background: #991b1b;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  transition: all 0.2s ease;
+}
+
+.ts-btn-delete:hover:not(:disabled) {
+  background: #7f1d1d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+}
+
+.ts-btn-delete:active {
+  transform: translateY(1px);
 }
 
 
@@ -668,55 +733,51 @@
   }
 
   .ts-vl-card-header {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .ts-vl-card-top {
     flex-wrap: wrap;
     gap: 0.8rem;
-    padding: 0.8rem 1rem;
+  }
+
+  .ts-vl-card-body {
+    padding: 1rem;
   }
 
   .ts-vl-card-links {
-    display: none;
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
   }
 
   .ts-vl-card-thumb {
-    width: 56px;
-    height: 42px;
-  }
-
-  .ts-vl-detail-content {
-    flex-direction: column;
-  }
-
-  .ts-vl-detail-left {
-    width: 100%;
-  }
-
-  .ts-vl-detail-img-wrap {
-    width: 100%;
-    height: 200px;
+    width: 96px;
+    height: 68px;
   }
 
   .ts-textarea {
     width: 100%;
   }
 
-  .ts-tools-grid {
-    gap: 1rem;
+  .ts-tech-cat-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
   }
 
-  .ts-tool-card {
-    flex-basis: 170px;
+  .ts-tech-cat-label {
+    min-width: auto;
   }
 
-  .ts-tool-name {
-    font-size: 0.7rem;
+  .ts-form-row {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
   }
 
-  .ts-tools-manager-section {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .ts-tools-manager-header h2 {
-    font-size: clamp(1.2rem, 4vw, 1.6rem);
+  .ts-admin-add-form-section {
+    margin: 0 1rem 1.5rem 1rem;
+    padding: 1.25rem 1rem;
   }
 }
