@@ -59,8 +59,9 @@ router.post('/featured/update', adminAuth, async (req, res) => {
 
     const featured = await Project.find({ featured: true }).populate('tools').sort({ order: 1 });
     res.json(featured);
-  } catch {
-    res.status(500).json({ message: 'Server error' });
+  } catch (err) {
+    console.error('Featured projects update error:', err);
+    res.status(500).json({ message: 'Server error: ' + (err.message || 'Unknown') });
   }
 });
 

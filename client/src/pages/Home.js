@@ -45,7 +45,7 @@ const parseTechStack = (raw) => {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, token } = useAuth();
 
   const gamingRef = useRef(null);
   const gamingVideoRef = useRef(null);
@@ -106,16 +106,21 @@ const Home = () => {
 
   const handleSaveProjectOrder = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const authToken = token || localStorage.getItem('adminToken');
+      if (!authToken) {
+        alert('You must be logged in as an administrator to save featured projects.');
+        return;
+      }
       const projectIds = editingProjects.map(p => p._id);
       const { data } = await axios.post('/api/projects/featured/update', { projectIds }, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${authToken}` }
       });
       setProjects(data);
+      setEditingProjects(data);
       setShowAdminPanel(false);
     } catch (err) {
       console.error('Failed to save featured projects:', err);
-      alert('Failed to save featured projects');
+      alert('Failed to save featured projects: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -246,7 +251,13 @@ const Home = () => {
           {isAdmin && (
             <button 
               className="admin-edit-btn" 
-              onClick={() => setShowAdminPanel(!showAdminPanel)}
+              onClick={() => {
+                if (!showAdminPanel) {
+                  setEditingProjects([...projects]);
+                  axios.get('/api/projects').then(({ data }) => setAllProjects(data)).catch(() => {});
+                }
+                setShowAdminPanel(!showAdminPanel);
+              }}
               title="Manage featured projects"
             >
               {showAdminPanel ? '✕ Close' : '⚙ Manage'}
