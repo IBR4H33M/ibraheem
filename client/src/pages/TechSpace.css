@@ -494,8 +494,8 @@
 
 /* ── Card Body (expanded details) ── */
 .ts-vl-card-body {
-  padding: 1.25rem clamp(1.2rem, 2.5vw, 2rem) 1.5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0 clamp(1.2rem, 2.5vw, 2rem) 1.5rem;
+  border-top: none;
   animation: tsVlSlideDown 0.25s ease-out;
 }
 
@@ -514,7 +514,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  padding-top: 0.5rem;
+  padding-top: 0;
   width: 100%;
 }
 
@@ -743,7 +743,7 @@
   }
 
   .ts-vl-card-body {
-    padding: 1rem;
+    padding: 0 1rem 1.25rem;
   }
 
   .ts-vl-card-links {

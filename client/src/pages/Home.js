@@ -14,6 +14,24 @@ const generateSlug = (title) => {
     .replace(/[^\w-]/g, '')}`;
 };
 
+// Helper to format URLs safely (preventing relative URL issues and handling domain links)
+const formatUrl = (url) => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+
+  const siteMatch = trimmed.match(/^(?:https?:\/\/)?(?:www\.)?ibraheemibnanwar\.me(\/.*)?$/i);
+  if (siteMatch) {
+    return siteMatch[1] || '/';
+  }
+
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/')) {
+    return trimmed;
+  }
+
+  return `https://${trimmed}`;
+};
+
 // Helper function to parse tech stack into categories and keyword lists
 const parseTechStack = (raw) => {
   if (!raw) return [];
@@ -466,7 +484,7 @@ const Home = () => {
                     <span className="ts-detail-label">Dataset</span>
                     <span className="ts-detail-value">
                       {selectedProject.datasetUrl
-                        ? <a href={selectedProject.datasetUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-link">{selectedProject.datasetTitle}</a>
+                        ? <a href={formatUrl(selectedProject.datasetUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-link">{selectedProject.datasetTitle}</a>
                         : selectedProject.datasetTitle}
                     </span>
                   </div>
@@ -474,7 +492,7 @@ const Home = () => {
               </div>
               <div className="ts-detail-actions">
                 {selectedProject.url && selectedProject.url.trim() !== '' && (
-                  <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="ts-detail-btn" style={{ gap: '0.4rem' }}>
+                  <a href={formatUrl(selectedProject.url)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn" style={{ gap: '0.4rem' }}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
                       <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
@@ -483,7 +501,7 @@ const Home = () => {
                   </a>
                 )}
                 {selectedProject.githubUrl && selectedProject.githubUrl.trim() !== '' && (
-                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
+                  <a href={formatUrl(selectedProject.githubUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
                     GitHub
                   </a>
                 )}

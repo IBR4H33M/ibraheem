@@ -8,6 +8,24 @@ import ToolsSelector from '../components/ToolsSelector';
 import ToolsManager from './ToolsManager';
 import './TechSpace.css';
 
+// Helper to format URLs safely (preventing relative URL issues and handling domain links)
+const formatUrl = (url) => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+
+  const siteMatch = trimmed.match(/^(?:https?:\/\/)?(?:www\.)?ibraheemibnanwar\.me(\/.*)?$/i);
+  if (siteMatch) {
+    return siteMatch[1] || '/';
+  }
+
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/')) {
+    return trimmed;
+  }
+
+  return `https://${trimmed}`;
+};
+
 const TechSpace = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -270,7 +288,7 @@ const TechSpace = () => {
               </div>
 
               <div className="ts-form-group">
-                <label className="ts-form-label">Background & Problem Statement</label>
+                <label className="ts-form-label">Background</label>
                 <textarea className="ts-form-input ts-form-textarea ts-form-textarea--large" placeholder="Detailed background story, motivation, problems faced, and why you built it..." value={formBackground} onChange={e => setFormBackground(e.target.value)} rows={6} />
               </div>
 
@@ -349,7 +367,7 @@ const TechSpace = () => {
                     </div>
                     <div className="ts-vl-card-links">
                       {project.url && project.url.trim() !== '' && (
-                        <a href={project.url} target="_blank" rel="noopener noreferrer" className="ts-vl-link-btn" onClick={e => e.stopPropagation()}>
+                        <a href={formatUrl(project.url)} target="_blank" rel="noopener noreferrer" className="ts-vl-link-btn" onClick={e => e.stopPropagation()}>
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ts-vl-btn-icon">
                             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
@@ -358,7 +376,7 @@ const TechSpace = () => {
                         </a>
                       )}
                       {project.githubUrl && project.githubUrl.trim() !== '' && (
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="ts-vl-link-btn" onClick={e => e.stopPropagation()}>
+                        <a href={formatUrl(project.githubUrl)} target="_blank" rel="noopener noreferrer" className="ts-vl-link-btn" onClick={e => e.stopPropagation()}>
                           <svg viewBox="0 0 24 24" fill="currentColor" className="ts-vl-gh-icon"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                           GitHub
                         </a>
@@ -395,7 +413,7 @@ const TechSpace = () => {
                         </div>
 
                         <div className="ts-form-group">
-                          <label className="ts-form-label">Background & Problem Statement</label>
+                          <label className="ts-form-label">Background</label>
                           <textarea className="ts-form-input ts-form-textarea ts-form-textarea--large" value={editBackground} onChange={e => setEditBackground(e.target.value)} placeholder="Detailed background story, motivation, problems faced, and why you built it..." rows={6} />
                         </div>
 
@@ -447,7 +465,7 @@ const TechSpace = () => {
                         <div className="ts-vl-detail-content">
                           {project.background && (
                             <div className="ts-vl-desc-block">
-                              <span className="ts-desc-label">Background & Problem Statement:</span>
+                              <span className="ts-desc-label">Background:</span>
                               <p className="ts-vl-desc">{project.background}</p>
                             </div>
                           )}
@@ -458,7 +476,7 @@ const TechSpace = () => {
                                 {project.datasetUrl && (
                                   <p className="ts-vl-desc">
                                     <strong>URL:</strong>{' '}
-                                    <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="ts-project-link">{project.datasetUrl}</a>
+                                    <a href={formatUrl(project.datasetUrl)} target="_blank" rel="noopener noreferrer" className="ts-project-link">{project.datasetUrl}</a>
                                   </p>
                                 )}
                               </div>
