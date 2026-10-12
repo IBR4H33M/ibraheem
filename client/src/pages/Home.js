@@ -363,10 +363,8 @@ const Home = () => {
             )}
 
             <div className="ts-slider-column">
-              {/* Thick-bordered frame around project icons and titles only */}
-              <div className="ts-bordered-frame">
-                <div
-                  className={`ts-section ${tsDragging ? 'is-dragging' : ''}`}
+              <div
+                className={`ts-section ${tsDragging ? 'is-dragging' : ''}`}
                   ref={tsTrackRef}
                   onMouseDown={handleTsMouseDown}
                   onMouseMove={handleTsMouseMove}
@@ -477,7 +475,6 @@ const Home = () => {
                     </div>
                   </div>
                 )}
-              </div>
             </div>
 
             {tsCanScrollRight && (
@@ -540,7 +537,7 @@ const Home = () => {
               </div>
             ) : recentGames.map((game, index) => {
               const totalGames = recentGames.length;
-              const angle = (index / totalGames) * Math.PI * 2 + manualRotation;
+              const angle = (index / totalGames) * Math.PI * 2 + Math.PI / 2 + manualRotation;
               const radius = 280;
               const x = Math.cos(angle) * radius;
               const z = Math.sin(angle) * radius;
