@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TerminalSpinner from '../components/TerminalSpinner';
 import { useAuth } from '../context/AuthContext';
@@ -62,7 +62,6 @@ const parseTechStack = (raw) => {
 };
 
 const Home = () => {
-  const navigate = useNavigate();
   const { isAdmin, token } = useAuth();
 
   const gamingRef = useRef(null);
@@ -77,7 +76,6 @@ const Home = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const tsTrackRef = useRef(null);
-  const tsArrowsTrackRef = useRef(null);
   const tsDraggingRef = useRef(false);
   const tsDragStartXRef = useRef(0);
   const tsStartScrollLeftRef = useRef(0);
@@ -172,9 +170,6 @@ const Home = () => {
     if (!el) return;
     setTsCanScrollLeft(el.scrollLeft > 0);
     setTsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-    if (tsArrowsTrackRef.current) {
-      tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
-    }
   };
 
   useEffect(() => {
@@ -185,9 +180,6 @@ const Home = () => {
     const el = tsTrackRef.current;
     if (!el) return;
     const handleScroll = () => {
-      if (tsArrowsTrackRef.current) {
-        tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
-      }
       setTsCanScrollLeft(el.scrollLeft > 0);
       setTsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
     };
@@ -227,9 +219,6 @@ const Home = () => {
       e.preventDefault();
       const walk = (x - tsDragStartXRef.current) * 1.25;
       el.scrollLeft = tsStartScrollLeftRef.current - walk;
-      if (tsArrowsTrackRef.current) {
-        tsArrowsTrackRef.current.scrollLeft = el.scrollLeft;
-      }
     }
   };
 
@@ -385,54 +374,109 @@ const Home = () => {
                   onMouseLeave={stopTsDrag}
                   onDragStart={(e) => e.preventDefault()}
                 >
-                  <div className="ts-track">
-                    {projects.map(project => (
-                      <div 
-                        key={project._id} 
-                        className={`ts-card ${selectedProjectId === project._id ? 'ts-card--selected' : ''}`}
-                        onClick={() => {
-                          // Only navigate if it wasn't a drag (distance < 5px)
-                          if (tsDragDistanceRef.current < 5) {
-                            const slug = project.slug || generateSlug(project.title);
-                            navigate(`/techspace/${slug}`);
-                          }
-                        }}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <div className="ts-img-wrap">
-                          {project.image?.url
-                            ? <img src={project.image.url} alt={project.title} className="ts-img" />
-                            : <div className="ts-img-placeholder"><TerminalSpinner /></div>}
+                  <div className={`ts-track ${selectedProjectId ? 'ts-track--has-selected' : ''}`}>
+                    {projects.map(project => {
+                      const isSelected = selectedProjectId === project._id;
+                      return (
+                        <div 
+                          key={project._id} 
+                          className={`ts-card ${isSelected ? 'ts-card--selected' : ''}`}
+                          onClick={() => {
+                            // Only toggle selection if it wasn't a drag (distance < 5px)
+                            if (tsDragDistanceRef.current < 5) {
+                              setSelectedProjectId(prev => (prev === project._id ? null : project._id));
+                            }
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="ts-img-wrap">
+                            {project.image?.url
+                              ? <img src={project.image.url} alt={project.title} className="ts-img" />
+                              : <div className="ts-img-placeholder"><TerminalSpinner /></div>}
+                          </div>
+                          <span className="ts-title">{project.title}</span>
+                          <button
+                            className={`ts-expand-arrow ${isSelected ? 'ts-expand-arrow--active' : ''}`}
+                            onClick={(e) => handleArrowClick(e, project._id)}
+                            aria-label={isSelected ? 'Collapse project details' : 'Expand project details'}
+                            title="Show project details"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                          </button>
                         </div>
-                        <span className="ts-title">{project.title}</span>
-                      </div>
-                    ))}
+                      );
+                    })}
 
                     {projectsLoading && (
                       <p className="ts-empty"><TerminalSpinner label="loading..." /></p>
                     )}
                   </div>
                 </div>
-              </div>
 
-              {/* Arrow icons underneath each project, NOT covered by border */}
-              <div className="ts-arrows-row-wrapper" ref={tsArrowsTrackRef}>
-                <div className="ts-arrows-track">
-                  {projects.map(project => (
-                    <div key={project._id} className="ts-arrow-slot">
-                      <button
-                        className={`ts-expand-arrow ${selectedProjectId === project._id ? 'ts-expand-arrow--active' : ''}`}
-                        onClick={(e) => handleArrowClick(e, project._id)}
-                        aria-label={selectedProjectId === project._id ? 'Collapse project details' : 'Expand project details'}
-                        title="Show project details"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </button>
+                {/* Project Details expanded inside the #494957 container */}
+                {selectedProject && (
+                  <div className="ts-detail-panel">
+                    <h3 className="ts-detail-title">{selectedProject.title}</h3>
+                    {selectedProject.introduction && (
+                      <p className="ts-detail-section">{selectedProject.introduction}</p>
+                    )}
+                    {selectedProject.background && (
+                      <p className="ts-detail-section">{selectedProject.background}</p>
+                    )}
+                    <div className="ts-detail-meta">
+                      {selectedProject.techStack && (
+                        <div className="ts-detail-meta-row ts-detail-meta-row--tech">
+                          <span className="ts-detail-label">Tech Stack</span>
+                          <div className="ts-tech-stack-container">
+                            {parseTechStack(selectedProject.techStack).map((item, idx) => (
+                              <div className="ts-tech-row" key={idx}>
+                                {item.category && (
+                                  <span className="ts-tech-cat">{item.category}:</span>
+                                )}
+                                <div className="ts-tech-tags">
+                                  {item.keywords.map((kw, kwIdx) => (
+                                    <span className="ts-tech-tag" key={kwIdx}>{kw}</span>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {selectedProject.datasetTitle && (
+                        <div className="ts-detail-meta-row">
+                          <span className="ts-detail-label">Dataset</span>
+                          <span className="ts-detail-value">
+                            {selectedProject.datasetUrl
+                              ? <a href={formatUrl(selectedProject.datasetUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-link">{selectedProject.datasetTitle}</a>
+                              : selectedProject.datasetTitle}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
+                    <div className="ts-detail-actions">
+                      {selectedProject.url && selectedProject.url.trim() !== '' && (
+                        <a href={formatUrl(selectedProject.url)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn" style={{ gap: '0.4rem' }}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                          </svg>
+                          URL
+                        </a>
+                      )}
+                      {selectedProject.githubUrl && selectedProject.githubUrl.trim() !== '' && (
+                        <a href={formatUrl(selectedProject.githubUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
+                          GitHub
+                        </a>
+                      )}
+                      <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn">
+                        Full Details →
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -447,71 +491,6 @@ const Home = () => {
             </>
           )}
         </div>
-
-        {/* Project Details Expand Bubble */}
-        {selectedProject && (
-          <div className="ts-detail-panel">
-            <div className="ts-detail-bubble">
-              <h3 className="ts-detail-title">{selectedProject.title}</h3>
-              {selectedProject.introduction && (
-                <p className="ts-detail-section">{selectedProject.introduction}</p>
-              )}
-              {selectedProject.background && (
-                <p className="ts-detail-section">{selectedProject.background}</p>
-              )}
-              <div className="ts-detail-meta">
-                {selectedProject.techStack && (
-                  <div className="ts-detail-meta-row ts-detail-meta-row--tech">
-                    <span className="ts-detail-label">Tech Stack</span>
-                    <div className="ts-tech-stack-container">
-                      {parseTechStack(selectedProject.techStack).map((item, idx) => (
-                        <div className="ts-tech-row" key={idx}>
-                          {item.category && (
-                            <span className="ts-tech-cat">{item.category}:</span>
-                          )}
-                          <div className="ts-tech-tags">
-                            {item.keywords.map((kw, kwIdx) => (
-                              <span className="ts-tech-tag" key={kwIdx}>{kw}</span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {selectedProject.datasetTitle && (
-                  <div className="ts-detail-meta-row">
-                    <span className="ts-detail-label">Dataset</span>
-                    <span className="ts-detail-value">
-                      {selectedProject.datasetUrl
-                        ? <a href={formatUrl(selectedProject.datasetUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-link">{selectedProject.datasetTitle}</a>
-                        : selectedProject.datasetTitle}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="ts-detail-actions">
-                {selectedProject.url && selectedProject.url.trim() !== '' && (
-                  <a href={formatUrl(selectedProject.url)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn" style={{ gap: '0.4rem' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14, flexShrink: 0 }}>
-                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                    </svg>
-                    URL
-                  </a>
-                )}
-                {selectedProject.githubUrl && selectedProject.githubUrl.trim() !== '' && (
-                  <a href={formatUrl(selectedProject.githubUrl)} target="_blank" rel="noopener noreferrer" className="ts-detail-btn">
-                    GitHub
-                  </a>
-                )}
-                <Link to={`/techspace/${selectedProject.slug || generateSlug(selectedProject.title)}`} className="ts-detail-btn">
-                  Full Details →
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Fandom Section - Full Width */}

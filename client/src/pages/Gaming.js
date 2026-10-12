@@ -34,6 +34,8 @@ const Gaming = () => {
   const [rgDragging, setRgDragging]         = useState(false);
   const [rgCanScrollLeft, setRgCanScrollLeft]   = useState(false);
   const [rgCanScrollRight, setRgCanScrollRight] = useState(false);
+  const [draggedRgIndex, setDraggedRgIndex]     = useState(null);
+  const [dragOverRgIndex, setDragOverRgIndex]   = useState(null);
 
   // Game recommendation states
   const [recommenderName, setRecommenderName] = useState('');
@@ -202,7 +204,7 @@ const Gaming = () => {
       }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setRecentGames(prev => [...prev, data]);
+      setRecentGames(prev => [data, ...prev]);
       setRgAdding(false); setRgSearchQuery(''); setRgSelectedGame(null); setRgSearchResults([]); setRgMsg('Added!');
     } catch { setRgMsg('Failed to add.'); }
     finally { setRgSaving(false); }
@@ -216,6 +218,33 @@ const Gaming = () => {
       setRgMsg('Removed!');
     } catch { setRgMsg('Failed to remove.'); }
     finally { setRgSaving(false); }
+  };
+
+  const handleRgReorder = async (fromIndex, toIndex) => {
+    if (fromIndex === null || fromIndex === undefined || fromIndex === toIndex) {
+      setDragOverRgIndex(null);
+      setDraggedRgIndex(null);
+      return;
+    }
+    const updated = [...recentGames];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setRecentGames(updated);
+    setDraggedRgIndex(null);
+    setDragOverRgIndex(null);
+
+    const authToken = token || localStorage.getItem('token') || localStorage.getItem('adminToken');
+    if (authToken) {
+      try {
+        await axios.post('/api/recent-games/reorder', {
+          gameIds: updated.map(g => g._id)
+        }, {
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+      } catch (err) {
+        console.error('Failed to save recent games order:', err);
+      }
+    }
   };
 
   const handleRecommend = async () => {
@@ -275,6 +304,7 @@ const Gaming = () => {
   const handleRgMouseDown = (e) => {
     if (e.button !== 0) return;
     if (e.target.closest('button, a, input, textarea, select')) return;
+    if (isAdmin && e.target.closest('.rg-card')) return;
     const el = rgTrackRef.current;
     if (!el) return;
     rgDraggingRef.current = true;
@@ -405,18 +435,56 @@ const Gaming = () => {
             onMouseMove={handleRgMouseMove}
             onMouseUp={stopRgDrag}
             onMouseLeave={stopRgDrag}
-            onDragStart={(e) => e.preventDefault()}
+            onDragStart={(e) => {
+              if (e.target.closest('.rg-card')) return;
+              e.preventDefault();
+            }}
           >
             <div className="rg-track">
-              {recentGames.map(game => (
-                <div key={game._id} className="rg-card">
+              {recentGames.map((game, index) => (
+                <div 
+                  key={game._id} 
+                  className={`rg-card ${draggedRgIndex === index ? 'rg-card--dragging' : ''} ${dragOverRgIndex === index ? 'rg-card--drag-over' : ''} ${isAdmin ? 'rg-card--draggable' : ''}`}
+                  draggable={isAdmin}
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', String(index));
+                    setDraggedRgIndex(index);
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (dragOverRgIndex !== index) {
+                      setDragOverRgIndex(index);
+                    }
+                  }}
+                  onDragLeave={() => {
+                    if (dragOverRgIndex === index) {
+                      setDragOverRgIndex(null);
+                    }
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleRgReorder(draggedRgIndex, index);
+                  }}
+                  onDragEnd={() => {
+                    setDraggedRgIndex(null);
+                    setDragOverRgIndex(null);
+                  }}
+                >
                   {isAdmin && (
-                    <button
-                      className="rg-delete-btn"
-                      onClick={() => handleRgDelete(game._id)}
-                      disabled={rgSaving}
-                      title="Remove game"
-                    >✕</button>
+                    <div className="rg-card-admin-header">
+                      <span className="rg-drag-handle" title="Drag to rearrange position">⋮⋮</span>
+                      <button
+                        className="rg-delete-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRgDelete(game._id);
+                        }}
+                        disabled={rgSaving}
+                        title="Remove game"
+                      >✕</button>
+                    </div>
                   )}
                   <div className="rg-img-wrap">
                     {game.coverUrl

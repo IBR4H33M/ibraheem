@@ -749,12 +749,70 @@
   word-break: break-word;
 }
 
+/* Per-card admin header and controls */
+.rg-card--draggable {
+  cursor: grab;
+}
+
+.rg-card--draggable:active {
+  cursor: grabbing;
+}
+
+.rg-card--dragging {
+  opacity: 0.35;
+  transform: scale(0.95);
+}
+
+.rg-card--drag-over {
+  transform: scale(1.05);
+}
+
+.rg-card--drag-over .rg-img-wrap {
+  border: 3px dashed #90ee90;
+  box-shadow: 0 0 20px rgba(144, 238, 144, 0.7);
+}
+
+.rg-card-admin-header {
+  position: absolute;
+  top: 0.4rem;
+  left: 44px;
+  right: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.rg-drag-handle {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(144, 238, 144, 0.6);
+  color: #90ee90;
+  font-family: var(--font-vcr);
+  font-size: 0.95rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.rg-drag-handle:hover {
+  background: #90ee90;
+  color: #0f172a;
+  border-color: #90ee90;
+}
+
+.rg-drag-handle:active {
+  cursor: grabbing;
+}
+
 /* Per-card delete button */
 .rg-delete-btn {
-  position: absolute;
-  top: 0.3rem;
-  right: 0.3rem;
-  z-index: 2;
   background: rgba(180, 30, 30, 0.85);
   border: none;
   color: #fff;
@@ -837,29 +895,39 @@
 .rg-selected-game {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.6rem;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  gap: 0.6rem;
+  padding: 0.45rem 0.85rem;
+  background: #90EE90;
+  border: 1px solid #76c776;
   border-radius: 6px;
   font-family: var(--font-vcr);
-  font-size: 0.8rem;
-  color: #1a1a1a;
+  font-size: 0.85rem;
+  color: #0f172a;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(144, 238, 144, 0.4);
+}
+
+.rg-selected-game span {
+  color: #0f172a;
+  font-weight: 700;
 }
 
 .rg-clear-btn {
-  background: rgba(180, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.2);
   border: none;
-  color: #fff;
+  color: #0f172a;
   cursor: pointer;
-  font-size: 0.9rem;
-  padding: 0.2rem 0.4rem;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.45rem;
   line-height: 1;
   border-radius: 4px;
+  font-weight: bold;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .rg-clear-btn:hover {
-  background: rgba(200, 20, 20, 1);
+  background: #d32f2f;
+  color: #ffffff;
 }
 
 .rg-admin-bar .admin-cancel-btn {

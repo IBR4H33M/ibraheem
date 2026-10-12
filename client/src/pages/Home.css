@@ -678,10 +678,10 @@
 /* Thick border around project icons and titles only */
 .ts-bordered-frame {
   width: 100%;
-  border: 4px solid #4a4a58;
+  border: 4px solid #494957;
   border-radius: 18px;
   overflow: hidden;
-  background: #4a4a58;
+  background: #494957;
   box-sizing: border-box;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
@@ -742,6 +742,9 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 5px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, filter 0.35s ease, opacity 0.35s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .ts-img {
@@ -776,40 +779,6 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-/* Arrows track underneath each project card, outside the thick border */
-.ts-arrows-row-wrapper {
-  width: 100%;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  margin-top: 0.4rem;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.ts-arrows-row-wrapper::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-.ts-arrows-track {
-  display: flex;
-  gap: 1.5rem;
-  padding: 0 1.25rem;
-  align-items: center;
-  min-width: min-content;
-  box-sizing: border-box;
-}
-
-.ts-arrow-slot {
-  flex: 0 0 240px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 52px;
 }
 
 /* Carousel scroll buttons outside the thick border */
@@ -851,7 +820,37 @@
   transform: scale(1.04);
 }
 
-/* Expand arrow button under each card */
+/* Fat border of #90EE90 on selected project */
+.ts-card--selected .ts-img-wrap {
+  border-color: #90EE90;
+  box-shadow: 0 0 22px rgba(144, 238, 144, 0.55), 0 8px 24px rgba(0, 0, 0, 0.65);
+}
+
+.ts-card--selected .ts-title {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(144, 238, 144, 0.45);
+}
+
+/* Blur other projects' images when one project is selected */
+.ts-track--has-selected .ts-card:not(.ts-card--selected) .ts-img-wrap {
+  filter: blur(5px);
+  opacity: 0.5;
+}
+
+.ts-track--has-selected .ts-card:not(.ts-card--selected):hover .ts-img-wrap {
+  filter: blur(2px);
+  opacity: 0.8;
+}
+
+.ts-track--has-selected .ts-card:not(.ts-card--selected) {
+  opacity: 0.7;
+}
+
+.ts-track--has-selected .ts-card:not(.ts-card--selected):hover {
+  opacity: 1;
+}
+
+/* Expand arrow button inside each card */
 .ts-expand-arrow {
   background: transparent;
   border: none;
@@ -867,9 +866,9 @@
 
 .ts-expand-arrow svg {
   display: block;
-  width: 32px;
-  height: 32px;
-  transition: width 0.25s ease, height 0.25s ease, transform 0.25s ease, filter 0.25s ease;
+  width: 30px;
+  height: 30px;
+  transition: transform 0.25s ease, filter 0.25s ease;
 }
 
 .ts-expand-arrow:hover {
@@ -881,18 +880,21 @@
 }
 
 .ts-expand-arrow--active svg {
-  width: 48px;
-  height: 48px;
   transform: rotate(180deg);
   filter: drop-shadow(0 0 8px rgba(144, 238, 144, 0.75));
 }
 
-/* Project detail expand bubble inside #19191D TechSpace */
+/* Project detail expand panel directly inside #494957 TechSpace container */
 .ts-detail-panel {
   width: 100%;
   background: transparent;
-  padding: 0.25rem clamp(1.5rem, 4vw, 4rem) 2rem clamp(1.5rem, 4vw, 4rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1.5rem clamp(1.25rem, 3.5vw, 2.75rem) 2rem clamp(1.25rem, 3.5vw, 2.75rem);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  color: #ffffff;
   animation: ts-panel-in 0.28s ease;
 }
 
@@ -901,24 +903,10 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.ts-detail-bubble {
-  max-width: 1100px;
-  margin: 0 auto;
-  background: #e8eaf0;
-  border-radius: 20px;
-  padding: clamp(1.5rem, 2.5vw, 2.2rem) clamp(1.5rem, 3vw, 2.5rem);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  box-sizing: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
 .ts-detail-title {
   font-family: var(--font-vcr);
-  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
-  color: #0f172a;
+  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+  color: #ffffff;
   margin: 0;
   letter-spacing: 0.03em;
   font-weight: 700;
@@ -926,7 +914,7 @@
 
 .ts-detail-section {
   font-size: clamp(0.88rem, 1.4vw, 0.98rem);
-  color: #27272e;
+  color: #ffffff;
   line-height: 1.65;
   margin: 0;
 }
@@ -955,8 +943,8 @@
 
 .ts-detail-label {
   font-family: var(--font-vcr);
-  font-size: 0.8rem;
-  color: #0f172a;
+  font-size: 0.82rem;
+  color: #90ee90;
   letter-spacing: 0.06em;
   min-width: 90px;
   padding-top: 0.1rem;
@@ -981,7 +969,7 @@
 .ts-tech-cat {
   font-family: var(--font-vcr);
   font-size: 0.84rem;
-  color: #374151;
+  color: #e5e7eb;
   letter-spacing: 0.03em;
   min-width: 110px;
   flex-shrink: 0;
@@ -995,10 +983,11 @@
   align-items: center;
 }
 
-/* Keyword inside grey colored box on light grey bg */
+/* Keyword inside dark pill box with subtle border on #494957 bg */
 .ts-tech-tag {
-  background: #cfd4dc;
-  color: #0f172a;
+  background: #353540;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 0.82rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   padding: 0.28rem 0.7rem;
@@ -1006,24 +995,24 @@
   line-height: 1.35;
   display: inline-block;
   font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .ts-detail-value {
   font-size: 0.92rem;
-  color: #1f2937;
+  color: #ffffff;
   flex: 1;
   line-height: 1.5;
 }
 
 .ts-detail-link {
-  color: #059669;
+  color: #90ee90;
   text-decoration: underline;
   font-weight: 600;
 }
 
 .ts-detail-link:hover {
-  color: #047857;
+  color: #a3f7a3;
 }
 
 .ts-detail-actions {
@@ -1033,7 +1022,7 @@
   margin-top: 0.5rem;
 }
 
-/* Uniform buttons: dark grey + white text unhovered, green + #0F1A2E text hovered, NO borders */
+/* Uniform buttons: dark with subtle border + white text unhovered, green + dark text hovered */
 .ts-detail-btn {
   display: inline-flex;
   align-items: center;
@@ -1044,18 +1033,18 @@
   letter-spacing: 0.05em;
   text-decoration: none;
   border-radius: 8px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   outline: none;
-  background: #1e1e24;
+  background: #23232b;
   color: #ffffff;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
   cursor: pointer;
 }
 
 .ts-detail-btn:hover {
-  background: #10b981;
+  background: #90ee90;
   color: #0F1A2E;
-  border: none;
+  border-color: #90ee90;
   transform: translateY(-2px);
 }
 

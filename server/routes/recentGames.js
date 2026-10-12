@@ -5,7 +5,7 @@ const adminAuth = require('../middleware/adminAuth');
 
 router.get('/', async (req, res) => {
   try {
-    const games = await RecentGame.find().sort({ order: 1, createdAt: 1 });
+    const games = await RecentGame.find().sort({ order: 1, createdAt: -1 });
     res.json(games);
   } catch {
     res.status(500).json({ message: 'Server error' });
@@ -14,16 +14,34 @@ router.get('/', async (req, res) => {
 
 router.post('/', adminAuth, async (req, res) => {
   try {
-    const count = await RecentGame.countDocuments();
+    // When a game is added, it should appear in the first position (order: 0)
+    await RecentGame.updateMany({}, { $inc: { order: 1 } });
     const game = await RecentGame.create({
       title: req.body.title,
       igdbId: req.body.igdbId,
       coverUrl: req.body.coverUrl,
       year: req.body.year,
       platforms: req.body.platforms || [],
-      order: count,
+      order: 0,
     });
     res.status(201).json(game);
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Reorder recent games
+router.post('/reorder', adminAuth, async (req, res) => {
+  try {
+    const { gameIds } = req.body;
+    if (!Array.isArray(gameIds)) {
+      return res.status(400).json({ message: 'gameIds must be an array' });
+    }
+    for (let i = 0; i < gameIds.length; i++) {
+      await RecentGame.findByIdAndUpdate(gameIds[i], { order: i });
+    }
+    const games = await RecentGame.find().sort({ order: 1, createdAt: -1 });
+    res.json(games);
   } catch {
     res.status(500).json({ message: 'Server error' });
   }
